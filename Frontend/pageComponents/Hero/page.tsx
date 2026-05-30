@@ -15,11 +15,7 @@ export default function Hero() {
             OUR PRODUCT
           </h1>
           <p className='text-white/90 text-xs md:text-sm leading-relaxed font-mono'>
-            Pink ponies and purple giraffes roamed the field. Cotton candy grew
-            from the ground as a chocolate river meandered off to the side. What
-            looked like stones in the pasture were actually rock candy.
-            Everything in her dream seemed to be perfect except for the fact
-            that she had no mouth.
+            EcoBug, a comprehensive landscaping consultant tool is a one-stop destination for all landscaping solutions be it for an architect, designer, site engineer or student! From analysis and development to maintenance and cost estimation, this software covers the integral stages of landscaping, providing an easy-to-use interface and assessing feasibility of landscape projects both environmentally and economically.
           </p>
         </div>
 
