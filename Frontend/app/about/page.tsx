@@ -22,7 +22,7 @@ export default function About() {
         </div>
         <div className='flex items-center justify-center backdrop-blur-2xl border border-white rounded-3xl p-8 m-10 md:m-14 lg:m-20'>
           <p
-            className={`${pixelifySans.className} text-3xl tracking-widest text-white text-justify leading-10`}
+            className=' text-3xl tracking-widest text-white text-justify leading-10'
           >
             {description}
           </p>
