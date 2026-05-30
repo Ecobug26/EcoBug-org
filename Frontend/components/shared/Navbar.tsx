@@ -152,7 +152,7 @@ function SubSection({ onHamburgerClick }: { onHamburgerClick: () => void }) {
         <h1
           className={`text-center text-5xl md:text-8xl text-[#1d4226] ${pixelifySans.className}`}
         >
-          ECOBUG
+          ECOBUGS
         </h1>
 
         <UserDialog />
