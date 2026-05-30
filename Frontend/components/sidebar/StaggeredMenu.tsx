@@ -142,7 +142,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
 
     if (itemEls.length) gsap.set(itemEls, { yPercent: 140, rotate: 10 })
     if (numberEls.length)
-      gsap.set(numberEls, { ['--sm-num-opacity' as any]: 0 })
+      gsap.set(numberEls, { ['--sm-num-opacity' as keyof CSSStyleDeclaration]: 0 })
     if (socialTitle) gsap.set(socialTitle, { opacity: 0 })
     if (socialLinks.length) gsap.set(socialLinks, { y: 25, opacity: 0 })
 
@@ -190,7 +190,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           {
             duration: 0.6,
             ease: 'power2.out',
-            ['--sm-num-opacity' as any]: 1,
+            ['--sm-num-opacity' as keyof CSSStyleDeclaration]: 1,
             stagger: { each: 0.08, from: 'start' },
           },
           itemsStart + 0.1,
@@ -274,7 +274,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
           ),
         ) as HTMLElement[]
         if (numberEls.length)
-          gsap.set(numberEls, { ['--sm-num-opacity' as any]: 0 })
+          gsap.set(numberEls, { ['--sm-num-opacity' as keyof CSSStyleDeclaration]: 0 })
 
         const socialTitle = panel.querySelector(
           '.sm-socials-title',
@@ -448,7 +448,7 @@ export const StaggeredMenu: React.FC<StaggeredMenuProps> = ({
         }
         style={
           accentColor
-            ? ({ ['--sm-accent' as any]: accentColor } as React.CSSProperties)
+            ? ({ ['--sm-num-opacity' as keyof CSSStyleDeclaration]: accentColor } as React.CSSProperties)
             : undefined
         }
         data-position={position}

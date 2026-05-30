@@ -161,7 +161,7 @@ function SubSection({ onHamburgerClick }: { onHamburgerClick: () => void }) {
       <div className='flex flex-nowrap justify-center items-end gap-2 sm:gap-6 lg:gap-40 mt-4 md:mt-10 px-2'>
         {navItems.map((item, index) => {
           const distanceFromCenter = index - (navItems.length - 1) / 2
-          const baseOffset = distanceFromCenter ** 2 * 20
+          const baseOffset = distanceFromCenter ** 2 * 12
           const scale = Math.min(width / 1200, 1)
           const currentY = baseOffset * archIntensity * scale
 
@@ -170,7 +170,7 @@ function SubSection({ onHamburgerClick }: { onHamburgerClick: () => void }) {
               key={item.text}
               style={{
                 transform: `translateY(${currentY}px)`,
-                transition: 'transform 0.1s',
+                transition: 'transform 0.2s ease-out' ,
                 willChange: 'transform',
               }}
             >

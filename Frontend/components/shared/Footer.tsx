@@ -2,46 +2,46 @@ import { pixelifySans } from '../utils/utils'
 
 export default function Footer() {
   return (
-    <footer className='bg-[#1c642a] text-white m-0 p-10 md:p-20 flex flex-col min-h-[50vh]'>
+    <footer className='bg-[#1c642a] text-white py-12 px-10 md:px-16 flex flex-col'>
       <div
-        className={`${pixelifySans.className} text-2xl text-white mb-16 ml-0 sm:ml-10 md:ml-20 lg:ml-24`}
+        className={`${pixelifySans.className} text-4xl text-white mb-8 ml-0 sm:ml-0 md:ml-20 lg:ml-24`}
       >
-        socials
+        SOCIALS
       </div>
       <div
-        className={`${pixelifySans.className} flex flex-wrap md:flex-nowrap justify-between w-full max-w-7xl mx-auto gap-12 md:gap-4`}
+        className='flex flex-col md:flex-row justify-between w-full max-w-7xl mx-auto gap-12'
       >
-        <div className='flex flex-col gap-6 w-full sm:w-[45%] md:w-auto items-start'>
-          <h3 className='text-2xl uppercase tracking-widest mb-4'>INSTAGRAM</h3>
+        <div className='flex flex-col items-start'>
+          <h3 className={`${pixelifySans.className} text-2xl uppercase tracking-widest `}>INSTAGRAM</h3>
           <a
             className='hover:text-gray-300 transition-colors break-all'
             href='https://www.instagram.com/we.ecobug/'
             target='_blank'
             rel='noopener noreferrer'
           >
-            https://www.instagram.com/we.ecobug/
+            @we.ecobug
           </a>
         </div>
 
-        <div className='flex flex-col gap-6 w-full sm:w-[45%] md:w-auto items-start'>
-          <h3 className='text-2xl uppercase tracking-widest mb-4'>LINKEDIN</h3>
+        <div className='flex flex-col items-start'>
+          <h3 className={`${pixelifySans.className} text-2xl uppercase tracking-widest `}>LINKEDIN</h3>
           <a
             className='hover:text-gray-300 transition-colors break-all'
             href='https://www.linkedin.com/in/ecobug-landscape-consultant-919a973b5/'
             target='_blank'
             rel='noopener noreferrer'
           >
-            https://www.linkedin.com/in/ecobug-landscape-consultant-919a973b5/
+            Ecobug Landscape Consultant
           </a>
         </div>
 
-        <div className='flex flex-col gap-6 w-full sm:w-[45%] md:w-auto items-start'>
-          <h3 className='text-2xl lowercase tracking-widest mb-4'>email:</h3>
+        <div className='flex flex-col items-start'>
+          <h3 className={`${pixelifySans.className} text-2xl uppercase tracking-widest `}>email:</h3>
           <a
             className='hover:text-gray-300 transition-colors break-all'
-            href='mailto:connect.ecobug@gmail.con'
+            href='mailto:connect.ecobug@gmail.com'
           >
-            connect.ecobug@gmail.con
+            connect.ecobug@gmail.com
           </a>
         </div>
       </div>
