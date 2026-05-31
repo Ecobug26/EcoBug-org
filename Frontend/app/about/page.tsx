@@ -1,11 +1,12 @@
 import { pixelifySans } from '@/components/utils/utils'
-
+import GlobalHamburger from '@/components/shared/GlobalHamburger'
 const description: string =
   'EcoBug Landscape Consultant Software finds its humble beginnings in an effort to organise and compile landscape data, designing, maintenance and costing. In an attempt to make the process seamless and time-efficient, the concept for the software was conceived to align with professional needs, real-life applications and financial implications.  EcoBug vies to embed sustainability and eco-sensitivity as an underlying yet important quality aiding designers to get the best and environmentally viable solutions.'
 
 export default function About() {
   return (
     <>
+      <GlobalHamburger />
       <div className='absolute inset-0 bg-black/50' />
       <div
         className='min-h-screen bg-no-repeat bg-cover '

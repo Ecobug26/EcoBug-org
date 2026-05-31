@@ -32,7 +32,7 @@ const menuItems = [
   { label: 'Webtool', ariaLabel: 'Go to webtool', link: '/webtool' },
   { label: 'Blog', ariaLabel: 'Go to blog', link: '/blog' },
   { label: 'About', ariaLabel: 'About us', link: '/about' },
-  { label: 'Buy', ariaLabel: 'Buy now', link: '/' },
+  { label: 'Buy', ariaLabel: 'Buy now', link: '/products' },
 ]
 
 function Btn({ text, link }: BtnProps) {
