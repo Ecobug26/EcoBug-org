@@ -1,10 +1,11 @@
 import { pixelifySans } from '@/components/utils/utils'
-
+import GlobalHamburger from '@/components/shared/GlobalHamburger'
 export default function WebTool() {
   const description: string =
     'Access professional tools on this website to iterate landscape designs, run simulations to understand suitability and practicality and avail cost estimations that update itself with any changes in the design. Check it out now!'
   return (
     <>
+      <GlobalHamburger />
       <div className='min-h-screen bg-[#367b38]'>
         <div className='flex justify-center items-center'>
           <h1
