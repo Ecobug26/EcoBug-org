@@ -1,7 +1,7 @@
 'use client'
 
+import { useRef, useState } from 'react'
 import Image from 'next/image'
-import { useRef, SetStateAction } from 'react'
 import StaggeredMenu from '@/components/sidebar/StaggeredMenu'
 
 const menuItems = [
@@ -9,16 +9,11 @@ const menuItems = [
   { label: 'Webtool', ariaLabel: 'Go to webtool', link: '/webtool' },
   { label: 'Blog', ariaLabel: 'Go to blog', link: '/blog' },
   { label: 'About', ariaLabel: 'About us', link: '/about' },
-  { label: 'Buy', ariaLabel: 'Buy now', link: '/' },
+  { label: 'Buy', ariaLabel: 'Buy now', link: '/products' },
 ]
 
-type Props = {
-  setIsSidebarOpen: React.Dispatch<SetStateAction<boolean>>
-}
-
-export default function GlobalHamburger({
-  setIsSidebarOpen,
-}: Props) {
+export default function PageHamburger() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const sidebarRef = useRef<HTMLDivElement>(null)
 
   const handleHamburgerClick = () => {
@@ -31,6 +26,10 @@ export default function GlobalHamburger({
 
   return (
     <>
+      {isSidebarOpen && (
+        <div className='fixed inset-0 z-40 bg-black/60 backdrop-blur-sm' />
+      )}
+
       <button
         onClick={handleHamburgerClick}
         className='fixed top-6 left-6 z-50 cursor-pointer'
