@@ -43,7 +43,7 @@ function Btn({ text, link }: BtnProps) {
       className={`
         group relative px-1 py-1
         ${pixelifySans.className}
-        text-[16px] sm:text-xl md:text-3xl text-[#1d4226c8]
+        text-[16px] sm:text-xl md:text-xl text-[#1d4226c8]
         transition-all duration-300 ease-out
         hover:text-[#1d4226] hover:-translate-y-1
         active:translate-y-0 active:scale-95
@@ -134,7 +134,7 @@ function SubSection({ onHamburgerClick }: { onHamburgerClick: () => void }) {
     }
   }, [])
 
-  const archIntensity = Math.max(0, 1.35 - scrollY / (maxScroll * 0.5))
+  const archIntensity = Math.max(0, 1.35 - scrollY / (maxScroll * 0.3))
 
   return (
     <div>
@@ -150,7 +150,7 @@ function SubSection({ onHamburgerClick }: { onHamburgerClick: () => void }) {
         </button>
 
         <h1
-          className={`text-center text-5xl md:text-8xl text-[#1d4226] ${pixelifySans.className}`}
+          className={`text-center text-5xl md:text-5xl text-[#1d4226] ${pixelifySans.className}`}
         >
           ECOBUG
         </h1>
@@ -158,7 +158,7 @@ function SubSection({ onHamburgerClick }: { onHamburgerClick: () => void }) {
         <UserDialog />
       </div>
 
-      <div className='flex flex-nowrap justify-center items-end gap-2 sm:gap-6 lg:gap-40 mt-4 md:mt-10 px-2'>
+      <div className='flex flex-nowrap justify-center items-end gap-2 sm:gap-6 lg:gap-20   px-2'>
         {navItems.map((item, index) => {
           const distanceFromCenter = index - (navItems.length - 1) / 2
           const baseOffset = distanceFromCenter ** 2 * 12
@@ -199,7 +199,7 @@ export default function Navbar({ setIsSidebarOpen }: NavProps) {
 
   return (
     <>
-      <nav className='text-black bg-white fixed top-0 left-0 right-0 z-20 p-4'>
+      <nav className='text-black bg-white fixed top-0 left-0 right-0 z-20 p-2'>
         <SubSection onHamburgerClick={handleHamburgerClick} />
       </nav>
 

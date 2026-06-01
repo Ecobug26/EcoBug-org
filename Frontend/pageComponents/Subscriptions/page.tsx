@@ -13,7 +13,7 @@ export default function Subscriptions() {
       </div>
       <div className='flex items-end justify-center flex-wrap gap-8 bg-white p-6'>
         <SubscriptionCard
-          type='Student Plan'
+          type='Education  Plan'
           description='if you are looking for a more personal approach choose custom.'
           link='/checkout'
         />
