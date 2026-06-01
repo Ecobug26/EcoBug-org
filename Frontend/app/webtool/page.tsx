@@ -8,19 +8,18 @@ export default function WebTool() {
       <GlobalHamburger />
       <div className='min-h-screen bg-[#367b38]'>
         <div className='flex justify-center items-center'>
-          <h1
-            className={`${pixelifySans.className} text-4xl sm:text-6xl md:text-8xl mt-10 sm:mt-16 text-[#1d4226]`}
-          >
-            WEBTOOL
-          </h1>
-        </div>
-        <div className='flex justify-center items-center px-4'>
-          <p
-            className={`${pixelifySans.className} text-white text-lg sm:text-2xl md:text-3xl mt-20 text-center`}
-          >
-            {description}
-          </p>
-        </div>
+  <h1
+    className={`${pixelifySans.className} text-3xl md:text-5xl mt-10 sm:mt-16 text-white`}
+  >
+    WEBTOOL
+  </h1>
+</div>
+
+<div className='flex justify-center items-center px-8 mt-10'>
+  <p className='text-xs md:text-sm leading-relaxed text-white text-center max-w-3xl'>
+    {description}
+  </p>
+</div>
       </div>
     </>
   )

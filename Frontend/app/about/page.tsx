@@ -7,28 +7,21 @@ export default function About() {
   return (
     <>
       <GlobalHamburger />
-      <div className='absolute inset-0 bg-black/50' />
-      <div
-        className='min-h-screen bg-no-repeat bg-cover '
-        style={{
-          backgroundImage: `url('/leaf.svg')`,
-        }}
-      >
-        <div className='flex items-center justify-center'>
-          <h1
-            className={`${pixelifySans.className} text-6xl sm:text-8xl text-white mt-16 md:mt-8 z-5`}
-          >
-            ABOUT
-          </h1>
-        </div>
-        <div className='flex items-center justify-center backdrop-blur-2xl border border-white rounded-3xl p-8 m-10 md:m-14 lg:m-20'>
-          <p
-            className=' text-3xl tracking-widest text-white text-justify leading-10'
-          >
-            {description}
-          </p>
-        </div>
-      </div>
+      <div className='min-h-screen bg-[#367B38]'>
+  <div className='flex items-center justify-center'>
+    <h1
+      className={`${pixelifySans.className} text-3xl sm:text-5xl text-white mt-16 md:mt-8 z-5`}
+    >
+      ABOUT
+    </h1>
+  </div>
+
+  <div className='flex items-center justify-center backdrop-blur-2xl border border-white rounded-3xl p-8 m-10 md:m-14 lg:m-20'>
+    <p className='text-xs md:text-sm leading-relaxed text-[#ffffff] text-justify font-mono'>
+      {description}
+    </p>
+  </div>
+</div>
     </>
   )
 }
