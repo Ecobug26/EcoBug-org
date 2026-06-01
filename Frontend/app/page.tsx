@@ -27,6 +27,7 @@ export default function Home() {
 
   return (
     <>
+      
       <div className='bg-white'>
         {isSidebarOpen && (
           <div className='fixed inset-0 z-40 bg-black/60 backdrop-blur-sm' />

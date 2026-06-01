@@ -30,7 +30,7 @@ export default function Feedbacks() {
                       className='bg-[#2f7335] shrink-0 w-[320px] min-h-[200px] rounded-3xl p-6 flex items-start cursor-pointer'
                     >
                       <p
-                        className={`text-black text-sm md:text-base leading-snug ${pixelifySans.className}`}
+                        className='text-white text-sm md:text-base leading-snug font-mono'
                       >
                         {quote}
                       </p>
@@ -41,12 +41,12 @@ export default function Feedbacks() {
             </div>
             <div className='bg-[#2f7335] rounded-2xl p-10 flex flex-col items-center justify-center text-center gap-5'>
               <p
-                className={`text-black text-sm tracking-widest uppercase ${pixelifySans.className}`}
+                className={`text-white text-2xl tracking-widest uppercase ${pixelifySans.className}`}
               >
                 Are you ready?
               </p>
               <h2
-                className={`text-black text-xl md:text-2xl tracking-widest uppercase ${pixelifySans.className}`}
+                className={`text-white text-xl md:text-2xl tracking-widest uppercase ${pixelifySans.className}`}
               >
                 Be a part of next best thing
               </h2>
