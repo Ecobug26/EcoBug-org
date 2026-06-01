@@ -1,11 +1,13 @@
 import { pixelifySans } from '@/components/utils/utils'
 import { useRouter } from 'next/navigation'
-
+import BackgroundDecorations from '@/components/shared/BackgroundDecorations'
 export default function Hero() {
   const r = useRouter()
 
   return (
-    <div className='min-h-screen w-full flex flex-col justify-end p-4 md:p-10'>
+    <div className='relative min-h-screen w-full flex flex-col justify-end p-4 md:p-10'>
+      <div className='relative w-full max-w-7xl mx-auto'>
+      <BackgroundDecorations/>
       <div className='bg-[#2f7a3b] rounded-2xl flex flex-col md:flex-row justify-between items-center p-8 md:p-12 mb-10 w-full max-w-7xl mx-auto'>
         {/* Left Side: Text Content */}
         <div className='max-w-3xl'>
@@ -27,6 +29,7 @@ export default function Hero() {
         >
           BUY
         </button>
+        </div>
       </div>
     </div>
   )
