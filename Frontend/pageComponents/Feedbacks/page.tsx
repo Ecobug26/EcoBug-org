@@ -1,7 +1,7 @@
 import { pixelifySans } from '@/components/utils/utils'
 import Marquee from 'react-fast-marquee'
 import { useRouter } from 'next/navigation'
-
+import BackgroundDecorations from '@/components/shared/BG_deco/BackgroundDecorations_feedbacks'
 export default function Feedbacks() {
   const r = useRouter()
   const quotes = [
@@ -13,8 +13,9 @@ export default function Feedbacks() {
 
   return (
     <>
+      
       <div className='relative min-h-screen scale-90 md:scale-100 flex items-end mb-8'>
-        
+        <BackgroundDecorations />
         <div className='max-w-4xl w-full mx-auto bg-white rounded-2xl border border-gray-200 shadow-[0px_2px_6px_#000] p-8 md:p-12 mb-5 overflow-hidden'>
           <div
             className={`text-[#204922] uppercase tracking-widest text-lg sm:text-2xl mb-8 ${pixelifySans.className}`}

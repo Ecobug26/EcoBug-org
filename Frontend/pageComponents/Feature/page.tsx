@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import { pixelifySans } from '@/components/utils/utils'
-import BackgroundDecorations from '@/components/shared/BackgroundDecorations'
+import BackgroundDecorations from '@/components/shared/BG_deco/BackgroundDecorations_features'
 const features = [
   {
     title: 'Landscaping Design',
-    icon: '/featuresimg_3.png',
+    icon: '/featuresImg_3.png',
     description:
       'Enables users to research, feed site plans or design in-place using tools, curated plant and furniture blocks with automated plant schedules.',
   },
@@ -43,7 +43,7 @@ const features = [
 export default function Feature() {
   return (
     <section className=" relative px-4 md:px-10 py-10 bg-white">
-      
+      <BackgroundDecorations />
       <div className="bg-[#367B38] rounded-2xl p-6 md:p-10">
         <h2
           className={`${pixelifySans.className}

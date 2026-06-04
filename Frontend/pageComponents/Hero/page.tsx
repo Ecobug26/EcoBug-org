@@ -1,6 +1,6 @@
 import { pixelifySans } from '@/components/utils/utils'
 import { useRouter } from 'next/navigation'
-import BackgroundDecorations from '@/components/shared/BackgroundDecorations'
+import BackgroundDecorations from '@/components/shared/BG_deco/BackgroundDecorations_hero'
 export default function Hero() {
   const r = useRouter()
 
