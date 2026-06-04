@@ -10,31 +10,31 @@ const features = [
   },
   {
     title: 'Costing and Estimation',
-    icon: '/featuresimg_4.png',
+    icon: '/featuresImg_4.png',
     description:
       'Get accurate bills of quantities and schedules that update with any changes in plans and costing.',
   },
   {
     title: 'Micro-climate analysis',
-    icon: '/featuresimg_5.png',
+    icon: '/featuresImg_5.png',
     description:
       'Assess the influence of local climate on landscape designs and understand practicality.',
   },
   {
     title: 'Data Bank',
-    icon: '/featuresimg_6.png',//3
+    icon: '/featuresImg_6.png',//3
     description:
       'Avail a repository of landscaping knowledge, right from plant catalogues to strategies.',
   },
   {
     title: '3D Simulation',
-    icon: '/featuresimg_2.png',//2
+    icon: '/featuresImg_2.png',//2
     description:
       'Run and analyse your model through real-time effects of light, shade and irrigation.',
   },
   {
     title: 'Eco-Sensitivity & Sustainability',
-    icon: '/featuresimg_1.png',//1
+    icon: '/featuresImg_1.png',//1
     description:
       'Environment kept as a priority, encouraging sustainable and eco-centric strategies.',
   },
