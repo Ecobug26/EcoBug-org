@@ -76,11 +76,11 @@ function UserDialog() {
     <div ref={dialogRef} className='relative flex items-center'>
       <button className='cursor-pointer' onClick={() => setOpen((p) => !p)}>
         <Image
-          src='/user.png'
+          src='/user-gren.png'
           alt='user'
           width={36}
           height={36}
-          className='w-7 h-7 sm:w-9 sm:h-9 md:w-11 md:h-11'
+          className='w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10'
         />
       </button>
 
@@ -141,7 +141,7 @@ function SubSection({ onHamburgerClick }: { onHamburgerClick: () => void }) {
       <div className='flex justify-between mx-1 md:mx-12'>
         <button className='cursor-pointer' onClick={onHamburgerClick}>
           <Image
-            src='/hamburger.png'
+            src='/ham-gren.png'
             alt='menu'
             width={36}
             height={36}

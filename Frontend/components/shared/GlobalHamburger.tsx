@@ -39,7 +39,7 @@ export default function PageHamburger() {
           alt='menu'
           width={40}
           height={40}
-          className='w-7 h-7 sm:w-9 sm:h-9 md:w-11 md:h-11'
+          className='invert w-7 h-7 sm:w-9 sm:h-9 md:w-11 md:h-11'
         />
       </button>
 

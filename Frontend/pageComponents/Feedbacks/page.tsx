@@ -13,7 +13,8 @@ export default function Feedbacks() {
 
   return (
     <>
-      <div className='min-h-screen scale-90 md:scale-100 flex items-end mb-8'>
+      <div className='relative min-h-screen scale-90 md:scale-100 flex items-end mb-8'>
+        
         <div className='max-w-4xl w-full mx-auto bg-white rounded-2xl border border-gray-200 shadow-[0px_2px_6px_#000] p-8 md:p-12 mb-5 overflow-hidden'>
           <div
             className={`text-[#204922] uppercase tracking-widest text-lg sm:text-2xl mb-8 ${pixelifySans.className}`}
