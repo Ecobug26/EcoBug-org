@@ -1,3 +1,8 @@
+'use client'
+
+import { useState } from 'react'
+import { supabase } from '@/lib/supabase'
+import { useRouter } from 'next/navigation'
 import localFont from 'next/font/local'
 
 const pixelifySans = localFont({
@@ -5,6 +10,25 @@ const pixelifySans = localFont({
 })
 
 export default function Signup() {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const router = useRouter()
+
+  async function handleSignup() {
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+  })
+
+  if (error) {
+    alert(error.message)
+    return
+  }
+
+  router.push('/')
+}
+
   return (
     <div className='min-h-screen flex items-center justify-center p-2 md:p-4'>
       <div className='bg-[#214330] w-full max-w-250 scale-80 rounded-2xl p-6 md:p-12'>
@@ -32,7 +56,9 @@ export default function Signup() {
               </span>
               <input
                 type='email'
-                className='w-full bg-[#d9d9d9] h-12 md:h-20 rounded-xl px-4 md:px-6 text-base md:text-2xl outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_6px_1px_#000]'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className='...'
                 placeholder='Enter your email'
               />
             </div>
@@ -44,12 +70,15 @@ export default function Signup() {
               </span>
               <input
                 type='password'
-                className='w-full bg-[#d9d9d9] h-12 md:h-20 rounded-xl px-4 md:px-6 text-base md:text-2xl outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_6px_1px_#000]'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className='...'
                 placeholder='Enter your password'
               />
             </div>
             <div>
               <button
+                onClick={handleSignup}
                 className={`w-full bg-[#4eb26d] hover:bg-[#4eb26d88] text-white h-12 md:h-20 rounded-xl text-xl md:text-4xl transition-colors cursor-pointer mt-2 md:mt-4 ${pixelifySans.className}`}
               >
                 Sign Up
