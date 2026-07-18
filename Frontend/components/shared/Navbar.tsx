@@ -5,6 +5,7 @@ import { useState, useEffect, useRef, SetStateAction } from 'react'
 import { pixelifySans } from '../utils/utils'
 import { useRouter } from 'next/navigation'
 import StaggeredMenu from '../sidebar/StaggeredMenu'
+import { getCurrentUser } from '@/lib/api'
 
 type BtnProps = {
   text: string
@@ -60,7 +61,17 @@ function Btn({ text, link }: BtnProps) {
 function UserDialog() {
   const router = useRouter()
   const [open, setOpen] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(false)
   const dialogRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+  async function checkUser() {
+    const user = await getCurrentUser()
+    setLoggedIn(!!user)
+  }
+
+  checkUser()
+}, [])
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -68,43 +79,86 @@ function UserDialog() {
         setOpen(false)
       }
     }
-    if (open) document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+
+    if (open) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () =>
+      document.removeEventListener('mousedown', handleClickOutside)
   }, [open])
 
+  function logout() {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    setLoggedIn(false)
+    setOpen(false)
+    router.push('/')
+  }
+
   return (
-    <div ref={dialogRef} className='relative flex items-center'>
-      <button className='cursor-pointer' onClick={() => setOpen((p) => !p)}>
+    <div ref={dialogRef} className="relative flex items-center">
+      <button
+        className="cursor-pointer"
+        onClick={() => setOpen((p) => !p)}
+      >
         <Image
-          src='/user.png'
-          alt='user'
+          src="/user-gren.png"
+          alt="user"
           width={36}
           height={36}
-          className='w-7 h-7 sm:w-9 sm:h-9 md:w-11 md:h-11'
+          className="w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10"
         />
       </button>
 
       {open && (
-        <div className='absolute top-full right-0 mt-2 w-36 bg-white border border-gray-100 rounded-xl shadow-lg overflow-hidden z-50'>
-          <button
-            onClick={() => {
-              router.push('/auth/login')
-              setOpen(false)
-            }}
-            className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-[#1d4226] hover:bg-[#f0f7f0] transition-colors ${pixelifySans.className}`}
-          >
-            Login
-          </button>
-          <div className='h-px bg-gray-100' />
-          <button
-            onClick={() => {
-              router.push('/auth/signup')
-              setOpen(false)
-            }}
-            className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-[#1d4226] hover:bg-[#f0f7f0] transition-colors ${pixelifySans.className}`}
-          >
-            Sign Up
-          </button>
+        <div className="absolute top-full right-0 mt-2 w-40 bg-white border border-gray-100 rounded-xl shadow-lg overflow-hidden z-50">
+          {!loggedIn ? (
+            <>
+              <button
+                onClick={() => {
+                  router.push('/auth/login')
+                  setOpen(false)
+                }}
+                className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-[#1d4226] hover:bg-[#f0f7f0] transition-colors ${pixelifySans.className}`}
+              >
+                Login
+              </button>
+
+              <div className="h-px bg-gray-100" />
+
+              <button
+                onClick={() => {
+                  router.push('/auth/signup')
+                  setOpen(false)
+                }}
+                className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-[#1d4226] hover:bg-[#f0f7f0] transition-colors ${pixelifySans.className}`}
+              >
+                Sign Up
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => {
+                  setOpen(false)
+                  router.push('/profile')
+                }}
+                className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-[#1d4226] hover:bg-[#f0f7f0] transition-colors ${pixelifySans.className}`}
+              >
+                Profile
+              </button>
+
+              <div className="h-px bg-gray-100" />
+
+              <button
+                onClick={logout}
+                className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors ${pixelifySans.className}`}
+              >
+                Logout
+              </button>
+            </>
+          )}
         </div>
       )}
     </div>
@@ -141,7 +195,7 @@ function SubSection({ onHamburgerClick }: { onHamburgerClick: () => void }) {
       <div className='flex justify-between mx-1 md:mx-12'>
         <button className='cursor-pointer' onClick={onHamburgerClick}>
           <Image
-            src='/hamburger.png'
+            src='/ham-gren.png'
             alt='menu'
             width={36}
             height={36}
