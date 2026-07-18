@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import localFont from 'next/font/local'
 
 const pixelifySans = localFont({
@@ -12,21 +12,50 @@ const pixelifySans = localFont({
 export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
+  const [fullName, setFullName] = useState('')
   const router = useRouter()
 
   async function handleSignup() {
-  const { error } = await supabase.auth.signUp({
-    email,
-    password,
-  })
-
-  if (error) {
-    alert(error.message)
+    if (!fullName || !email || !password) {
+    alert('Please fill in all fields.')
     return
   }
 
-  router.push('/')
+  if (password.length < 8) {
+    alert('Password must be at least 8 characters.')
+    return
+  }
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName,
+          email,
+          password,
+        }),
+      }
+    )
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      alert(data.message || 'Signup failed')
+      return
+    }
+
+    localStorage.setItem('accessToken', data.accessToken)
+    localStorage.setItem('refreshToken', data.refreshToken)
+
+    router.push('/')
+  } catch (err) {
+    console.error(err)
+    alert('Unable to connect to server')
+  }
 }
 
   return (
@@ -47,6 +76,21 @@ export default function Signup() {
               Sign Up
             </span>
           </div>
+          <div className='flex flex-col gap-2 md:gap-3'>
+  <span
+    className={`text-white text-xl md:text-3xl ${pixelifySans.className}`}
+  >
+    Full Name
+  </span>
+
+  <input
+    type='text'
+    value={fullName}
+    onChange={(e) => setFullName(e.target.value)}
+    className='w-full bg-[#d9d9d9] h-12 md:h-20 rounded-xl px-6 text-xl md:text-2xl outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_6px_1px_#000]'
+    placeholder='Enter your full name'
+  />
+</div>
           <div className='flex flex-col gap-5 md:gap-8'>
             <div className='flex flex-col gap-2 md:gap-3'>
               <span
@@ -58,7 +102,7 @@ export default function Signup() {
                 type='email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className='...'
+                className='w-full bg-[#d9d9d9] h-12 md:h-20 rounded-xl px-6 text-xl md:text-2xl outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_6px_1px_#000]'
                 placeholder='Enter your email'
               />
             </div>
@@ -72,7 +116,7 @@ export default function Signup() {
                 type='password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className='...'
+                className='w-full bg-[#d9d9d9] h-12 md:h-20 rounded-xl px-6 text-xl md:text-2xl outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_6px_1px_#000]'
                 placeholder='Enter your password'
               />
             </div>
@@ -90,7 +134,7 @@ export default function Signup() {
           >
             <span>already have an account?</span>
             <a
-              href='#'
+              href='/auth/login'
               className='hover:text-[#7ec28d] transition-colors hover:underline'
             >
               Login

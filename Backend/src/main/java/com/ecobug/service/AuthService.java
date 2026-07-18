@@ -8,8 +8,7 @@ import com.ecobug.repository.UserRepository;
 import com.ecobug.exception.EmailAlreadyExistsException;
 import com.ecobug.exception.InvalidCredentialsException;
 import com.ecobug.security.JwtService;
-import com.ecobug.dto.LoginRequest;
-import com.ecobug.exception.InvalidCredentialsException;
+import com.ecobug.dto.RefreshRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,6 +66,33 @@ public class AuthService {
     return AuthResponse.builder()
             .accessToken(accessToken)
             .refreshToken(refreshToken)
+            .email(user.getEmail())
+            .fullName(user.getFullName())
+            .build();
+}
+public AuthResponse refresh(RefreshRequest request) {
+
+    String email;
+
+    try {
+        email = jwtService.extractEmail(request.getRefreshToken());
+    } catch (Exception e) {
+        throw new InvalidCredentialsException("Invalid refresh token");
+    }
+
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new InvalidCredentialsException("User not found"));
+
+    if (!jwtService.isTokenValid(request.getRefreshToken(), user.getEmail())) {
+        throw new InvalidCredentialsException("Invalid refresh token");
+    }
+
+    String newAccessToken = jwtService.generateAccessToken(user.getEmail());
+    String newRefreshToken = jwtService.generateRefreshToken(user.getEmail());
+
+    return AuthResponse.builder()
+            .accessToken(newAccessToken)
+            .refreshToken(newRefreshToken)
             .email(user.getEmail())
             .fullName(user.getFullName())
             .build();

@@ -3,6 +3,7 @@ package com.ecobug.controller;
 import com.ecobug.dto.AuthResponse;
 import com.ecobug.dto.LoginRequest;
 import com.ecobug.dto.RegisterRequest;
+import com.ecobug.dto.RefreshRequest;
 import com.ecobug.service.AuthService;
 import com.ecobug.dto.UserResponse;
 import com.ecobug.entity.User;
@@ -46,5 +47,9 @@ public UserResponse me(Authentication authentication) {
             .email(user.getEmail())
             .role(user.getRole())
             .build();
+}
+@PostMapping("/refresh")
+public AuthResponse refresh(@Valid @RequestBody RefreshRequest request) {
+    return authService.refresh(request);
 }
 }
