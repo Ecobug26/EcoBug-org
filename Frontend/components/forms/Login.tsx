@@ -1,9 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
-
+import Link from 'next/link'
 import localFont from 'next/font/local'
 
 const pixelifySans = localFont({
@@ -11,24 +10,48 @@ const pixelifySans = localFont({
 })
 
 
-export default function Login() {
+export default function Login() {   
   const router = useRouter()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   async function handleLogin() {
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
+    if (!email || !password) {
+  alert('Please fill in all fields.')
+  return
+}
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      }
+    )
 
-  if (error) {
-    alert(error.message)
-    return
+    const data = await response.json()
+
+    if (!response.ok) {
+      alert(data.message || 'Login failed')
+      return
+    }
+
+    // Store tokens
+    localStorage.setItem('accessToken', data.accessToken)
+    localStorage.setItem('refreshToken', data.refreshToken)
+
+    router.push('/')
+  } catch (error) {
+    console.error(error)
+    alert('Unable to connect to server.')
   }
-
-  router.push('/')
 }
 
   return (
@@ -93,7 +116,7 @@ export default function Login() {
           >
             <span>no account?</span>
             <a
-              href='#'
+              href='/auth/signup'
               className='hover:text-[#7ec28d] transition-colors hover:underline'
             >
               Create account

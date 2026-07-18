@@ -8,7 +8,6 @@ import Feature from '@/pageComponents/Feature/page'
 
 import { useEffect, useState } from 'react'
 import Hero from '@/pageComponents/Hero/page'
-import AuthCheck from '@/components/auth/AuthCheck'
 
 export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -38,7 +37,6 @@ export default function Home() {
         <Feature />
         <Feedbacks />
         <Footer />
-        <AuthCheck />
       </div>
     </>
   )
