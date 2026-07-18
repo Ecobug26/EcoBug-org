@@ -2,10 +2,11 @@
 
 import SubscriptionCard from '@/components/cards/SubscriptionCard'
 import { pixelifySans } from '@/components/utils/utils'
-
+import BackgroundDecoration from '@/components/shared/BG_deco/BackgroundDecorations_subscription'
 export default function Subscriptions() {
   return (
     <div className='min-h-screen flex flex-col justify-between items-stretch'>
+      <BackgroundDecoration/>
       <div
         className={`flex mt-80 text-[#004400] text-6xl justify-center items-center ${pixelifySans.className}`}
       >

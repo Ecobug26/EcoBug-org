@@ -1,11 +1,61 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import localFont from 'next/font/local'
 
 const pixelifySans = localFont({
   src: '../../public/fonts/pixelifySans.ttf',
 })
 
-export default function Login() {
+
+export default function Login() {   
+  const router = useRouter()
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  async function handleLogin() {
+    if (!email || !password) {
+  alert('Please fill in all fields.')
+  return
+}
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      }
+    )
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      alert(data.message || 'Login failed')
+      return
+    }
+
+    // Store tokens
+    localStorage.setItem('accessToken', data.accessToken)
+    localStorage.setItem('refreshToken', data.refreshToken)
+
+    router.push('/')
+  } catch (error) {
+    console.error(error)
+    alert('Unable to connect to server.')
+  }
+}
+
   return (
+    
     <div className='min-h-screen flex items-center justify-center p-2 md:p-4'>
       <div className='bg-[#214330] w-full max-w-250 scale-80 rounded-2xl p-8 md:p-12 shadow-2xl border border-white/20'>
         <div className='border-b border-white/30 pb-6 mb-8'>
@@ -32,12 +82,29 @@ export default function Login() {
               </span>
               <input
                 type='email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className='w-full bg-[#d9d9d9] h-16 md:h-20 rounded-xl px-6 text-2xl outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_6px_1px_#000]'
                 placeholder='Enter your email'
               />
             </div>
+            <div className='flex flex-col gap-3'>
+              <span
+              className={`text-white text-2xl md:text-3xl ${pixelifySans.className}`}
+              >
+              Password
+              </span>
+              <input
+                type='password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className='w-full bg-[#d9d9d9] h-16 md:h-20 rounded-xl px-6 text-2xl outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_6px_1px_#000]'
+                placeholder='Enter your password'
+              />
+            </div>
             <div>
               <button
+                onClick={handleLogin}
                 className={`w-full bg-[#4eb26d] hover:bg-[#4eb26d88] text-white h-16 md:h-20 rounded-xl text-2xl md:text-4xl transition-colors cursor-pointer mt-2 ${pixelifySans.className}`}
               >
                 Login
@@ -49,7 +116,7 @@ export default function Login() {
           >
             <span>no account?</span>
             <a
-              href='#'
+              href='/auth/signup'
               className='hover:text-[#7ec28d] transition-colors hover:underline'
             >
               Create account

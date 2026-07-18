@@ -35,7 +35,7 @@ export default function PageHamburger() {
         className='fixed top-6 left-6 z-50 cursor-pointer'
       >
         <Image
-          src='/hamburger.png'
+          src='/ham-gren.png'
           alt='menu'
           width={40}
           height={40}
