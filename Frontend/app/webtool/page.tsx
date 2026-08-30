@@ -55,8 +55,8 @@ export default function WebTool() {
 
         <div className='flex justify-center px-4 sm:px-8 mt-8 mb-16'>
           <div className='w-full max-w-3xl bg-white rounded-2xl p-4 md:p-6 shadow-xl flex flex-col gap-4'>
-            {/* Plant Bank — on hold */}
-            <ToolCard title='Plant Bank' disabled badge='on hold' />
+            {/* Plant Bank */}
+            <ToolCard title='Plant Bank' href='/webtool/plantbank' />
             {/* Strategies */}
             <ToolCard title='Strategies' href='/webtool/strategy' />
             {/* Coming soon */}
