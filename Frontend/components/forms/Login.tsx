@@ -46,6 +46,7 @@ export default function Login() {
     // Store tokens
     localStorage.setItem('accessToken', data.accessToken)
     localStorage.setItem('refreshToken', data.refreshToken)
+    localStorage.setItem('email', email)
 
     router.push('/')
   } catch (error) {
@@ -55,64 +56,57 @@ export default function Login() {
 }
 
   return (
-    
     <div className='min-h-screen flex items-center justify-center p-2 md:p-4'>
-      <div className='bg-[#214330] w-full max-w-250 scale-80 rounded-2xl p-8 md:p-12 shadow-2xl border border-white/20'>
-        <div className='border-b border-white/30 pb-6 mb-8'>
+      <div className='bg-[#214330] w-full max-w-md rounded-xl p-6 md:p-8 shadow-2xl border border-white/20'>
+        <div className='border-b border-white/30 pb-4 mb-6'>
           <span
-            className={`${pixelifySans.className} text-white text-6xl md:text-9xl tracking-[-0.002em]`}
+            className={`${pixelifySans.className} text-white text-3xl md:text-4xl tracking-[0.05em]`}
           >
             ECOBUG
           </span>
         </div>
-        <div className='flex flex-col gap-8'>
-          <div className='mb-8'>
+        <div className='flex flex-col gap-6'>
+          <span
+            className={`text-white text-lg md:text-xl ${pixelifySans.className}`}
+          >
+            Sign In
+          </span>
+          <div className='flex flex-col gap-2'>
             <span
-              className={`text-white text-3xl md:text-4xl ${pixelifySans.className}`}
+              className={`text-white text-sm md:text-base ${pixelifySans.className}`}
             >
-              Sign In
+              Email
             </span>
+            <input
+              type='email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className='w-full bg-[#d9d9d9] h-10 md:h-12 rounded-lg px-4 text-base md:text-lg outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_4px_1px_#000]'
+            />
           </div>
-          <div className='flex flex-col gap-8'>
-            <div className='flex flex-col gap-3'>
-              <span
-                className={`text-white text-2xl md:text-3xl ${pixelifySans.className}`}
-              >
-                Email
-              </span>
-              <input
-                type='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className='w-full bg-[#d9d9d9] h-16 md:h-20 rounded-xl px-6 text-2xl outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_6px_1px_#000]'
-                placeholder='Enter your email'
-              />
-            </div>
-            <div className='flex flex-col gap-3'>
-              <span
-              className={`text-white text-2xl md:text-3xl ${pixelifySans.className}`}
-              >
+          <div className='flex flex-col gap-2'>
+            <span
+              className={`text-white text-sm md:text-base ${pixelifySans.className}`}
+            >
               Password
-              </span>
-              <input
-                type='password'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className='w-full bg-[#d9d9d9] h-16 md:h-20 rounded-xl px-6 text-2xl outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_6px_1px_#000]'
-                placeholder='Enter your password'
-              />
-            </div>
-            <div>
-              <button
-                onClick={handleLogin}
-                className={`w-full bg-[#4eb26d] hover:bg-[#4eb26d88] text-white h-16 md:h-20 rounded-xl text-2xl md:text-4xl transition-colors cursor-pointer mt-2 ${pixelifySans.className}`}
-              >
-                Login
-              </button>
-            </div>
+            </span>
+            <input
+              type='password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className='w-full bg-[#d9d9d9] h-10 md:h-12 rounded-lg px-4 text-base md:text-lg outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_4px_1px_#000]'
+            />
+          </div>
+          <div>
+            <button
+              onClick={handleLogin}
+              className={`w-full bg-[#6aa874] hover:bg-[#6aa874aa] text-white h-9 md:h-11 rounded-lg text-sm md:text-base transition-colors cursor-pointer ${pixelifySans.className}`}
+            >
+              NEXT
+            </button>
           </div>
           <div
-            className={`mt-4 text-white text-xl md:text-3xl flex gap-3 ${pixelifySans.className}`}
+            className={`text-white text-sm md:text-base flex gap-2 ${pixelifySans.className}`}
           >
             <span>no account?</span>
             <a
