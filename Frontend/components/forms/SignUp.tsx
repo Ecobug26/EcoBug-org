@@ -12,11 +12,12 @@ const pixelifySans = localFont({
 export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [fullName, setFullName] = useState('')
   const router = useRouter()
 
   async function handleSignup() {
-    if (!fullName || !email || !password) {
+    // Full name derived from email (UI only collects email + password)
+    const fullName = email.split('@')[0] || ''
+    if (!email || !password) {
     alert('Please fill in all fields.')
     return
   }
@@ -50,6 +51,7 @@ export default function Signup() {
 
     localStorage.setItem('accessToken', data.accessToken)
     localStorage.setItem('refreshToken', data.refreshToken)
+    localStorage.setItem('email', email)
 
     router.push('/')
   } catch (err) {
@@ -60,77 +62,56 @@ export default function Signup() {
 
   return (
     <div className='min-h-screen flex items-center justify-center p-2 md:p-4'>
-      <div className='bg-[#214330] w-full max-w-250 scale-80 rounded-2xl p-6 md:p-12'>
-        <div className='border-b border-white/30 pb-4 mb-6 md:pb-6 md:mb-8'>
+      <div className='bg-[#214330] w-full max-w-md rounded-xl p-6 md:p-8 shadow-2xl border border-white/20'>
+        <div className='border-b border-white/30 pb-4 mb-6'>
           <span
-            className={`${pixelifySans.className} text-white text-5xl md:text-9xl tracking-[-0.002em]`}
+            className={`${pixelifySans.className} text-white text-3xl md:text-4xl tracking-[0.05em]`}
           >
             ECOBUG
           </span>
         </div>
-        <div className='flex flex-col gap-6 md:gap-8'>
-          <div className='mb-2 md:mb-8'>
+        <div className='flex flex-col gap-6'>
+          <span
+            className={`text-white text-lg md:text-xl ${pixelifySans.className}`}
+          >
+            Sign Up
+          </span>
+          <div className='flex flex-col gap-2'>
             <span
-              className={`text-white text-2xl md:text-4xl ${pixelifySans.className}`}
+              className={`text-white text-sm md:text-base ${pixelifySans.className}`}
             >
-              Sign Up
+              Enter Email
             </span>
+            <input
+              type='email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className='w-full bg-[#d9d9d9] h-10 md:h-12 rounded-lg px-4 text-base md:text-lg outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_4px_1px_#000]'
+            />
           </div>
-          <div className='flex flex-col gap-2 md:gap-3'>
-  <span
-    className={`text-white text-xl md:text-3xl ${pixelifySans.className}`}
-  >
-    Full Name
-  </span>
-
-  <input
-    type='text'
-    value={fullName}
-    onChange={(e) => setFullName(e.target.value)}
-    className='w-full bg-[#d9d9d9] h-12 md:h-20 rounded-xl px-6 text-xl md:text-2xl outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_6px_1px_#000]'
-    placeholder='Enter your full name'
-  />
-</div>
-          <div className='flex flex-col gap-5 md:gap-8'>
-            <div className='flex flex-col gap-2 md:gap-3'>
-              <span
-                className={`text-white text-xl md:text-3xl ${pixelifySans.className}`}
-              >
-                Email
-              </span>
-              <input
-                type='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className='w-full bg-[#d9d9d9] h-12 md:h-20 rounded-xl px-6 text-xl md:text-2xl outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_6px_1px_#000]'
-                placeholder='Enter your email'
-              />
-            </div>
-            <div className='flex flex-col gap-2 md:gap-3'>
-              <span
-                className={`text-white text-xl md:text-3xl ${pixelifySans.className}`}
-              >
-                Password
-              </span>
-              <input
-                type='password'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className='w-full bg-[#d9d9d9] h-12 md:h-20 rounded-xl px-6 text-xl md:text-2xl outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_6px_1px_#000]'
-                placeholder='Enter your password'
-              />
-            </div>
-            <div>
-              <button
-                onClick={handleSignup}
-                className={`w-full bg-[#4eb26d] hover:bg-[#4eb26d88] text-white h-12 md:h-20 rounded-xl text-xl md:text-4xl transition-colors cursor-pointer mt-2 md:mt-4 ${pixelifySans.className}`}
-              >
-                Sign Up
-              </button>
-            </div>
+          <div className='flex flex-col gap-2'>
+            <span
+              className={`text-white text-sm md:text-base ${pixelifySans.className}`}
+            >
+              Enter Password
+            </span>
+            <input
+              type='password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className='w-full bg-[#d9d9d9] h-10 md:h-12 rounded-lg px-4 text-base md:text-lg outline-none focus:ring-4 focus:ring-[#7ec28d]/50 transition-all shadow-[0px_4px_1px_#000]'
+            />
+          </div>
+          <div>
+            <button
+              onClick={handleSignup}
+              className={`w-full bg-[#6aa874] hover:bg-[#6aa874aa] text-white h-9 md:h-11 rounded-lg text-sm md:text-base transition-colors cursor-pointer ${pixelifySans.className}`}
+            >
+              NEXT
+            </button>
           </div>
           <div
-            className={`mt-2 md:mt-4 text-white text-base md:text-3xl flex flex-wrap gap-2 md:gap-3 ${pixelifySans.className}`}
+            className={`text-white text-sm md:text-base flex flex-wrap gap-2 ${pixelifySans.className}`}
           >
             <span>already have an account?</span>
             <a
