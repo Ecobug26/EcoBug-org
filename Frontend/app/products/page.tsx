@@ -1,13 +1,19 @@
+import AppNavbar from '@/components/shared/AppNavbar'
+import AppFooter from '@/components/shared/AppFooter'
 import ProductSection from '@/components/product/ProductSection'
-import { pixelifySans } from '@/components/utils/utils'
 import Subscriptions from '@/pageComponents/Subscriptions/page'
-import GlobalHamburger from '@/components/shared/GlobalHamburger' 
+
 export default function Product() {
   return (
-    <main className='min-h-screen flex flex-col gap-12 md:gap-15 items-center px-4'>
-  <GlobalHamburger />
-  <Subscriptions />
-  <ProductSection />
-</main>
+    <div className='min-h-screen flex flex-col bg-bg'>
+      <AppNavbar />
+
+      <main className='flex-1 flex flex-col items-center pt-28 md:pt-32 pb-16 px-4 gap-12'>
+        <Subscriptions />
+        <ProductSection />
+      </main>
+
+      <AppFooter />
+    </div>
   )
 }

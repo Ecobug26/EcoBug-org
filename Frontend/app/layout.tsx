@@ -1,5 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { AuthProvider } from '@/context/AuthContext'
 
@@ -26,10 +27,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-bg text-ink`}
       >
+        {/* Pre-paint theme init: applies saved/system theme before first paint (no flash) */}
+        <Script id='eb-theme-init' strategy='beforeInteractive'>
+          {`(function(){try{var t=localStorage.getItem('eb-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`}
+        </Script>
         <AuthProvider>
     {children}
 </AuthProvider>

@@ -1,1 +1,95 @@
 @import 'tailwindcss';
+
+/* Class-based dark mode (Tailwind v4 custom variant) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------
+   EcoBug design tokens — Figma Frame 73 (light) / Frame 72 (dark)
+   ------------------------------------------------------------------ */
+:root {
+  --eb-bg: #eaf3de;
+  --eb-card: #a9de8c;
+  --eb-primary: #4b8b57;
+  --eb-primary-hover: #1e4a26;
+  --eb-secondary: #7fb98a;
+  --eb-tertiary: #c4e08f;
+  --eb-text: #17251b;
+  --eb-text-muted: #5f6e5f;
+  --eb-border: #cfe4c4;
+  --eb-warning: #e08a4c;
+  /* supporting surfaces seen in the page mockups */
+  --eb-cream: #f6ecd9;
+  --eb-panel: #ffffff;
+  --eb-footer: #52c34e;
+  --eb-footer-ink: #0f2c12;
+  --eb-chip: #f1f5e8;
+  /* dot color for the footer wordmark */
+  --eb-dot: #164312;
+}
+
+.dark {
+  --eb-bg: #0c130a;
+  --eb-card: #1e3320;
+  --eb-primary: #57b36a;
+  --eb-primary-hover: #a8e6b0;
+  --eb-secondary: #4e6b46;
+  --eb-tertiary: #c0de8f;
+  --eb-text: #f1f7ec;
+  --eb-text-muted: #8fa790;
+  --eb-border: #24401f;
+  --eb-warning: #e08a4c;
+  --eb-cream: #131b10;
+  --eb-panel: #16281a;
+  --eb-footer: #060606;
+  --eb-footer-ink: #57b36a;
+  --eb-chip: #1a2a18;
+  /* dot color for the footer wordmark */
+  --eb-dot: #52c34e;
+}
+
+/* Expose tokens as Tailwind color utilities (bg-bg, text-ink, bg-card, ...) */
+@theme inline {
+  --color-bg: var(--eb-bg);
+  --color-card: var(--eb-card);
+  --color-primary: var(--eb-primary);
+  --color-primary-hover: var(--eb-primary-hover);
+  --color-secondary: var(--eb-secondary);
+  --color-tertiary: var(--eb-tertiary);
+  --color-ink: var(--eb-text);
+  --color-ink-muted: var(--eb-text-muted);
+  --color-line: var(--eb-border);
+  --color-warning: var(--eb-warning);
+  --color-cream: var(--eb-cream);
+  --color-panel: var(--eb-panel);
+  --color-footer: var(--eb-footer);
+  --color-footer-ink: var(--eb-footer-ink);
+  --color-chip: var(--eb-chip);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--eb-bg);
+  color: var(--eb-text);
+}
+
+/* Dot-matrix "ECOBUG" effect for the footer wordmark:
+   the text shape is used as a mask and filled with a dot pattern.
+   Dot color flips with the theme (dark dots on green / green dots on black). */
+.dotted-text {
+  color: transparent;
+  background-image: radial-gradient(circle, var(--eb-dot) 30%, transparent 34%);
+  background-size: 0.16em 0.16em;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Hide horizontal scrollbars on category chip rails */
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
