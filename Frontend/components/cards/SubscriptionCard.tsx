@@ -1,5 +1,8 @@
+'use client'
+
 import { useRouter } from 'next/navigation'
 import { pixelifySans } from '@/components/utils/utils'
+import { PixelButton } from '@/components/shared/ui'
 
 type CardProps = {
   type: string
@@ -7,6 +10,7 @@ type CardProps = {
   link: string
 }
 
+/** Pricing plan card — token-based (green brand card + pixel BUY button). */
 export default function SubscriptionCard({
   type,
   description,
@@ -14,29 +18,26 @@ export default function SubscriptionCard({
 }: CardProps) {
   const r = useRouter()
   return (
-    <div
-className='bg-[#367B38] text-white w-full max-w-[320px] h-[500px] rounded-xl p-8 flex flex-col shadow-[0px_6px_6px_#000]'    >
+    <div className='bg-primary text-panel w-full max-w-[320px] h-[500px] rounded-2xl p-8 flex flex-col shadow-[0_6px_0_rgba(0,0,0,0.18)]'>
       <div className='mt-10 text-center'>
-<h2 className={`text-3xl md:text-5xl tracking-widest ${pixelifySans.className}`}>
-  {type}
-</h2>
+        <h2 className={`${pixelifySans.className} text-2xl md:text-3xl tracking-widest`}>
+          {type}
+        </h2>
       </div>
-      <div className='mt-16 text-xs md:text-sm leading-relaxed px-2 text-center'>
-  {description}
-</div>
+
+      <div className='mt-14 text-xs md:text-sm leading-relaxed px-2 text-center text-panel/90'>
+        {description}
+      </div>
+
       <div className='mt-auto mb-6 flex justify-center'>
-        <button
+        <PixelButton
           onClick={() => {
             r.push(link)
           }}
-          className='px-10 py-1 rounded-[50px] bg-linear-to-b from-white/20 to-black/40 shadow-[inset_0_2px_4px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.4)] hover:scale-105 active:scale-95 transition-transform duration-200 cursor-pointer'
+          className='!text-2xl md:!text-3xl !px-10 !py-2 !rounded-[50px]'
         >
-          <span
-  className={`text-3xl md:text-5xl tracking-widest drop-shadow-md ${pixelifySans.className}`}
->
-  BUY
-</span>
-        </button>
+          BUY
+        </PixelButton>
       </div>
     </div>
   )

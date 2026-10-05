@@ -1,29 +1,34 @@
+import AppNavbar from '@/components/shared/AppNavbar'
+import AppFooter from '@/components/shared/AppFooter'
 import { pixelifySans } from '@/components/utils/utils'
-import GlobalHamburger from '@/components/shared/GlobalHamburger'
+import { Panel, Chip } from '@/components/shared/ui'
 
 export default function Blog() {
   const description: string =
     'From exciting news in the field of landscape architecture to research and development of materials, tools and textures, find a dedicated page informing you of things that ought to be seen!'
 
   return (
-    <>
-      <GlobalHamburger />
+    <div className='min-h-screen flex flex-col bg-bg'>
+      <AppNavbar />
 
-      <div className='min-h-screen bg-[#367B38]'>
-        <div className='flex justify-center items-center'>
+      <main className='flex-1 flex flex-col items-center pt-28 md:pt-32 pb-16 px-4'>
+        <div className='flex items-center gap-3'>
           <h1
-            className={`${pixelifySans.className} text-3xl md:text-5xl mt-10 sm:mt-16 text-white`}
+            className={`${pixelifySans.className} text-4xl sm:text-5xl md:text-6xl text-ink tracking-widest uppercase font-bold text-center`}
           >
             BLOG
           </h1>
+          <Chip className='mt-2'>coming soon</Chip>
         </div>
 
-        <div className='flex justify-center items-center px-8 mt-10'>
-          <p className='text-xs md:text-sm leading-relaxed text-white text-center max-w-3xl'>
+        <Panel className='w-full max-w-3xl mt-10 p-8 md:p-12'>
+          <p className='text-sm md:text-base leading-relaxed text-ink text-center'>
             {description}
           </p>
-        </div>
-      </div>
-    </>
+        </Panel>
+      </main>
+
+      <AppFooter />
+    </div>
   )
 }

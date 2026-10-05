@@ -1,17 +1,14 @@
 'use client'
 
-import Navbar from '@/components/shared/Navbar'
-import Feedbacks from '@/pageComponents/Feedbacks/page'
-import Footer from '@/components/shared/Footer'
+import { useEffect } from 'react'
 import Lenis from 'lenis'
-import Feature from '@/pageComponents/Feature/page'
-
-import { useEffect, useState } from 'react'
+import AppNavbar from '@/components/shared/AppNavbar'
+import AppFooter from '@/components/shared/AppFooter'
 import Hero from '@/pageComponents/Hero/page'
+import Feature from '@/pageComponents/Feature/page'
+import Feedbacks from '@/pageComponents/Feedbacks/page'
 
 export default function Home() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-
   useEffect(() => {
     const lenis = new Lenis({
       duration: 0.5,
@@ -26,18 +23,12 @@ export default function Home() {
   }, [])
 
   return (
-    <>
-      
-      <div className='bg-white'>
-        {isSidebarOpen && (
-          <div className='fixed inset-0 z-40 bg-black/60 backdrop-blur-sm' />
-        )}
-        <Hero />
-        <Navbar setIsSidebarOpen={setIsSidebarOpen} />
-        <Feature />
-        <Feedbacks />
-        <Footer />
-      </div>
-    </>
+    <div className='min-h-screen flex flex-col bg-bg'>
+      <AppNavbar />
+      <Hero />
+      <Feature />
+      <Feedbacks />
+      <AppFooter />
+    </div>
   )
 }
