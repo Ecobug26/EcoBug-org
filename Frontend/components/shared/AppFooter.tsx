@@ -16,7 +16,7 @@ const LINKS = [
   { label: 'Buy', href: '/products' },
   { label: 'Webtool', href: '/webtool' },
   { label: 'Blog', href: '/blog' },
-  { label: 'Careers', href: '#' },
+  { label: 'Careers', href: '/careers' },
   { label: 'Contact Us', href: '#' },
   { label: 'About', href: '/about' },
 ]
