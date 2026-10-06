@@ -23,7 +23,7 @@ const LEFT_LINKS = [
 ]
 
 const RIGHT_LINKS = [
-  { label: 'CAREERS', href: '#' },
+  { label: 'CAREERS', href: '/careers' },
   { label: 'ABOUT', href: '/about' },
   { label: 'CONTACT US', href: '#' },
 ]
@@ -32,6 +32,7 @@ const MENU_ITEMS = [
   { label: 'Home', ariaLabel: 'Go to home page', link: '/' },
   { label: 'Webtool', ariaLabel: 'Go to webtool', link: '/webtool' },
   { label: 'Blog', ariaLabel: 'Go to blog', link: '/blog' },
+  { label: 'Careers', ariaLabel: 'Go to careers', link: '/careers' },
   { label: 'About', ariaLabel: 'About us', link: '/about' },
   { label: 'Buy', ariaLabel: 'Buy now', link: '/products' },
 ]
