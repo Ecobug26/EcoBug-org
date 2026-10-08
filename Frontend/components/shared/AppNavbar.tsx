@@ -50,9 +50,15 @@ function NavLink({
     <Link
       href={href}
       aria-current={active ? 'page' : undefined}
-      className={`${offbit.className} whitespace-nowrap font-bold text-base lg:text-[20px] leading-6 tracking-normal text-[#1D422A] dark:text-[#8FCB8A] hover:underline underline-offset-4 ${active ? 'underline' : ''}`}
+      className={`group relative ${offbit.className} whitespace-nowrap font-bold text-base lg:text-[20px] leading-6 tracking-normal text-[#1D422A] dark:text-[#8FCB8A] hover:text-[#255509] dark:hover:text-[#E9F5E0] transition-colors`}
     >
       {label}
+      {/* underline grows from a dot on the left, per the original interaction */}
+      <span
+        className={`absolute left-0 -bottom-0.5 h-[2px] w-full bg-current origin-left transition-transform duration-200 ${
+          active ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+        }`}
+      />
     </Link>
   )
 }
