@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { pixelifySans } from '@/components/utils/utils'
+import { offbit } from '@/components/utils/utils'
 import ThemeToggle from '@/components/shared/ThemeToggle'
 import { useAuth } from '@/context/AuthContext'
 
@@ -41,7 +41,7 @@ function MenuLink({
       role='menuitem'
       href={href}
       onClick={onClick}
-      className={`block w-full text-center py-1.5 text-primary hover:text-primary-hover border-b border-line transition-colors ${pixelifySans.className} text-sm tracking-wide`}
+      className={`block w-full text-center py-1.5 text-primary hover:text-primary-hover border-b border-line transition-colors ${offbit.className} text-sm tracking-wide`}
     >
       {children}
     </Link>
@@ -98,7 +98,7 @@ export default function AccountMenu() {
         onClick={() => setOpen((v) => !v)}
         className='cursor-pointer block rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary'
       >
-        <AvatarIcon className='w-8 h-8 md:w-9 md:h-9' />
+        <AvatarIcon className='w-8 h-8 md:w-[42px] md:h-[42px]' />
       </button>
 
       {open && (
@@ -121,7 +121,7 @@ export default function AccountMenu() {
               <button
                 role='menuitem'
                 onClick={handleLogout}
-                className={`block w-full text-center py-1.5 text-primary hover:text-primary-hover border-b border-line transition-colors cursor-pointer ${pixelifySans.className} text-sm tracking-wide`}
+                className={`block w-full text-center py-1.5 text-primary hover:text-primary-hover border-b border-line transition-colors cursor-pointer ${offbit.className} text-sm tracking-wide`}
               >
                 LOGOUT
               </button>
@@ -141,7 +141,7 @@ export default function AccountMenu() {
             <ThemeToggle />
           </div>
           <span
-            className={`${pixelifySans.className} mt-1.5 text-[9px] tracking-widest text-primary uppercase`}
+            className={`${offbit.className} mt-1.5 text-[9px] tracking-widest text-primary uppercase`}
           >
             Toggle: Dark Mode
           </span>

@@ -1,6 +1,6 @@
 'use client'
 
-import { pixelifySans } from '@/components/utils/utils'
+import { offbit } from '@/components/utils/utils'
 import Marquee from 'react-fast-marquee'
 import { useRouter } from 'next/navigation'
 import { PixelButton } from '@/components/shared/ui'
@@ -19,7 +19,7 @@ export default function Feedbacks() {
     <section className='relative w-full px-4 py-14'>
       <div className='max-w-4xl w-full mx-auto bg-panel rounded-3xl border border-line shadow-[0_8px_24px_rgba(0,0,0,0.08)] p-8 md:p-12 overflow-hidden'>
         <div
-          className={`${pixelifySans.className} text-ink uppercase tracking-widest text-lg sm:text-2xl mb-8`}
+          className={`${offbit.className} text-ink uppercase tracking-widest text-lg sm:text-2xl mb-8`}
         >
           What clients have to say
         </div>
@@ -44,12 +44,12 @@ export default function Feedbacks() {
 
           <div className='bg-card rounded-2xl p-10 flex flex-col items-center justify-center text-center gap-5 border border-line'>
             <p
-              className={`${pixelifySans.className} text-ink text-2xl tracking-widest uppercase`}
+              className={`${offbit.className} text-ink text-2xl tracking-widest uppercase`}
             >
               Are you ready?
             </p>
             <h2
-              className={`${pixelifySans.className} text-ink text-xl md:text-2xl tracking-widest uppercase`}
+              className={`${offbit.className} text-ink text-xl md:text-2xl tracking-widest uppercase`}
             >
               Be a part of next best thing
             </h2>

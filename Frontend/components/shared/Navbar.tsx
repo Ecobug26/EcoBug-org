@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useState, useEffect, useRef, SetStateAction } from 'react'
-import { pixelifySans } from '../utils/utils'
+import { offbit } from '../utils/utils'
 import { useRouter } from 'next/navigation'
 import StaggeredMenu from '../sidebar/StaggeredMenu'
 import { getCurrentUser } from '@/lib/api'
@@ -43,7 +43,7 @@ function Btn({ text, link }: BtnProps) {
     <button
       className={`
         group relative px-1 py-1
-        ${pixelifySans.className}
+        ${offbit.className}
         text-[16px] sm:text-xl md:text-xl text-[#1d4226c8]
         transition-all duration-300 ease-out
         hover:text-[#1d4226] hover:-translate-y-1
@@ -120,7 +120,7 @@ function UserDialog() {
                   router.push('/auth/login')
                   setOpen(false)
                 }}
-                className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-[#1d4226] hover:bg-[#f0f7f0] transition-colors ${pixelifySans.className}`}
+                className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-[#1d4226] hover:bg-[#f0f7f0] transition-colors ${offbit.className}`}
               >
                 Login
               </button>
@@ -132,7 +132,7 @@ function UserDialog() {
                   router.push('/auth/signup')
                   setOpen(false)
                 }}
-                className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-[#1d4226] hover:bg-[#f0f7f0] transition-colors ${pixelifySans.className}`}
+                className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-[#1d4226] hover:bg-[#f0f7f0] transition-colors ${offbit.className}`}
               >
                 Sign Up
               </button>
@@ -144,7 +144,7 @@ function UserDialog() {
                   setOpen(false)
                   router.push('/profile')
                 }}
-                className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-[#1d4226] hover:bg-[#f0f7f0] transition-colors ${pixelifySans.className}`}
+                className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-[#1d4226] hover:bg-[#f0f7f0] transition-colors ${offbit.className}`}
               >
                 Profile
               </button>
@@ -153,7 +153,7 @@ function UserDialog() {
 
               <button
                 onClick={logout}
-                className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors ${pixelifySans.className}`}
+                className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors ${offbit.className}`}
               >
                 Logout
               </button>
@@ -204,7 +204,7 @@ function SubSection({ onHamburgerClick }: { onHamburgerClick: () => void }) {
         </button>
 
         <h1
-          className={`text-center text-5xl md:text-5xl text-[#1d4226] ${pixelifySans.className}`}
+          className={`text-center text-5xl md:text-5xl text-[#1d4226] ${offbit.className}`}
         >
           ECOBUG
         </h1>

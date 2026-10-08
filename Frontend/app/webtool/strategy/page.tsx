@@ -4,7 +4,7 @@ import React, { Suspense, JSX } from 'react'
 import { useSearchParams } from 'next/navigation'
 import AppNavbar from '@/components/shared/AppNavbar'
 import AppFooter from '@/components/shared/AppFooter'
-import { pixelifySans } from '@/components/utils/utils'
+import { offbit } from '@/components/utils/utils'
 import { StrategyLibrary } from './StrategyLibrary'
 import { useStrategies } from '@/hooks/useStrategies'
 
@@ -35,7 +35,7 @@ export default function StrategyPage(): JSX.Element {
 
       <main className='flex-1 flex flex-col items-center pt-28 md:pt-32 pb-16 px-2 sm:px-4'>
         <h1
-          className={`${pixelifySans.className} text-4xl sm:text-5xl md:text-6xl text-ink tracking-widest uppercase font-bold text-center`}
+          className={`${offbit.className} text-4xl sm:text-5xl md:text-6xl text-ink tracking-widest uppercase font-bold text-center`}
         >
           WEBTOOL
         </h1>

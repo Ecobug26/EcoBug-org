@@ -93,3 +93,11 @@ body {
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
+/* Expose the Geist fonts loaded in app/layout.tsx as ready-made classes */
+.font-geist-sans {
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+.font-geist-mono {
+  font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}

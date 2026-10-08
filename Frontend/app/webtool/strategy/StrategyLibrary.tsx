@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { StrategyCard } from './StrategyCard'
-import { pixelifySans } from '@/components/utils/utils'
+import { offbit } from '@/components/utils/utils'
 import { Strategy } from './types'
 import {
   SearchBar,
@@ -93,11 +93,11 @@ export const StrategyLibrary: React.FC<StrategyLibraryProps> = ({
       <div className='flex flex-col gap-2 w-full flex-shrink-0'>
         <div className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 w-full'>
           <div className='flex items-center gap-2'>
-            <h2 className={`${pixelifySans.className} text-xl sm:text-2xl font-bold text-ink tracking-wide`}>
+            <h2 className={`${offbit.className} text-xl sm:text-2xl font-bold text-ink tracking-wide`}>
               STRATEGY
             </h2>
             <span
-              className={`${pixelifySans.className} text-[10px] px-2.5 py-0.5 rounded-full bg-tertiary text-primary-hover font-bold`}
+              className={`${offbit.className} text-[10px] px-2.5 py-0.5 rounded-full bg-tertiary text-primary-hover font-bold`}
             >
               {strategies.length} items
             </span>
@@ -112,7 +112,7 @@ export const StrategyLibrary: React.FC<StrategyLibraryProps> = ({
         </div>
 
         <div className='flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none'>
-          <span className={`${pixelifySans.className} text-xs text-ink-muted font-bold mr-1 flex-shrink-0`}>
+          <span className={`${offbit.className} text-xs text-ink-muted font-bold mr-1 flex-shrink-0`}>
             Categories:
           </span>
           {categories.map((category) => (

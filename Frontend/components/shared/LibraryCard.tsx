@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { pixelifySans } from '@/components/utils/utils'
+import { offbit } from '@/components/utils/utils'
 
 export interface LibraryCardData {
   title: string
@@ -113,7 +113,7 @@ export const LibraryCard: React.FC<LibraryCardProps> = ({
           </div>
           <div className='flex-1 min-w-0'>
             <span
-              className={`${pixelifySans.className} inline-block px-2 py-0.5 rounded bg-tertiary/40 text-primary-hover text-[9px] font-bold tracking-tight uppercase truncate max-w-full`}
+              className={`${offbit.className} inline-block px-2 py-0.5 rounded bg-tertiary/40 text-primary-hover text-[9px] font-bold tracking-tight uppercase truncate max-w-full`}
             >
               {category}
             </span>
@@ -122,13 +122,13 @@ export const LibraryCard: React.FC<LibraryCardProps> = ({
 
         <div className='flex-1 flex flex-col min-h-0 mt-1'>
           <h3
-            className={`${pixelifySans.className} text-[13px] font-bold text-ink leading-tight line-clamp-2`}
+            className={`${offbit.className} text-[13px] font-bold text-ink leading-tight line-clamp-2`}
             title={title}
           >
             {title}
           </h3>
           <p
-            className={`${pixelifySans.className} text-[10px] text-ink-muted leading-snug line-clamp-3 mt-0.5`}
+            className={`${offbit.className} text-[10px] text-ink-muted leading-snug line-clamp-3 mt-0.5`}
           >
             {summary}
           </p>
@@ -136,13 +136,13 @@ export const LibraryCard: React.FC<LibraryCardProps> = ({
 
         <div className='w-full pt-1 border-t border-line flex justify-between items-center text-[9px] text-ink-muted flex-shrink-0'>
           <span
-            className={`${pixelifySans.className} text-primary font-semibold truncate max-w-[120px]`}
+            className={`${offbit.className} text-primary font-semibold truncate max-w-[120px]`}
           >
             {keywords[0] ? `#${keywords[0]}` : fallbackTag}
           </span>
           <span
             aria-hidden
-            className={`${pixelifySans.className} group-hover:translate-x-0.5 transition-transform text-ink flex-shrink-0`}
+            className={`${offbit.className} group-hover:translate-x-0.5 transition-transform text-ink flex-shrink-0`}
           >
             →
           </span>

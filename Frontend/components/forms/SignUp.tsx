@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { pixelifySans } from '@/components/utils/utils'
+import { offbit } from '@/components/utils/utils'
 
 export default function Signup() {
   const [email, setEmail] = useState('')
@@ -60,20 +60,20 @@ export default function Signup() {
       <div className='bg-panel w-full max-w-md rounded-2xl p-6 md:p-8 shadow-[0_8px_24px_rgba(0,0,0,0.10)] border border-line'>
         <div className='border-b border-line pb-4 mb-6'>
           <span
-            className={`${pixelifySans.className} text-ink text-3xl md:text-4xl tracking-[0.05em]`}
+            className={`${offbit.className} text-ink text-3xl md:text-4xl tracking-[0.05em]`}
           >
             ECOBUG
           </span>
         </div>
         <div className='flex flex-col gap-6'>
           <span
-            className={`text-ink text-lg md:text-xl ${pixelifySans.className}`}
+            className={`text-ink text-lg md:text-xl ${offbit.className}`}
           >
             Sign Up
           </span>
           <div className='flex flex-col gap-2'>
             <span
-              className={`text-ink text-sm md:text-base ${pixelifySans.className}`}
+              className={`text-ink text-sm md:text-base ${offbit.className}`}
             >
               Enter Email
             </span>
@@ -86,7 +86,7 @@ export default function Signup() {
           </div>
           <div className='flex flex-col gap-2'>
             <span
-              className={`text-ink text-sm md:text-base ${pixelifySans.className}`}
+              className={`text-ink text-sm md:text-base ${offbit.className}`}
             >
               Enter Password
             </span>
@@ -100,13 +100,13 @@ export default function Signup() {
           <div>
             <button
               onClick={handleSignup}
-              className={`w-full bg-primary-hover hover:opacity-90 text-panel h-9 md:h-11 rounded-lg text-sm md:text-base transition-opacity cursor-pointer ${pixelifySans.className}`}
+              className={`w-full bg-primary-hover hover:opacity-90 text-panel h-9 md:h-11 rounded-lg text-sm md:text-base transition-opacity cursor-pointer ${offbit.className}`}
             >
               NEXT
             </button>
           </div>
           <div
-            className={`text-ink-muted text-sm md:text-base flex flex-wrap gap-2 ${pixelifySans.className}`}
+            className={`text-ink-muted text-sm md:text-base flex flex-wrap gap-2 ${offbit.className}`}
           >
             <span>already have an account?</span>
             <a

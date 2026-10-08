@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { pixelifySans } from '@/components/utils/utils'
+import { offbit } from '@/components/utils/utils'
 import { Panel } from '@/components/shared/ui'
 
 /** Account page — token-based card (avatar, email, placeholder rows, sign out). */
@@ -38,7 +38,7 @@ export default function UsernamePage() {
 
         <Panel className='w-full p-6 pt-12 md:p-8 md:pt-14'>
           <h1
-            className={`${pixelifySans.className} text-ink text-2xl md:text-3xl tracking-[0.05em] mb-6 md:mb-8 text-center md:text-left md:pl-24`}
+            className={`${offbit.className} text-ink text-2xl md:text-3xl tracking-[0.05em] mb-6 md:mb-8 text-center md:text-left md:pl-24`}
           >
             user name
           </h1>
@@ -56,7 +56,7 @@ export default function UsernamePage() {
             {/* Manage subscription placeholder rows */}
             <div className='flex flex-col sm:flex-row gap-4 sm:gap-8'>
               <span
-                className={`text-ink text-sm md:text-base whitespace-nowrap ${pixelifySans.className}`}
+                className={`text-ink text-sm md:text-base whitespace-nowrap ${offbit.className}`}
               >
                 manage subscription:
               </span>
@@ -77,7 +77,7 @@ export default function UsernamePage() {
             <div>
               <button
                 onClick={handleSignOut}
-                className={`${pixelifySans.className} bg-primary-hover hover:opacity-90 text-panel h-9 md:h-11 px-6 rounded-lg text-sm md:text-base transition-opacity cursor-pointer`}
+                className={`${offbit.className} bg-primary-hover hover:opacity-90 text-panel h-9 md:h-11 px-6 rounded-lg text-sm md:text-base transition-opacity cursor-pointer`}
               >
                 Sign Out
               </button>
