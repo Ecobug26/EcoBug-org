@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import AppNavbar from '@/components/shared/AppNavbar'
 import AppFooter from '@/components/shared/AppFooter'
-import { pixelifySans } from '@/components/utils/utils'
+import { offbit } from '@/components/utils/utils'
 
 /**
  * Webtool landing — Figma "WEBTOOL" screen:
@@ -25,7 +25,7 @@ function ToolCard({ title, href, disabled = false }: ToolCardProps) {
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:-translate-y-1 hover:shadow-[0_8px_0_rgba(0,0,0,0.22)] cursor-pointer transition-all duration-150'}
       `}
     >
-      <span className={`${pixelifySans.className} text-ink text-base md:text-lg font-bold tracking-wide`}>
+      <span className={`${offbit.className} text-ink text-base md:text-lg font-bold tracking-wide`}>
         {title}
       </span>
     </div>
@@ -46,7 +46,7 @@ export default function WebTool() {
 
       <main className='flex-1 flex flex-col items-center pt-28 md:pt-32 pb-16 px-4'>
         <h1
-          className={`${pixelifySans.className} text-4xl sm:text-5xl md:text-6xl text-ink tracking-widest uppercase font-bold text-center`}
+          className={`${offbit.className} text-4xl sm:text-5xl md:text-6xl text-ink tracking-widest uppercase font-bold text-center`}
         >
           WEBTOOL
         </h1>

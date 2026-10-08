@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { pixelifySans } from '@/components/utils/utils'
+import { offbit } from '@/components/utils/utils'
 
 /**
  * Shared UI primitives for the EcoBug design system (Figma Frame 72/73).
@@ -23,7 +23,7 @@ export function PixelButton({
   type?: 'button' | 'submit'
   ariaLabel?: string
 }) {
-  const cls = `inline-flex items-center justify-center ${pixelifySans.className} bg-ink text-bg px-8 py-3 tracking-widest uppercase text-sm md:text-base shadow-[0_5px_0_rgba(0,0,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_0_rgba(0,0,0,0.35)] active:translate-y-0.5 active:shadow-[0_2px_0_rgba(0,0,0,0.35)] transition-all cursor-pointer select-none ${className}`
+  const cls = `inline-flex items-center justify-center ${offbit.className} bg-ink text-bg px-8 py-3 tracking-widest uppercase text-sm md:text-base shadow-[0_5px_0_rgba(0,0,0,0.35)] hover:-translate-y-0.5 hover:shadow-[0_8px_0_rgba(0,0,0,0.35)] active:translate-y-0.5 active:shadow-[0_2px_0_rgba(0,0,0,0.35)] transition-all cursor-pointer select-none ${className}`
   if (href) {
     return (
       <Link href={href} className={cls} aria-label={ariaLabel}>
@@ -48,7 +48,7 @@ export function SectionTitle({
 }) {
   return (
     <h2
-      className={`${pixelifySans.className} text-2xl md:text-4xl tracking-widest uppercase text-ink ${className}`}
+      className={`${offbit.className} text-2xl md:text-4xl tracking-widest uppercase text-ink ${className}`}
     >
       {children}
     </h2>
@@ -105,7 +105,7 @@ export function SearchBar({
         onChange={(e) => onChange?.(e.target.value)}
         placeholder={placeholder}
         aria-label={ariaLabel}
-        className={`flex-1 min-w-0 bg-transparent outline-none text-sm text-panel placeholder-panel/60 ${pixelifySans.className}`}
+        className={`flex-1 min-w-0 bg-transparent outline-none text-sm text-panel placeholder-panel/60 ${offbit.className}`}
       />
       {value ? (
         <button
@@ -135,7 +135,7 @@ export function Chip({
   onClick?: () => void
   className?: string
 }) {
-  const cls = `${pixelifySans.className} text-xs px-3.5 py-1 rounded-full font-bold whitespace-nowrap transition-all ${className} ${
+  const cls = `${offbit.className} text-xs px-3.5 py-1 rounded-full font-bold whitespace-nowrap transition-all ${className} ${
     active
       ? 'bg-primary-hover text-panel scale-105'
       : 'bg-chip text-ink border border-line hover:bg-tertiary/40'
@@ -154,7 +154,7 @@ export function LoadingState({ label = 'Loading...' }: { label?: string }) {
   return (
     <div className='flex flex-col items-center gap-4 py-10'>
       <div className='w-10 h-10 rounded-full border-4 border-primary border-t-transparent animate-spin' />
-      <p className={`${pixelifySans.className} text-sm text-ink-muted`}>{label}</p>
+      <p className={`${offbit.className} text-sm text-ink-muted`}>{label}</p>
     </div>
   )
 }
@@ -171,10 +171,10 @@ export function ErrorState({
       <div className='text-4xl' aria-hidden>
         ⚠️
       </div>
-      <h3 className={`${pixelifySans.className} text-lg font-bold text-ink`}>
+      <h3 className={`${offbit.className} text-lg font-bold text-ink`}>
         Something went wrong
       </h3>
-      <p className={`${pixelifySans.className} text-sm text-ink-muted max-w-sm`}>{message}</p>
+      <p className={`${offbit.className} text-sm text-ink-muted max-w-sm`}>{message}</p>
       {onRetry && (
         <PixelButton onClick={onRetry} className='mt-2 !px-5 !py-2 !text-xs'>
           Retry
@@ -198,8 +198,8 @@ export function EmptyState({
       <div className='w-12 h-12 rounded-full bg-tertiary/40 flex items-center justify-center text-ink text-xl'>
         🔍
       </div>
-      <h3 className={`${pixelifySans.className} text-lg font-bold text-ink`}>{title}</h3>
-      <p className={`${pixelifySans.className} text-xs text-ink-muted max-w-sm`}>{message}</p>
+      <h3 className={`${offbit.className} text-lg font-bold text-ink`}>{title}</h3>
+      <p className={`${offbit.className} text-xs text-ink-muted max-w-sm`}>{message}</p>
       {onReset && (
         <PixelButton onClick={onReset} className='mt-2 !px-5 !py-2 !text-xs'>
           Reset Filters

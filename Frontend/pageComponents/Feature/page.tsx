@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { pixelifySans } from '@/components/utils/utils'
+import { offbit } from '@/components/utils/utils'
 import { SectionTitle } from '@/components/shared/ui'
 
 const features = [
@@ -65,7 +65,7 @@ export default function Feature() {
               </div>
 
               <h3
-                className={`${pixelifySans.className} text-ink text-lg tracking-wider mb-3`}
+                className={`${offbit.className} text-ink text-lg tracking-wider mb-3`}
               >
                 {feature.title}
               </h3>

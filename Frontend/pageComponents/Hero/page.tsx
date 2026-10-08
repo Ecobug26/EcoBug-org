@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { pixelifySans } from '@/components/utils/utils'
+import { offbit } from '@/components/utils/utils'
 import { PixelButton } from '@/components/shared/ui'
 
 /**
@@ -15,12 +15,12 @@ export default function Hero() {
     <section className='relative w-full flex flex-col items-center px-4 pt-28 md:pt-36 pb-10 overflow-hidden'>
       {/* Giant pixel wordmark */}
       <h1
-        className={`${pixelifySans.className} text-5xl sm:text-7xl md:text-8xl text-ink tracking-[0.15em] uppercase text-center leading-none select-none`}
+        className={`${offbit.className} text-5xl sm:text-7xl md:text-8xl text-ink tracking-[0.15em] uppercase text-center leading-none select-none`}
       >
         ECOBUG
       </h1>
       <p
-        className={`${pixelifySans.className} mt-3 text-xs sm:text-sm md:text-base text-ink-muted tracking-[0.25em] uppercase text-center`}
+        className={`${offbit.className} mt-3 text-xs sm:text-sm md:text-base text-ink-muted tracking-[0.25em] uppercase text-center`}
       >
         landscaping, designed sustainably
       </p>
@@ -31,7 +31,7 @@ export default function Hero() {
           {/* Left: copy */}
           <div className='max-w-2xl'>
             <h2
-              className={`${pixelifySans.className} text-panel text-2xl md:text-4xl mb-4 tracking-widest uppercase`}
+              className={`${offbit.className} text-panel text-2xl md:text-4xl mb-4 tracking-widest uppercase`}
             >
               OUR PRODUCT
             </h2>
