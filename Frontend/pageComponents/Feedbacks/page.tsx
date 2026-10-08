@@ -1,7 +1,11 @@
+'use client'
+
 import { pixelifySans } from '@/components/utils/utils'
 import Marquee from 'react-fast-marquee'
 import { useRouter } from 'next/navigation'
-import BackgroundDecorations from '@/components/shared/BG_deco/BackgroundDecorations_feedbacks'
+import { PixelButton } from '@/components/shared/ui'
+
+/** Client quotes + CTA section, restyled with the design tokens. */
 export default function Feedbacks() {
   const r = useRouter()
   const quotes = [
@@ -12,56 +16,49 @@ export default function Feedbacks() {
   ]
 
   return (
-    <>
-      
-      <div className='relative min-h-screen scale-90 md:scale-100 flex items-end mb-8'>
-        <BackgroundDecorations />
-        <div className='max-w-4xl w-full mx-auto bg-white rounded-2xl border border-gray-200 shadow-[0px_2px_6px_#000] p-8 md:p-12 mb-5 overflow-hidden'>
-          <div
-            className={`text-[#204922] uppercase tracking-widest text-lg sm:text-2xl mb-8 ${pixelifySans.className}`}
-          >
-            What clients have to say
+    <section className='relative w-full px-4 py-14'>
+      <div className='max-w-4xl w-full mx-auto bg-panel rounded-3xl border border-line shadow-[0_8px_24px_rgba(0,0,0,0.08)] p-8 md:p-12 overflow-hidden'>
+        <div
+          className={`${pixelifySans.className} text-ink uppercase tracking-widest text-lg sm:text-2xl mb-8`}
+        >
+          What clients have to say
+        </div>
+
+        <div className='flex flex-col gap-12'>
+          <div className='overflow-hidden w-full relative'>
+            <Marquee speed={100} pauseOnHover>
+              <div className='flex ml-6 gap-6 w-max'>
+                {[...quotes, ...quotes].map((quote, index) => (
+                  <div
+                    key={index}
+                    className='bg-primary shrink-0 w-[320px] min-h-[200px] rounded-3xl p-6 flex items-start cursor-pointer'
+                  >
+                    <p className='text-panel text-sm md:text-base leading-snug font-mono'>
+                      {quote}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </Marquee>
           </div>
-          <div className='flex flex-col gap-12'>
-            <div className='overflow-hidden w-full relative'>
-              <Marquee speed={100} pauseOnHover>
-                <div className='flex ml-6 gap-6 w-max'>
-                  {[...quotes, ...quotes].map((quote, index) => (
-                    <div
-                      key={index}
-                      className='bg-[#2f7335] shrink-0 w-[320px] min-h-[200px] rounded-3xl p-6 flex items-start cursor-pointer'
-                    >
-                      <p
-                        className='text-white text-sm md:text-base leading-snug font-mono'
-                      >
-                        {quote}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </Marquee>
-            </div>
-            <div className='bg-[#2f7335] rounded-2xl p-10 flex flex-col items-center justify-center text-center gap-5'>
-              <p
-                className={`text-white text-2xl tracking-widest uppercase ${pixelifySans.className}`}
-              >
-                Are you ready?
-              </p>
-              <h2
-                className={`text-white text-xl md:text-2xl tracking-widest uppercase ${pixelifySans.className}`}
-              >
-                Be a part of next best thing
-              </h2>
-              <button
-                className={`mt-2 px-8 py-3 bg-[#111] text-white rounded-lg text-lg hover:bg-black transition-colors cursor-pointer ${pixelifySans.className}`}
-                onClick={() => r.push('/products')}
-              >
-                View Our Price
-              </button>
-            </div>
+
+          <div className='bg-card rounded-2xl p-10 flex flex-col items-center justify-center text-center gap-5 border border-line'>
+            <p
+              className={`${pixelifySans.className} text-ink text-2xl tracking-widest uppercase`}
+            >
+              Are you ready?
+            </p>
+            <h2
+              className={`${pixelifySans.className} text-ink text-xl md:text-2xl tracking-widest uppercase`}
+            >
+              Be a part of next best thing
+            </h2>
+            <PixelButton onClick={() => r.push('/products')}>
+              View Our Price
+            </PixelButton>
           </div>
         </div>
       </div>
-    </>
+    </section>
   )
 }
