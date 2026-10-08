@@ -23,7 +23,7 @@ const APPLY_EMAIL = 'connect.ecobug@gmail.com'
 
 function JobCard({ job }: { job: Job }) {
   return (
-    <article className='rounded-2xl p-10 bg-[#97C974] dark:bg-[#253B25] grid grid-cols-[80px_100px] gap-x-[122px] gap-y-6 lg:grid-cols-[616px_100px] lg:gap-x-6'>
+    <article className='rounded-2xl p-10 bg-[#97C974] dark:bg-[#253B25] grid grid-cols-[80px_100px] gap-x-[122px] gap-y-6 lg:grid-cols-[616px_100px] lg:gap-x-6 transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_10px_24px_rgba(0,0,0,0.15)]'>
       {/* Role + details (Figma "Role + Details": gap 8) */}
       <div className='flex flex-col gap-2 min-w-0'>
         <h2
@@ -46,7 +46,7 @@ function JobCard({ job }: { job: Job }) {
           `Application: ${job.title}`
         )}`}
         aria-label={`View role: ${job.title}`}
-        className='justify-self-start w-[100px] h-[38px] inline-flex items-center justify-center bg-black text-white font-geist-mono font-medium text-[14px] leading-[14px] select-none hover:opacity-90 transition-opacity cursor-pointer'
+        className='justify-self-start w-[100px] h-[38px] inline-flex items-center justify-center bg-black text-white font-geist-mono font-medium text-[14px] leading-[14px] select-none cursor-pointer transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[0_5px_0_rgba(0,0,0,0.35)] active:translate-y-0.5 active:shadow-[0_2px_0_rgba(0,0,0,0.35)] hover:opacity-95'
       >
         View role
       </a>
