@@ -23,7 +23,7 @@ const APPLY_EMAIL = 'connect.ecobug@gmail.com'
 
 function JobCard({ job }: { job: Job }) {
   return (
-    <article className='rounded-2xl p-10 bg-[#97C974] dark:bg-[#253B25] grid grid-cols-[80px_100px] gap-x-[122px] gap-y-6 lg:grid-cols-[616px_100px] lg:gap-x-6 transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_10px_24px_rgba(0,0,0,0.15)]'>
+    <article className='w-full rounded-2xl p-6 sm:p-10 bg-[#97C974] dark:bg-[#253B25] flex flex-col gap-4 sm:grid sm:grid-cols-[1fr_100px] sm:gap-x-6 lg:grid-cols-[616px_100px] sm:gap-y-6 transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_10px_24px_rgba(0,0,0,0.15)] overflow-x-clip'>
       {/* Role + details (Figma "Role + Details": gap 8) */}
       <div className='flex flex-col gap-2 min-w-0'>
         <h2
@@ -33,7 +33,7 @@ function JobCard({ job }: { job: Job }) {
         </h2>
 
         {/* Meta data: type · location (Futura PT 14 + Geist Mono separator) */}
-        <div className='flex gap-2 whitespace-nowrap font-geist-sans text-[14px] leading-[14px] text-[#577F29] dark:text-[#A8C686]'>
+        <div className='flex gap-2 flex-wrap font-geist-sans text-[14px] leading-[14px] text-[#577F29] dark:text-[#A8C686]'>
           <span>{job.type}</span>
           <span className='font-geist-mono text-[#6C6C6C]'>·</span>
           <span>{job.location}</span>
@@ -51,7 +51,7 @@ function JobCard({ job }: { job: Job }) {
         View role
       </a>
 
-      <p className='col-span-2 lg:col-span-1 font-geist-sans text-[15px] leading-[18px] lg:text-[20px] lg:leading-[24px] tracking-[-0.04em] text-[#40543F] dark:text-[#9BAE95]'>
+      <p className='sm:col-span-2 lg:col-span-1 font-geist-sans text-[15px] leading-[18px] lg:text-[20px] lg:leading-[24px] tracking-[-0.04em] text-[#40543F] dark:text-[#9BAE95]'>
         {job.description}
       </p>
     </article>

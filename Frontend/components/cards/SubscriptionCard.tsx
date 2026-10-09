@@ -1,44 +1,60 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import type { ReactNode } from 'react'
 import { offbit } from '@/components/utils/utils'
-import { PixelButton } from '@/components/shared/ui'
+import { MonoButton } from '@/components/shared/ui'
 
 type CardProps = {
-  type: string
-  description: string
-  link: string
+  title: ReactNode
+  features?: string[]
+  comingSoon?: boolean
+  link?: string
 }
 
-/** Pricing plan card — token-based (green brand card + pixel BUY button). */
+/**
+ * Pricing plan card — matches Figma Buy Frame 10 (195:3796 light,
+ * 312:10979 dark): 350x394 card, r24, pad 40, gap 24.
+ * Light: #97C974 card, #1B2B1E title, #40543F body.
+ * Dark:  #253B25 card, #EAF2E4 title, #9BAE95 body.
+ * Button: black "Button primary" with white bullet (MonoButton).
+ */
 export default function SubscriptionCard({
-  type,
-  description,
-  link,
+  title,
+  features = [],
+  comingSoon = false,
+  link = '/checkout',
 }: CardProps) {
-  const r = useRouter()
   return (
-    <div className='bg-primary text-panel w-full max-w-[320px] h-[500px] rounded-2xl p-8 flex flex-col shadow-[0_6px_0_rgba(0,0,0,0.18)]'>
-      <div className='mt-10 text-center'>
-        <h2 className={`${offbit.className} text-2xl md:text-3xl tracking-widest`}>
-          {type}
-        </h2>
-      </div>
+    <div className='w-full max-w-[320px] sm:max-w-[350px] min-h-[394px] rounded-3xl p-6 sm:p-10 flex flex-col items-center gap-6 bg-[#97C974] dark:bg-[#253B25] transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_10px_24px_rgba(0,0,0,0.15)]'>
+      <h2
+        className={`${offbit.className} font-bold text-[40px] leading-[48px] tracking-[-0.01em] text-center text-[#1B2B1E] dark:text-[#EAF2E4]`}
+      >
+        {title}
+      </h2>
 
-      <div className='mt-14 text-xs md:text-sm leading-relaxed px-2 text-center text-panel/90'>
-        {description}
-      </div>
+      {comingSoon ? (
+        <p className='font-geist-sans font-normal text-[36px] leading-[43px] tracking-[-0.01em] text-center text-[#40543F] dark:text-[#9BAE95]'>
+          COMING SOON
+        </p>
+      ) : (
+        <>
+          <p className='font-geist-sans font-normal text-[16px] leading-[19.2px] tracking-[-0.01em] text-center text-[#40543F] dark:text-[#9BAE95]'>
+            {features.join(' // ')}
+          </p>
 
-      <div className='mt-auto mb-6 flex justify-center'>
-        <PixelButton
-          onClick={() => {
-            r.push(link)
-          }}
-          className='!text-2xl md:!text-3xl !px-10 !py-2 !rounded-[50px]'
-        >
-          BUY
-        </PixelButton>
-      </div>
+          <div className='mt-auto pt-2'>
+            <MonoButton
+              bullet
+              href={link}
+              ariaLabel='Buy plan'
+              className='px-9 py-[21px] text-[24px] leading-6 tracking-[4.1px]'
+            >
+              BUY
+            </MonoButton>
+          </div>
+        </>
+      )}
     </div>
   )
 }
+

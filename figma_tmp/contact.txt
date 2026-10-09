@@ -1,0 +1,32 @@
+﻿FRAME "Desktop" 195:3897 @(1643,9735) 1280x1360 LAY=VERTICAL//CENTER pad=,,, gap=22.0 fill=#FFF4DF@1
+  FRAME "Frame 75" 195:3898 @(1666,9735) 1234x1096 LAY=VERTICAL// pad=,87.0,, gap=10.0
+    FRAME "Desktop - 1" 195:3899 @(1666,9822) 1234x1009 LAY=VERTICAL//CENTER pad=173.0,83.0,173.0,82.0 gap=12.0 fill=#FFFFFF@1 r=26.0
+      TEXT "CONTACT US" 195:3913 @(2034,9905) 499x96 fill=#000000@1 FONT=OffBit Trial [Dot Bold] 700 96.0px lh=96.0 ls=-2.9 align=CENTER
+         TXT: CONTACT US
+      FRAME "Frame 102" 195:3926 @(1942,10013) 682x107 LAY=VERTICAL// pad=,,, gap=8.0
+        TEXT "Full Name" 195:3916 @(1942,10013) 132x29 fill=#646464@1 FONT=OffBit Trial [Bold] 700 29.0px lh=29.0 ls=-0.9 align=RIGHT
+           TXT:    Full Name
+        FRAME "Frame 46" 195:3914 @(1942,10050) 682x70
+          RECTANGLE "Rectangle 19" 195:3915 @(1942,10050) 682x70 fill=#D9D9D9@1 stroke=#6D6D6D@1/4.0 r=54.0
+      FRAME "Frame 103" 195:3927 @(1942,10132) 682x107 LAY=VERTICAL// pad=,,, gap=8.0
+        TEXT "E-mail" 195:3920 @(1942,10132) 90x29 fill=#646464@1 FONT=OffBit Trial [Bold] 700 29.0px lh=29.0 ls=-0.9 align=RIGHT
+           TXT:    E-mail
+        FRAME "Frame 47" 195:3918 @(1942,10169) 682x70
+          RECTANGLE "Rectangle 19" 195:3919 @(1942,10169) 682x70 fill=#D9D9D9@1 stroke=#6D6D6D@1/4.0 r=54.0
+      FRAME "Frame 104" 195:3928 @(1942,10251) 682x107 LAY=VERTICAL// pad=,,, gap=8.0
+        TEXT "Subject" 195:3924 @(1942,10251) 112x29 fill=#646464@1 FONT=OffBit Trial [Bold] 700 29.0px lh=29.0 ls=-0.9 align=RIGHT
+           TXT:    Subject
+        FRAME "Frame 48" 195:3922 @(1942,10288) 682x70
+          RECTANGLE "Rectangle 19" 195:3923 @(1942,10288) 682x70 fill=#D9D9D9@1 stroke=#6D6D6D@1/4.0 r=54.0
+      FRAME "Frame 105" 195:3929 @(1942,10370) 682x289 LAY=VERTICAL// pad=,,, gap=8.0
+        TEXT "Message" 195:3930 @(1942,10370) 122x29 fill=#646464@1 FONT=OffBit Trial [Bold] 700 29.0px lh=29.0 ls=-0.9 align=RIGHT
+           TXT:    Message
+        FRAME "Frame 48" 195:3931 @(1942,10407) 682x252
+          RECTANGLE "Rectangle 19" 195:3932 @(1942,10407) 682x252 fill=#D9D9D9@1 stroke=#6D6D6D@1/4.0 r=54.0
+      FRAME "Frame 106" 195:3935 @(2177,10671) 212x78 LAY=VERTICAL// pad=,,, gap=8.0
+        FRAME "Frame 48" 195:3937 @(2177,10671) 212x78
+          RECTANGLE "Rectangle 19" 195:3938 @(2177,10671) 212x78 fill=#000000@1 stroke=#6D6D6D@1/4.0 r=54.0
+          TEXT "SEND" 195:3941 @(2251,10699) 65x22 fill=#FFFFFF@1 FONT=OffBit Trial [Bold] 700 29.0px lh=29.0 ls=-0.9 align=CENTER
+             TXT: SEND
+  FRAME "Frame 2" 195:3910 @(1644,10853) 1279x262 LAY=VERTICAL// pad=23.0,,23.0, gap=10.0
+    VECTOR "ECOBUG" 195:3911 @(1666,10853) 1233x262 fill=#2B600C@1

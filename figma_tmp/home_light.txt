@@ -1,0 +1,221 @@
+﻿FRAME "Desktop" 166:2355 @(2798,213) 1280x4846 LAY=VERTICAL//MAX pad=,,, gap= fill=#E9F5E0@1
+  INSTANCE "Nav items LIGHT" 284:3072 @(2798,213) 1280x76 LAY=HORIZONTAL/CENTER/CENTER pad=186.0,18.0,,18.0 gap=51.0 fx=GLASS off(,) blur= spread= #000000@0
+    FRAME "Frame 79" I284:3072;284:3022 @(3026,221) 918x60 LAY=HORIZONTAL//CENTER pad=,,, gap=47.0
+      TEXT "BUY" I284:3072;284:3023 @(3026,239) 37x24 fill=#1D422A@1 FONT=OffBit Trial [Bold] 700 20.0px lh=24.0 ls=0.0 align=LEFT
+         TXT: BUY
+      TEXT "WEBTOOL" I284:3072;284:3024 @(3110,239) 87x24 fill=#1D422A@1 FONT=OffBit Trial [Bold] 700 20.0px lh=24.0 ls=0.0 align=LEFT
+         TXT: WEBTOOL
+      TEXT "BLOG" I284:3072;284:3025 @(3244,239) 46x24 fill=#1D422A@1 FONT=OffBit Trial [Bold] 700 20.0px lh=24.0 ls=0.0 align=LEFT
+         TXT: BLOG
+      BOOLEAN_OPERATION "Logo" I284:3072;284:3026 @(3247,213) 262x43 HIDDEN fill=#000000@1
+        VECTOR "Vector" I284:3072;284:3027 @(3481,215) 28x41 fill=#66640F@1
+        VECTOR "Vector" I284:3072;284:3028 @(3471,215) 8x40 fill=#66640F@1
+        VECTOR "Vector" I284:3072;284:3029 @(3440,225) 29x31 fill=#66640F@1
+        VECTOR "Vector" I284:3072;284:3030 @(3408,213) 32x42 fill=#66640F@1
+        VECTOR "Vector" I284:3072;284:3031 @(3392,225) 18x30 fill=#66640F@1
+        VECTOR "Vector" I284:3072;284:3032 @(3361,225) 29x31 fill=#66640F@1
+        VECTOR "Vector" I284:3072;284:3033 @(3332,215) 27x40 fill=#66640F@1
+        VECTOR "Vector" I284:3072;284:3034 @(3311,218) 20x38 fill=#66640F@1
+        VECTOR "Vector" I284:3072;284:3035 @(3283,225) 29x31 fill=#66640F@1
+        VECTOR "Vector" I284:3072;284:3036 @(3247,217) 38x39 fill=#66640F@1
+      TEXT "ECOBUG" I284:3072;284:3037 @(3336,221) 212x60 fill=#255509@1 FONT=OffBit Trial [Dot Bold] 700 57.0px lh=68.4 ls=0.0 align=CENTER
+         TXT: ECOBUG
+      TEXT "CAREERS" I284:3072;284:3038 @(3596,239) 82x24 fill=#1D422A@1 FONT=OffBit Trial [Bold] 700 20.0px lh=24.0 ls=0.0 align=LEFT
+         TXT: CAREERS
+      TEXT "Text" I284:3072;284:3039 @(3724,239) 62x24 fill=#1D422A@1 FONT=OffBit Trial [Bold] 700 20.0px lh=24.0 ls=0.0 align=LEFT
+         TXT: ABOUT
+      TEXT "CONTACT US" I284:3072;284:3040 @(3834,239) 110x24 fill=#1D422A@1 FONT=OffBit Trial [Bold] 700 20.0px lh=24.0 ls=0.0 align=LEFT
+         TXT: CONTACT US
+    INSTANCE "Ellipse 2" I284:3072;284:3041 @(3994,230) 42x42
+      ELLIPSE "Ellipse 1" I284:3072;284:3041;195:3942 @(3990,225) 51x51 fill=#1B2B1E@1
+      ELLIPSE "Ellipse 3" I284:3072;284:3041;195:3947 @(4014,250) 4x4 fill=#FFFFFF@1
+      ELLIPSE "Ellipse 2" I284:3072;284:3041;195:3945 @(3990,225) 51x51 fill=#FFFFFF@1
+      RECTANGLE "image-from-rawpixel-id-16487372-png 3" I284:3072;284:3041;195:3949 @(3998,233) 36x36 fill=IMAGE
+  FRAME "Intro + Features section" 166:2356 @(2798,289) 1280x1332 LAY=VERTICAL// pad=,,, gap=
+    FRAME "Features section" 166:2357 @(2798,289) 1280x742 LAY=VERTICAL//CENTER pad=20.0,120.0,20.0,120.0 gap=40.0
+    FRAME "Intro section" 166:2358 @(2798,1031) 1280x590 LAY=VERTICAL//CENTER pad=20.0,68.0,20.0,140.0 gap=56.0
+      FRAME "Intro content" 166:2359 @(2923,1099) 1030x382 LAY=VERTICAL//CENTER pad=,,, gap=32.0
+        FRAME "Header text" 166:2360 @(2923,1099) 1030x284 LAY=VERTICAL//CENTER pad=,9.0,,9.0 gap=16.0
+          FRAME "Header" 166:2361 @(2923,1108) 1030x80 LAY=VERTICAL//CENTER pad=,,, gap=-8.0
+            TEXT "OUR PRODUCT" 166:2362 @(2923,1108) 1030x80 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 80.0px lh=80.0 ls=-0.8 align=CENTER
+               TXT: OUR PRODUCT
+          TEXT "EcoBug, a comprehensive landscaping consultant tool is a one-stop destination for all landscaping solutions be it for an architect, designer, site engineer or student! From analysis and development to maintenance and cost estimation, this software covers the integral stages of landscaping, providing an easy-to-use interface and assessing feasibility of landscape projects both environmentally and economically." 166:2363 @(2923,1204) 1030x170 fill=#40543F@1 FONT=Futura PT [Book] 400 28.0px lh=33.6 ls=-0.3 align=CENTER
+             TXT: EcoBug, a comprehensive landscaping consultant tool is a one-stop destination for all landscaping solutions be it for an architect, designer, site engineer or student! From analysis and development to maintenance and cost estimation, this software covers the integral stages of landscaping, providing an easy-to-use interface and assessing feasibility of landscape projects both environmentally and economically.
+        FRAME "Button row" 166:2364 @(3369,1415) 138x66 LAY=HORIZONTAL//CENTER pad=,,, gap=16.0
+          INSTANCE "Button primary" 166:2365 @(3369,1415) 138x66 LAY=HORIZONTAL/CENTER/CENTER pad=36.0,21.0,36.0,21.0 gap=10.0 fill=#000000@1
+            RECTANGLE "Bullet" I166:2365;3:2286 @(3405,1446) 4x4 fill=#FFFFFF@1
+            TEXT "Request a demo" I166:2365;3:2297 @(3419,1436) 52x24 fill=#FFFFFF@1 FONT=Geist Mono [Medium] 500 24.0px lh=24.0 ls=4.1 align=LEFT
+               TXT: BUY
+      RECTANGLE "Hero image" 166:2366 @(2958,1609) 960x608 HIDDEN fill=IMAGE stroke=#000000@1/2.0 r=24.0
+  FRAME "Frame 1" 166:2367 @(2798,1621) 1280x885 LAY=VERTICAL// pad=20.0,92.0,20.0,92.0 gap=
+    FRAME "Header" 166:2368 @(2818,1713) 1240x92 LAY=VERTICAL//MAX pad=,16.0,,16.0 gap=-8.0
+      TEXT "FEATURES OUR SERVICE PROVIDES" 166:2369 @(2818,1729) 1240x60 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 60.0px lh=60.0 ls=-0.6 align=CENTER
+         TXT: FEATURES OUR SERVICE PROVIDES
+    FRAME "Value modules" 166:2370 @(2818,1805) 1240x314 LAY=HORIZONTAL// pad=26.0,20.0,26.0,20.0 gap=16.0
+      INSTANCE "Container 1" 166:2371 @(2844,1825) 385x274 LAY=VERTICAL// pad=40.0,40.0,40.0,40.0 gap=24.0 fill=#97C974@1 r=24.0
+        INSTANCE "Icon" I166:2371;12:2893 @(2884,1865) 42x42
+          BOOLEAN_OPERATION "Union" I166:2371;12:2893;12:2856 @(2884,1865) 42x42 fill=#3C6E47@1
+            ELLIPSE "Ellipse" I166:2371;12:2893;12:2857 @(2885,1866) 40x40 stroke=#000000@1/2.0
+            LINE "Line" I166:2371;12:2893;12:2858 @(2904,1866) 0x41 stroke=#000000@1/2.0
+            VECTOR "Line" I166:2371;12:2893;12:2859 @(2905,1886) 20x0 stroke=#000000@1/2.0
+        FRAME "Content" I166:2371;3:4541 @(2884,1931) 305x128 LAY=VERTICAL// pad=,,, gap=8.0
+          TEXT "Clarity drives action" I166:2371;3:4561 @(2884,1931) 305x24 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 24.0px lh=24.0 ls=-0.5 align=LEFT
+             TXT: Landscaping Design
+          TEXT "We believe better decisions start with better dataâ?"measured, visible, and trusted." I166:2371;3:4564 @(2884,1963) 305x96 fill=#40543F@1 FONT=Futura PT [Book] 400 20.0px lh=24.0 ls=-0.8 align=LEFT
+             TXT: Enables users to research, feed site plans or design in-place using tools, curated plant and furniture blocks with automated plant schedules.
+      INSTANCE "Container 2" 166:2372 @(3245,1825) 385x274 LAY=VERTICAL// pad=40.0,40.0,40.0,40.0 gap=24.0 fill=#97C974@1 r=24.0
+        INSTANCE "Icon" I166:2372;12:2893 @(3285,1865) 42x42
+          BOOLEAN_OPERATION "Union" I166:2372;12:2893;12:2876 @(3285,1865) 42x42 fill=#3C6E47@1
+            ELLIPSE "Ellipse" I166:2372;12:2893;12:2877 @(3286,1866) 40x40 stroke=#000000@1/2.0
+            ELLIPSE "Ellipse" I166:2372;12:2893;12:2878 @(3286,1877) 40x18 stroke=#000000@1/2.0
+            ELLIPSE "Ellipse" I166:2372;12:2893;12:2879 @(3297,1866) 18x40 stroke=#000000@1/2.0
+        FRAME "Content" I166:2372;3:4541 @(3285,1931) 305x104 LAY=VERTICAL// pad=,,, gap=8.0
+          TEXT "Clarity drives action" I166:2372;3:4561 @(3285,1931) 305x24 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 24.0px lh=24.0 ls=-0.5 align=LEFT
+             TXT: Costing and Estimation
+          TEXT "We believe better decisions start with better dataâ?"measured, visible, and trusted." I166:2372;3:4564 @(3285,1963) 305x72 fill=#40543F@1 FONT=Futura PT [Book] 400 20.0px lh=24.0 ls=-0.8 align=LEFT
+             TXT: Get accurate bills of quantities and schedules that update with any changes in plans and costing.
+      INSTANCE "Container 3" 166:2373 @(3647,1825) 385x274 LAY=VERTICAL// pad=40.0,40.0,40.0,40.0 gap=24.0 fill=#97C974@1 r=24.0
+        INSTANCE "Icon" I166:2373;12:2893 @(3687,1865) 42x42
+          BOOLEAN_OPERATION "Union" I166:2373;12:2893;12:2811 @(3687,1865) 42x42 fill=#3C6E47@1
+            ELLIPSE "Ellipse" I166:2373;12:2893;12:2812 @(3688,1866) 40x40 stroke=#000000@1/2.0
+            VECTOR "Shape" I166:2373;12:2893;12:2813 @(3700,1878) 16x16 stroke=#000000@1/2.0
+        FRAME "Content" I166:2373;3:4541 @(3687,1931) 305x104 LAY=VERTICAL// pad=,,, gap=8.0
+          TEXT "Clarity drives action" I166:2373;3:4561 @(3687,1931) 305x24 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 24.0px lh=24.0 ls=-0.5 align=LEFT
+             TXT: Micro-climate analysis
+          TEXT "We believe better decisions start with better dataâ?"measured, visible, and trusted." I166:2373;3:4564 @(3687,1963) 305x72 fill=#40543F@1 FONT=Futura PT [Book] 400 20.0px lh=24.0 ls=-0.8 align=LEFT
+             TXT: Assess the influence of local climate on landscape designs and understand practicality.
+    FRAME "Value modules" 166:2374 @(2818,2119) 1240x295 LAY=HORIZONTAL// pad=26.0,1.0,26.0,20.0 gap=16.0
+      INSTANCE "Container 1" 166:2375 @(2844,2120) 385x274 LAY=VERTICAL// pad=40.0,40.0,40.0,40.0 gap=24.0 fill=#97C974@1 r=24.0
+        INSTANCE "Icon" I166:2375;12:2893 @(2884,2160) 42x42
+          BOOLEAN_OPERATION "Union" I166:2375;12:2893;12:2856 @(2884,2160) 42x42 fill=#3C6E47@1
+            ELLIPSE "Ellipse" I166:2375;12:2893;12:2857 @(2885,2161) 40x40 stroke=#000000@1/2.0
+            LINE "Line" I166:2375;12:2893;12:2858 @(2904,2161) 0x41 stroke=#000000@1/2.0
+            VECTOR "Line" I166:2375;12:2893;12:2859 @(2905,2181) 20x0 stroke=#000000@1/2.0
+        FRAME "Content" I166:2375;3:4541 @(2884,2226) 305x104 LAY=VERTICAL// pad=,,, gap=8.0
+          TEXT "Clarity drives action" I166:2375;3:4561 @(2884,2226) 305x24 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 24.0px lh=24.0 ls=-0.5 align=LEFT
+             TXT: Data Bank
+          TEXT "We believe better decisions start with better dataâ?"measured, visible, and trusted." I166:2375;3:4564 @(2884,2258) 305x72 fill=#40543F@1 FONT=Futura PT [Book] 400 20.0px lh=24.0 ls=-0.8 align=LEFT
+             TXT: Avail a repository of landscaping knowledge, right from plant catalogues to strategies.
+      INSTANCE "Container 2" 166:2376 @(3245,2120) 385x274 LAY=VERTICAL// pad=40.0,40.0,40.0,40.0 gap=24.0 fill=#97C974@1 r=24.0
+        INSTANCE "Icon" I166:2376;12:2893 @(3285,2160) 42x42
+          BOOLEAN_OPERATION "Union" I166:2376;12:2893;12:2876 @(3285,2160) 42x42 fill=#3C6E47@1
+            ELLIPSE "Ellipse" I166:2376;12:2893;12:2877 @(3286,2161) 40x40 stroke=#000000@1/2.0
+            ELLIPSE "Ellipse" I166:2376;12:2893;12:2878 @(3286,2172) 40x18 stroke=#000000@1/2.0
+            ELLIPSE "Ellipse" I166:2376;12:2893;12:2879 @(3297,2161) 18x40 stroke=#000000@1/2.0
+        FRAME "Content" I166:2376;3:4541 @(3285,2226) 305x80 LAY=VERTICAL// pad=,,, gap=8.0
+          TEXT "Clarity drives action" I166:2376;3:4561 @(3285,2226) 305x24 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 24.0px lh=24.0 ls=-0.5 align=LEFT
+             TXT: 3D Simulation
+          TEXT "We believe better decisions start with better dataâ?"measured, visible, and trusted." I166:2376;3:4564 @(3285,2258) 305x48 fill=#40543F@1 FONT=Futura PT [Book] 400 20.0px lh=24.0 ls=-0.8 align=LEFT
+             TXT: Run and analyse your model through real-time effects of light, shade and irrigation.
+      INSTANCE "Container 3" 166:2377 @(3647,2120) 385x274 LAY=VERTICAL// pad=40.0,40.0,40.0,40.0 gap=24.0 fill=#97C974@1 r=24.0
+        INSTANCE "Icon" I166:2377;12:2893 @(3687,2160) 42x42
+          BOOLEAN_OPERATION "Union" I166:2377;12:2893;12:2811 @(3687,2160) 42x42 fill=#3C6E47@1
+            ELLIPSE "Ellipse" I166:2377;12:2893;12:2812 @(3688,2161) 40x40 stroke=#000000@1/2.0
+            VECTOR "Shape" I166:2377;12:2893;12:2813 @(3700,2173) 16x16 stroke=#000000@1/2.0
+        FRAME "Content" I166:2377;3:4541 @(3687,2226) 305x104 LAY=VERTICAL// pad=,,, gap=8.0
+          TEXT "Clarity drives action" I166:2377;3:4561 @(3687,2226) 305x48 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 24.0px lh=24.0 ls=-0.5 align=LEFT
+             TXT: Eco-Sensitivity & Sustainability
+          TEXT "We believe better decisions start with better dataâ?"measured, visible, and trusted." I166:2377;3:4564 @(3687,2282) 305x48 fill=#40543F@1 FONT=Futura PT [Book] 400 20.0px lh=24.0 ls=-0.8 align=LEFT
+             TXT: Environment kept as a priority, encouraging sustainable and eco-centric strategies.
+  FRAME "Blog section" 166:2378 @(2798,2506) 1280x660 LAY=VERTICAL//CENTER pad=20.0,,20.0,50.0 gap=40.0
+    TEXT "READ OUR BLOGS" 166:2379 @(3132,2506) 612x64 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 64.0px lh=64.0 ls=-0.6 align=CENTER
+       TXT: READ OUR BLOGS
+    FRAME "Article body" 166:2380 @(3128,2610) 620x506 LAY=VERTICAL//CENTER pad=,,, gap=24.0
+      FRAME "Journal list" 166:2381 @(3128,2610) 620x444 LAY=VERTICAL// pad=,,, gap=
+        INSTANCE "Journal item 1" 166:2382 @(3128,2610) 620x148 LAY=HORIZONTAL// pad=16.0,,16.0, gap=16.0 fill=#97C974@1 stroke=#000000@1/1.0 r=29.0
+          FRAME "Content" I166:2382;35:4571 @(3144,2610) 620x148 LAY=HORIZONTAL/SPACE_BETWEEN/ pad=,24.0,,24.0 gap=16.0
+            RECTANGLE "Image" I166:2382;34:3872 @(3144,2634) 165x100 fill=IMAGE r=20.0
+            FRAME "Role + Details" I166:2382;34:3318 @(3325,2634) 439x46 LAY=VERTICAL// pad=,,, gap=8.0
+              TEXT "How to Build a Climate-Ready Data Stack" I166:2382;34:3319 @(3325,2634) 439x24 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 24.0px lh=24.0 ls=-0.5 align=LEFT
+                 TXT: How to build a Nuclear Bomb at home
+              FRAME "Details" I166:2382;34:3882 @(3325,2666) 160x14 LAY=HORIZONTAL// pad=,,, gap=8.0
+                TEXT "Tooling" I166:2382;34:3883 @(3325,2666) 93x14 fill=#40543F@1 FONT=Geist Mono [Regular] 400 14.0px lh=14.0 ls=0.0 align=LEFT
+                   TXT: Landscaping
+                TEXT "A·" I166:2382;34:3884 @(3426,2666) 9x14 fill=#6C6C6C@1 FONT=Geist Mono [Regular] 400 14.0px lh=14.0 ls=0.0 align=LEFT
+                   TXT: A·
+                TEXT "4 min" I166:2382;34:3885 @(3443,2666) 42x14 fill=#40543F@1 FONT=Geist Mono [Regular] 400 14.0px lh=14.0 ls=0.0 align=LEFT
+                   TXT: 4 min
+        INSTANCE "Journal item 2" 166:2383 @(3128,2758) 620x148 LAY=HORIZONTAL// pad=16.0,,16.0, gap=16.0 fill=#97C974@1 stroke=#000000@1/1.0 r=29.0
+          FRAME "Content" I166:2383;35:4571 @(3144,2758) 620x148 LAY=HORIZONTAL/SPACE_BETWEEN/ pad=,24.0,,24.0 gap=16.0
+            RECTANGLE "Image" I166:2383;34:3872 @(3144,2782) 165x100 fill=IMAGE r=20.0
+            FRAME "Role + Details" I166:2383;34:3318 @(3325,2782) 439x46 LAY=VERTICAL// pad=,,, gap=8.0
+              TEXT "How to Build a Climate-Ready Data Stack" I166:2383;34:3319 @(3325,2782) 439x24 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 24.0px lh=24.0 ls=-0.5 align=LEFT
+                 TXT: Help us bring down Benjamin Netanyahu
+              FRAME "Details" I166:2383;34:3882 @(3325,2814) 168x14 LAY=HORIZONTAL// pad=,,, gap=8.0
+                TEXT "Tooling" I166:2383;34:3883 @(3325,2814) 101x14 fill=#40543F@1 FONT=Geist Mono [Regular] 400 14.0px lh=14.0 ls=0.0 align=LEFT
+                   TXT: Architecture
+                TEXT "A·" I166:2383;34:3884 @(3434,2814) 9x14 fill=#6C6C6C@1 FONT=Geist Mono [Regular] 400 14.0px lh=14.0 ls=0.0 align=LEFT
+                   TXT: A·
+                TEXT "4 min" I166:2383;34:3885 @(3451,2814) 42x14 fill=#40543F@1 FONT=Geist Mono [Regular] 400 14.0px lh=14.0 ls=0.0 align=LEFT
+                   TXT: 4 min
+        INSTANCE "Journal item 3" 166:2384 @(3128,2906) 620x148 LAY=HORIZONTAL// pad=16.0,,16.0, gap=16.0 fill=#97C974@1 stroke=#000000@1/1.0 r=29.0
+          FRAME "Content" I166:2384;35:4571 @(3144,2906) 620x148 LAY=HORIZONTAL/SPACE_BETWEEN/ pad=,24.0,,24.0 gap=16.0
+            RECTANGLE "Image" I166:2384;34:3872 @(3144,2930) 165x100 fill=IMAGE r=20.0
+            FRAME "Role + Details" I166:2384;34:3318 @(3325,2930) 439x46 LAY=VERTICAL// pad=,,, gap=8.0
+              TEXT "How to Build a Climate-Ready Data Stack" I166:2384;34:3319 @(3325,2930) 439x24 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 24.0px lh=24.0 ls=-0.5 align=LEFT
+                 TXT: Doing Leet-Code is Israeli Propaganda
+              FRAME "Details" I166:2384;34:3882 @(3325,2962) 202x14 LAY=HORIZONTAL// pad=,,, gap=8.0
+                TEXT "Tooling" I166:2384;34:3883 @(3325,2962) 135x14 fill=#40543F@1 FONT=Geist Mono [Regular] 400 14.0px lh=14.0 ls=0.0 align=LEFT
+                   TXT: Chemical-Warfare
+                TEXT "A·" I166:2384;34:3884 @(3468,2962) 9x14 fill=#6C6C6C@1 FONT=Geist Mono [Regular] 400 14.0px lh=14.0 ls=0.0 align=LEFT
+                   TXT: A·
+                TEXT "4 min" I166:2384;34:3885 @(3485,2962) 42x14 fill=#40543F@1 FONT=Geist Mono [Regular] 400 14.0px lh=14.0 ls=0.0 align=LEFT
+                   TXT: 4 min
+      INSTANCE "Button secondary" 166:2385 @(3354,3078) 167x38 LAY=HORIZONTAL/CENTER/CENTER pad=12.0,12.0,12.0,12.0 gap=10.0 fill=#000000@1
+        TEXT "Watch case study" I166:2385;3:4711 @(3366,3090) 143x14 fill=#FFFFFF@1 FONT=Geist Mono [Medium] 500 14.0px lh=14.0 ls=0.0 align=LEFT
+           TXT: View all articles
+  FRAME "Frame 4" 166:2386 @(2798,3166) 1280x862 LAY=VERTICAL/CENTER/CENTER pad=,,, gap=14.0
+    TEXT "WHAT OUR CUSTOMERS HAVE TO SAY" 166:2387 @(2784,3221) 1307x119 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 64.0px lh=76.8 ls=-0.6 align=CENTER
+       TXT: WHAT OUR CUSTOMERS HAVE TO SAY
+    FRAME "Frame 5" 166:2388 @(2892,3354) 1092x278 LAY=HORIZONTAL/CENTER/CENTER pad=,,,28.0 gap=25.0
+      FRAME "Container 1" 166:2389 @(2837,3356) 382x246 LAY=HORIZONTAL/CENTER/ pad=40.0,40.0,40.0,40.0 gap=24.0 fill=#97C974@1 r=24.0
+        FRAME "Content" 166:2390 @(2877,3396) 302x68 LAY=VERTICAL// pad=,,, gap=8.0
+          TEXT "â?oItâ?Ts really nice to have everything in one place.â??" 166:2391 @(2877,3396) 302x68 fill=#40543F@1 FONT=Futura PT [Book] 400 28.0px lh=33.6 ls=-1.1 align=LEFT
+             TXT: â?oItâ?Ts really nice to have everything in one place.â??
+      FRAME "Container 2" 166:2392 @(3244,3354) 385x250 LAY=HORIZONTAL/CENTER/ pad=40.0,40.0,40.0,40.0 gap=24.0 fill=#97C974@1 r=24.0
+        FRAME "Content" 166:2393 @(3284,3394) 305x170 LAY=VERTICAL// pad=,,, gap=8.0
+          TEXT "â?oWe are really looking forward to having maintenance plans for landscaping, a much needed respite for our long term works.â??" 166:2394 @(3284,3394) 305x170 fill=#40543F@1 FONT=Futura PT [Book] 400 28.0px lh=33.6 ls=-1.1 align=LEFT
+             TXT: â?oWe are really looking forward to having maintenance plans for landscaping, a much needed respite for our long term works.â??
+      FRAME "Container 3" 166:2395 @(3654,3356) 385x246 LAY=HORIZONTAL/CENTER/ pad=40.0,40.0,40.0,40.0 gap=24.0 fill=#97C974@1 r=24.0
+        FRAME "Content" 166:2396 @(3694,3396) 305x102 LAY=VERTICAL// pad=,,, gap=8.0
+          TEXT "â?oI am expecting ecologically aware and driven strategies for our upcoming projects.â??" 166:2397 @(3694,3396) 305x102 fill=#40543F@1 FONT=Futura PT [Book] 400 28.0px lh=33.6 ls=-1.1 align=LEFT
+             TXT: â?oI am expecting ecologically aware and driven strategies for our upcoming projects.â??
+    FRAME "Container 1" 166:2398 @(2874,3646) 1128x327 LAY=VERTICAL/CENTER/CENTER pad=40.0,76.0,40.0,85.0 gap=42.0 fill=#97C974@1 r=24.0
+      FRAME "Content" 166:2399 @(2914,3681) 1048x140 LAY=VERTICAL// pad=,,, gap=8.0
+        TEXT "Are you ready? Be a part of next best thing" 166:2400 @(2914,3681) 1048x140 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 58.0px lh=69.6 ls=-2.3 align=CENTER
+           TXT: Are you ready? // Be a part of next best thing
+      FRAME "Button row" 166:2401 @(3292,3863) 291x66 LAY=HORIZONTAL//CENTER pad=,,, gap=16.0
+        INSTANCE "Button primary" 166:2402 @(3292,3863) 291x66 LAY=HORIZONTAL/CENTER/CENTER pad=36.0,21.0,36.0,21.0 gap=10.0 fill=#000000@1
+          RECTANGLE "Bullet" I166:2402;3:2286 @(3328,3894) 4x4 fill=#FFFFFF@1
+          TEXT "Request a demo" I166:2402;3:2297 @(3342,3884) 205x24 fill=#FFFFFF@1 FONT=Geist Mono [Medium] 500 24.0px lh=24.0 ls=0.2 align=LEFT
+             TXT: View our Plans
+  FRAME "Call to action" 166:2403 @(2798,4028) 1280x414 LAY=VERTICAL//CENTER pad=20.0,120.0,20.0,120.0 gap=32.0
+    TEXT "Contact Us" 166:2404 @(2818,4148) 1240x96 fill=#1B2B1E@1 FONT=OffBit Trial [Bold] 700 96.0px lh=96.0 ls=-2.9 align=CENTER
+       TXT: Contact Us
+    INSTANCE "Button primary" 166:2405 @(3364,4276) 147x46 LAY=HORIZONTAL/CENTER/CENTER pad=16.0,16.0,16.0,16.0 gap=10.0 fill=#000000@1
+      RECTANGLE "Bullet" I166:2405;3:2286 @(3380,4297) 4x4 fill=#FFFFFF@1
+      TEXT "Request a demo" I166:2405;3:2297 @(3394,4292) 101x14 fill=#FFFFFF@1 FONT=Geist Mono [Medium] 500 14.0px lh=14.0 ls=0.0 align=LEFT
+         TXT: Contact Page
+  INSTANCE "Footer" 283:1450 @(2798,4442) 1280x617 LAY=VERTICAL//CENTER pad=20.0,20.0,20.0,20.0 gap=20.0 fill=#5DD34E@1
+    FRAME "Footer header" I283:1450;174:3308 @(2818,4462) 1240x36 LAY=HORIZONTAL/SPACE_BETWEEN/CENTER pad=,,, gap=288.0
+      FRAME "Footer links" I283:1450;174:3309 @(2818,4470) 467x20 LAY=HORIZONTAL//CENTER pad=,,, gap=20.0
+        TEXT "Buy" I283:1450;174:3310 @(2818,4470) 34x20 fill=#255509@1 FONT=Radio Canada Big [Medium] 500 20.0px lh=20.0 ls=-0.4 align=LEFT
+           TXT: Buy
+        TEXT "Webtool" I283:1450;174:3311 @(2872,4470) 74x20 fill=#255509@1 FONT=Radio Canada Big [Medium] 500 20.0px lh=20.0 ls=-0.4 align=LEFT
+           TXT: Webtool
+        TEXT "Blog" I283:1450;174:3312 @(2966,4470) 39x20 fill=#255509@1 FONT=Radio Canada Big [Medium] 500 20.0px lh=20.0 ls=-0.4 align=LEFT
+           TXT: Blog
+        TEXT "Careers" I283:1450;174:3313 @(3025,4470) 69x20 fill=#255509@1 FONT=Radio Canada Big [Medium] 500 20.0px lh=20.0 ls=-0.4 align=LEFT
+           TXT: Careers
+        TEXT "Contact Us" I283:1450;174:3314 @(3114,4470) 97x20 fill=#255509@1 FONT=Radio Canada Big [Medium] 500 20.0px lh=20.0 ls=-0.4 align=LEFT
+           TXT: Contact Us
+        TEXT "About" I283:1450;174:3315 @(3231,4470) 54x20 fill=#255509@1 FONT=Radio Canada Big [Medium] 500 20.0px lh=20.0 ls=-0.4 align=LEFT
+           TXT: About
+      FRAME "Frame 3" I283:1450;174:3316 @(3846,4462) 212x36
+        RECTANGLE "Untitled-7 1" I283:1450;174:3317 @(3846,4462) 35x35 fill=IMAGE
+        RECTANGLE "iconmonstr-linkedin-3-240 1" I283:1450;174:3318 @(3929,4462) 35x36 fill=IMAGE
+        RECTANGLE "image-from-rawpixel-id-16487372-png 1" I283:1450;174:3319 @(4000,4461) 54x38 fill=IMAGE
+    FRAME "Frame 125" I283:1450;283:1430 @(2798,4518) 1280x534 LAY=VERTICAL//CENTER pad=,,, gap=32.0
+      RECTANGLE "footer light 1" I283:1450;283:1429 @(2818,4518) 1240x280 fill=IMAGE
+      FRAME "Frame 2" I283:1450;174:3321 @(2798,4830) 1280x222 fill=#000000@0.01
+        VECTOR "ECOBUG" I283:1450;174:3322 @(2821,4817) 1233x262 fill=#2B600C@1
