@@ -114,3 +114,15 @@ video {
 .font-geist-mono {
   font-family: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
+
+/* Futura PT (Adobe-licensed, not on Google Fonts): closest system stack.
+   Used for Figma labels, roles and story copy on the About page. */
+.font-futura {
+  font-family: 'Futura PT', 'Futura Std', Futura, 'Century Gothic',
+    'Trebuchet MS', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Source Serif 4 (loaded via next/font in utils.ts) for table emails */
+.font-source-serif {
+  font-family: var(--font-source-serif), Georgia, 'Times New Roman', serif;
+}
