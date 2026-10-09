@@ -18,7 +18,7 @@ const LINKS = [
   { label: 'Webtool', href: '/webtool' },
   { label: 'Blog', href: '/blog' },
   { label: 'Careers', href: '/careers' },
-  { label: 'Contact Us', href: '#' },
+  { label: 'Contact Us', href: '/contact' },
   { label: 'About', href: '/about' },
 ]
 
@@ -258,9 +258,9 @@ export default function AppFooter() {
     <footer className='mt-auto overflow-hidden bg-[#5DD34E] dark:bg-black'>
       {/* Figma Footer component: content 1240 (pad 20), links 20px Radio
           Canada Big, leaf band 1240x280, full-width dot wordmark. */}
-      <div className='mx-auto w-full max-w-[1280px] px-5 pt-5'>
-        <div className='flex flex-wrap items-center justify-between gap-x-6 gap-y-3'>
-          <nav aria-label='Footer' className='flex flex-wrap gap-x-5 gap-y-2'>
+      <div className='mx-auto w-full max-w-[1280px] px-5 pt-5 overflow-x-clip'>
+        <div className='flex flex-col sm:flex-row flex-wrap items-center sm:items-center justify-between gap-x-6 gap-y-4 text-center sm:text-left'>
+          <nav aria-label='Footer' className='flex flex-wrap justify-center sm:justify-start gap-x-5 gap-y-2'>
             {LINKS.map((l) => (
               <Link
                 key={l.label}

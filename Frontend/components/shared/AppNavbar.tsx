@@ -25,7 +25,7 @@ const LEFT_LINKS = [
 const RIGHT_LINKS = [
   { label: 'CAREERS', href: '/careers' },
   { label: 'ABOUT', href: '/about' },
-  { label: 'CONTACT US', href: '#' },
+  { label: 'CONTACT US', href: '/contact' },
 ]
 
 const MENU_ITEMS = [
@@ -35,6 +35,7 @@ const MENU_ITEMS = [
   { label: 'Careers', ariaLabel: 'Go to careers', link: '/careers' },
   { label: 'About', ariaLabel: 'About us', link: '/about' },
   { label: 'Buy', ariaLabel: 'Buy now', link: '/products' },
+  { label: 'Contact', ariaLabel: 'Contact us', link: '/contact' },
 ]
 
 function NavLink({
@@ -82,7 +83,7 @@ export default function AppNavbar() {
       <header className='fixed top-0 inset-x-0 z-40 bg-bg/90 backdrop-blur'>
         {/* Desktop — Figma "Nav items LIGHT/DARK": 76px bar, padL 186,
             cluster gap 47, avatar gap 51 (content sits ~227px from left). */}
-        <nav className='hidden md:flex items-center justify-center w-full h-[76px] pl-6 lg:pl-[186px]'>
+        <nav className='hidden lg:flex items-center justify-center w-full h-[76px] pl-6 lg:pl-[186px]'>
           <div className='flex items-center gap-4 lg:gap-[47px]'>
             {LEFT_LINKS.map((l) => (
               <NavLink key={l.label} {...l} active={isActive(l.href)} />
@@ -108,7 +109,7 @@ export default function AppNavbar() {
         </nav>
 
         {/* Mobile */}
-        <div className='flex md:hidden items-center justify-between px-4 h-[60px]'>
+        <div className='flex lg:hidden items-center justify-between px-4 h-[60px]'>
           <button
             onClick={handleHamburgerClick}
             aria-label='Open menu'
@@ -131,11 +132,11 @@ export default function AppNavbar() {
 
       {/* Mobile drawer */}
       {drawerOpen && (
-        <div className='fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden' />
+        <div className='fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden' />
       )}
       <div
         ref={sidebarRef}
-        className='fixed top-0 left-0 w-screen h-screen z-50 pointer-events-none md:hidden'
+        className='fixed top-0 left-0 w-screen h-screen z-50 pointer-events-none lg:hidden'
       >
         <StaggeredMenu
           isFixed={false}

@@ -34,6 +34,7 @@ const menuItems = [
   { label: 'Blog', ariaLabel: 'Go to blog', link: '/blog' },
   { label: 'About', ariaLabel: 'About us', link: '/about' },
   { label: 'Buy', ariaLabel: 'Buy now', link: '/products' },
+  { label: 'Contact', ariaLabel: 'Contact us', link: '/contact' },
 ]
 
 function Btn({ text, link }: BtnProps) {

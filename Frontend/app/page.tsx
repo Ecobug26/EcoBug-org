@@ -5,8 +5,11 @@ import Lenis from 'lenis'
 import AppNavbar from '@/components/shared/AppNavbar'
 import AppFooter from '@/components/shared/AppFooter'
 import Hero from '@/pageComponents/Hero/page'
+import Intro from '@/pageComponents/Intro/page'
 import Feature from '@/pageComponents/Feature/page'
+import Blogs from '@/pageComponents/Blogs/page'
 import Feedbacks from '@/pageComponents/Feedbacks/page'
+import ContactCta from '@/pageComponents/ContactCta/page'
 
 export default function Home() {
   useEffect(() => {
@@ -23,12 +26,16 @@ export default function Home() {
   }, [])
 
   return (
-    <div className='min-h-screen flex flex-col bg-bg'>
+    <div className='min-h-screen flex flex-col bg-[#E9F5E0] dark:bg-[#102112]'>
       <AppNavbar />
       <Hero />
+      <Intro />
       <Feature />
+      <Blogs />
       <Feedbacks />
+      <ContactCta />
       <AppFooter />
     </div>
   )
 }
+
