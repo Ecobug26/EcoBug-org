@@ -94,6 +94,19 @@ body {
   display: none;
 }
 
+/* Responsive safety: never allow accidental horizontal scroll from
+   fixed-pixel Figma frames; media scales down instead of overflowing. */
+html,
+body {
+  overflow-x: clip;
+  max-width: 100%;
+}
+img,
+svg,
+video {
+  max-width: 100%;
+}
+
 /* Expose the Geist fonts loaded in app/layout.tsx as ready-made classes */
 .font-geist-sans {
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;

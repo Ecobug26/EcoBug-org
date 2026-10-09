@@ -55,6 +55,50 @@ export function SectionTitle({
   )
 }
 
+/**
+ * Black Geist-Mono button matching the Figma "Button primary/secondary"
+ * (homepage BUY / View our Plans / Contact Page, careers View role).
+ * Optional 4x4 white bullet = Figma Button primary.
+ * Lifts on hover and presses on click, like PixelButton.
+ */
+export function MonoButton({
+  children,
+  href,
+  onClick,
+  className = '',
+  type = 'button',
+  ariaLabel,
+  bullet = false,
+}: {
+  children: React.ReactNode
+  href?: string
+  onClick?: () => void
+  className?: string
+  type?: 'button' | 'submit'
+  ariaLabel?: string
+  bullet?: boolean
+}) {
+  const cls = `inline-flex items-center justify-center gap-2.5 bg-black text-white font-geist-mono font-medium select-none cursor-pointer transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[0_5px_0_rgba(0,0,0,0.35)] active:translate-y-0.5 active:shadow-[0_2px_0_rgba(0,0,0,0.35)] ${className}`
+  const inner = (
+    <>
+      {bullet && <span className='w-1 h-1 bg-white shrink-0' aria-hidden />}
+      {children}
+    </>
+  )
+  if (href) {
+    return (
+      <Link href={href} className={cls} aria-label={ariaLabel}>
+        {inner}
+      </Link>
+    )
+  }
+  return (
+    <button type={type} onClick={onClick} className={cls} aria-label={ariaLabel}>
+      {inner}
+    </button>
+  )
+}
+
 /** White (light) / dark-green (dark) rounded card surface */
 export function Panel({
   children,
