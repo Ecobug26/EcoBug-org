@@ -287,7 +287,7 @@ export default function About() {
           eyebrow='Our origin'
           imageFirst={true}
           imageLabel='Variegated monstera leaves'
-          imageSrc='/Frontend/public/images/origin.png'
+          imageSrc='/images/origin.png'
         />
         <Founders />
         <TeamTable />
