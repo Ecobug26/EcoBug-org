@@ -137,7 +137,13 @@ dist
 !.yarn/sdks
 !.yarn/versions
 
+
 # Vite files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Figma analysis scratch (local working files, never commit)
+figma_tmp/
+figma_imgs/
+figma_*.json
