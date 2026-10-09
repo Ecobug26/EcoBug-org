@@ -4,38 +4,15 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { offbit } from '@/components/utils/utils'
 import { MonoButton } from '@/components/shared/ui'
+import { posts } from '@/data/posts'
 
 /**
  * Blog teaser — Figma "Blog section" (166:2378 / 283:2455, mobile 296:5330):
- * OffBit 64 heading, three 620px journal items (r29, green, 1px black
- * stroke, stacked with no gap; image 165x100 r20 + Geist Mono meta),
- * then the black "View all articles" button. Section pad top 0 / bottom 50
- * (mobile 82), gap 40 (mobile 30).
- *
- * NOTE: the Figma title/category text is joke placeholder copy, so neutral
- * landscaping titles are used instead.
+ * OffBit 64 heading, journal items (r29, green, 1px black stroke, stacked
+ * with no gap; image 165x100 r20 + Geist Mono meta), then the black
+ * "View all articles" button. Section pad top 0 / bottom 50 (mobile 82),
+ * gap 40 (mobile 30). Cards link to their full article pages.
  */
-const posts = [
-  {
-    image: '/blog/blog-1.png',
-    title: 'How to Build a Climate-Ready Data Stack',
-    category: 'Landscaping',
-    read: '4 min',
-  },
-  {
-    image: '/blog/blog-2.png',
-    title: 'Costing Landscape Projects with Confidence',
-    category: 'Architecture',
-    read: '4 min',
-  },
-  {
-    image: '/blog/blog-3.png',
-    title: 'Micro-climate Strategies for Greener Sites',
-    category: 'Sustainability',
-    read: '4 min',
-  },
-]
-
 export default function Blogs() {
   return (
     <section className='w-full px-5 pb-[82px] lg:pb-[50px]'>
@@ -48,10 +25,10 @@ export default function Blogs() {
 
         <div className='w-full max-w-[620px] flex flex-col gap-6'>
           <div className='flex flex-col'>
-            {posts.map((post) => (
+            {posts.slice(0, 3).map((post) => (
               <Link
-                key={post.title}
-                href='/blog'
+                key={post.slug}
+                href={`/blog/${post.slug}`}
                 className='group bg-[#97C974] dark:bg-[#253B25] border border-black rounded-[26.1px] lg:rounded-[29px] px-[14.4px] lg:px-4 transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_10px_24px_rgba(0,0,0,0.15)] hover:z-10 relative'
               >
                 <div className='flex flex-col lg:flex-row items-center gap-[14.4px] lg:gap-4 py-[21.6px] lg:py-6'>

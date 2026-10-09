@@ -7,17 +7,11 @@ import { offbit } from '@/components/utils/utils'
  * ls -1, centered), 3 plan cards in a row (gap 40).
  */
 const EDUCATION_FEATURES = [
-  '1 Month free trial',
-  'Single active device',
-  'Rs. 49 per month/ Rs. 399 per year',
-  'Auto renewal every month or year',
-  'Plant Bank Access',
-  'Landscape Strategies',
+  '1 month free trial Single active device Rs. 49 per month/ Rs. 399 per year Auto renewal every month or year Plant Bank Access Landscape Strategies Upcoming BOQ generation',
 ]
 
 const PROFESSIONAL_FEATURES = [
   ...EDUCATION_FEATURES,
-  'Upcoming BOQ generation',
 ]
 
 export default function Subscriptions() {
