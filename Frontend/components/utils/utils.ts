@@ -25,7 +25,7 @@ export const offbitDot = localFont({
  * Source Serif 4 is the official continuation of Source Serif Pro on
  * Google Fonts — same typeface design.
  */
-export const sourceSerif = Source_Serif_4({ subsets: ['latin'] })
+export const sourceSerif = Source_Serif_4({ subsets: ['latin'], variable: '--font-source-serif' })
 
 /** Footer links (Figma: Radio Canada Big Medium 500) */
 export const radioCanadaBig = Radio_Canada_Big({ subsets: ['latin'] })
