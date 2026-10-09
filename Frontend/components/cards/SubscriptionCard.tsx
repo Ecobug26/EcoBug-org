@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { pixelifySans } from '@/components/utils/utils'
+import { offbit } from '@/components/utils/utils'
 import { PixelButton } from '@/components/shared/ui'
 
 type CardProps = {
@@ -20,7 +20,7 @@ export default function SubscriptionCard({
   return (
     <div className='bg-primary text-panel w-full max-w-[320px] h-[500px] rounded-2xl p-8 flex flex-col shadow-[0_6px_0_rgba(0,0,0,0.18)]'>
       <div className='mt-10 text-center'>
-        <h2 className={`${pixelifySans.className} text-2xl md:text-3xl tracking-widest`}>
+        <h2 className={`${offbit.className} text-2xl md:text-3xl tracking-widest`}>
           {type}
         </h2>
       </div>

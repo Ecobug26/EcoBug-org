@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import AppNavbar from '@/components/shared/AppNavbar'
 import AppFooter from '@/components/shared/AppFooter'
-import { pixelifySans } from '@/components/utils/utils'
+import { offbit } from '@/components/utils/utils'
 import { useStrategy } from '@/hooks/useStrategies'
 import {
   SearchBar,
@@ -47,7 +47,7 @@ export default function StrategyDetailPage({ params }: StrategyDetailPageProps) 
 
       <main className='flex-1 flex flex-col items-center pt-28 md:pt-32 pb-16 px-3 sm:px-6'>
         <h1
-          className={`${pixelifySans.className} text-4xl sm:text-5xl md:text-6xl text-ink tracking-widest uppercase font-bold text-center`}
+          className={`${offbit.className} text-4xl sm:text-5xl md:text-6xl text-ink tracking-widest uppercase font-bold text-center`}
         >
           STRATEGY
         </h1>
@@ -65,7 +65,7 @@ export default function StrategyDetailPage({ params }: StrategyDetailPageProps) 
               <div className='flex justify-center'>
                 <button
                   onClick={goBack}
-                  className={`${pixelifySans.className} text-sm text-primary hover:text-primary-hover transition-colors cursor-pointer`}
+                  className={`${offbit.className} text-sm text-primary hover:text-primary-hover transition-colors cursor-pointer`}
                 >
                   ← Back to Strategies
                 </button>
@@ -113,7 +113,7 @@ export default function StrategyDetailPage({ params }: StrategyDetailPageProps) 
                   {/* Text */}
                   <div className='flex-1 min-w-0 flex flex-col'>
                     <h2
-                      className={`${pixelifySans.className} text-xl sm:text-2xl md:text-3xl font-bold text-ink leading-tight`}
+                      className={`${offbit.className} text-xl sm:text-2xl md:text-3xl font-bold text-ink leading-tight`}
                     >
                       {strategy.title}
                     </h2>
@@ -128,7 +128,7 @@ export default function StrategyDetailPage({ params }: StrategyDetailPageProps) 
                 {/* Tags */}
                 <div className='mt-6'>
                   <h3
-                    className={`${pixelifySans.className} text-xs text-ink-muted font-bold mb-1.5`}
+                    className={`${offbit.className} text-xs text-ink-muted font-bold mb-1.5`}
                   >
                     tags:
                   </h3>
@@ -136,7 +136,7 @@ export default function StrategyDetailPage({ params }: StrategyDetailPageProps) 
                     {strategy.keywords.map((keyword) => (
                       <span
                         key={keyword}
-                        className={`${pixelifySans.className} text-[10px] bg-panel px-2.5 py-1 rounded-full text-ink border border-line`}
+                        className={`${offbit.className} text-[10px] bg-panel px-2.5 py-1 rounded-full text-ink border border-line`}
                       >
                         #{keyword}
                       </span>

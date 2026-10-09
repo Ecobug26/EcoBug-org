@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { pixelifySans } from '@/components/utils/utils'
+import { offbit, offbitDot } from '@/components/utils/utils'
 import AccountMenu from '@/components/shared/AccountMenu'
 import StaggeredMenu from '@/components/sidebar/StaggeredMenu'
 
@@ -50,13 +50,12 @@ function NavLink({
     <Link
       href={href}
       aria-current={active ? 'page' : undefined}
-      className={`group relative ${pixelifySans.className} text-xs md:text-sm tracking-widest text-ink hover:text-primary-hover transition-colors ${
-        active ? 'text-primary-hover' : ''
-      }`}
+      className={`group relative ${offbit.className} whitespace-nowrap font-bold text-base lg:text-[20px] leading-6 tracking-normal text-[#1D422A] dark:text-[#8FCB8A] hover:text-[#255509] dark:hover:text-[#E9F5E0] transition-colors`}
     >
       {label}
+      {/* underline grows from a dot on the left, per the original interaction */}
       <span
-        className={`absolute left-0 -bottom-0.5 h-[2px] w-full bg-primary-hover origin-left transition-transform duration-200 ${
+        className={`absolute left-0 -bottom-0.5 h-[2px] w-full bg-current origin-left transition-transform duration-200 ${
           active ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
         }`}
       />
@@ -80,33 +79,36 @@ export default function AppNavbar() {
 
   return (
     <>
-      <header className='fixed top-0 inset-x-0 z-40 bg-bg/90 backdrop-blur border-b border-line'>
-        {/* Desktop */}
-        <nav className='hidden md:flex items-center justify-between px-8 lg:px-14 h-16 w-full'>
-          <div className='flex items-center gap-7 lg:gap-10'>
+      <header className='fixed top-0 inset-x-0 z-40 bg-bg/90 backdrop-blur'>
+        {/* Desktop — Figma "Nav items LIGHT/DARK": 76px bar, padL 186,
+            cluster gap 47, avatar gap 51 (content sits ~227px from left). */}
+        <nav className='hidden md:flex items-center justify-center w-full h-[76px] pl-6 lg:pl-[186px]'>
+          <div className='flex items-center gap-4 lg:gap-[47px]'>
             {LEFT_LINKS.map((l) => (
               <NavLink key={l.label} {...l} active={isActive(l.href)} />
             ))}
-          </div>
 
-          <Link
-            href='/'
-            aria-label='EcoBug home'
-            className={`${pixelifySans.className} text-lg tracking-[0.2em] text-ink border border-line rounded px-3 py-0.5 bg-panel`}
-          >
-            ECOBUG
-          </Link>
+            <Link
+              href='/'
+              aria-label='EcoBug home'
+              className={`${offbitDot.className} text-[40px] lg:text-[57px] leading-[1.2] text-[#255509] dark:text-[#E9F5E0] hover:opacity-80 transition-opacity select-none`}
+            >
+              ECOBUG
+            </Link>
 
-          <div className='flex items-center gap-7 lg:gap-10'>
             {RIGHT_LINKS.map((l) => (
               <NavLink key={l.label} {...l} active={isActive(l.href)} />
             ))}
-            <AccountMenu />
+
+            {/* +4px so the avatar gap is 51 (vs the cluster's 47) at lg */}
+            <span className='ml-1'>
+              <AccountMenu />
+            </span>
           </div>
         </nav>
 
         {/* Mobile */}
-        <div className='flex md:hidden items-center justify-between px-4 h-14'>
+        <div className='flex md:hidden items-center justify-between px-4 h-[60px]'>
           <button
             onClick={handleHamburgerClick}
             aria-label='Open menu'
@@ -118,7 +120,7 @@ export default function AppNavbar() {
           <Link
             href='/'
             aria-label='EcoBug home'
-            className={`${pixelifySans.className} absolute left-1/2 -translate-x-1/2 text-lg tracking-[0.2em] text-ink`}
+            className={`${offbitDot.className} absolute left-1/2 -translate-x-1/2 text-[32px] leading-none text-[#255509] dark:text-[#E9F5E0] select-none`}
           >
             ECOBUG
           </Link>
