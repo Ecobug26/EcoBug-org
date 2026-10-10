@@ -52,8 +52,7 @@ export default function WebTool() {
         </h1>
 
         <div className='w-full max-w-3xl mt-10 md:mt-14 flex flex-col gap-5'>
-          {/* Plant Bank is built next; disabled until then */}
-          <ToolCard title='PLANT BANK' disabled />
+          <ToolCard title='PLANT BANK' href='/webtool/plantbank' />
           <ToolCard title='STRATEGIES' href='/webtool/strategy' />
           {/* BOQ is not in scope yet */}
           <ToolCard title='BOQ' disabled />

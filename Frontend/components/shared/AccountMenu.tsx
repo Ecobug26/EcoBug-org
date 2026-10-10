@@ -114,8 +114,7 @@ export default function AccountMenu() {
               <MenuLink href='/username' onClick={close}>
                 Profile
               </MenuLink>
-              {/* TODO: point at the Plant Vault page once it exists */}
-              <MenuLink href='/webtool' onClick={close}>
+              <MenuLink href='/webtool/plantbank' onClick={close}>
                 Plant Vault
               </MenuLink>
               <button
