@@ -8,9 +8,25 @@ export type Post = {
   body: string[]
 }
 
-const ORIGIN_IMAGE = '/images/origin.png'
-
 export const posts: Post[] = [
+  /* Pinned: 'Welcome to Ecobug' stays first; newest posts go below. */
+  {
+    slug: 'welcome-to-ecobug',
+    title: 'Welcome to Ecobug',
+    category: 'Introduction',
+    read: '4 min',
+    image: '/images/intro.png',
+    excerpt:
+      'Whether its a residential garden, a commercial complex, or a public park, thoughtful landscape planning can improve functionality, sustainability, and overall well-being.',
+    body: [
+      'A well-designed landscape does more than enhance the appearance of a property; it shapes how people experience and interact with the space. Whether its a residential garden, a commercial complex, or a public park, thoughtful landscape planning can improve functionality, sustainability, and overall well-being.',
+      'At ECOBUG, we help bring these ideas to life through landscaping consultancy and software solutions that simplify the design process. Our goal is to help create outdoor spaces that are not only visually appealing but also practical and environmentally responsible.',
+      'Who Are We and What Do We Do?',
+      'The name ECOBUG reflects our commitment to nature. We believe that a healthy balance between flora, fauna, and the built environment is essential for creating landscapes that thrive. Our mission is to help clients design outdoor spaces that are functional, aesthetically pleasing, and environmentally responsible.',
+'Our blogs intend to convey ideas, suggestions and tips for better landscaping. We hope that these writings can help the users understand that landscaping is not all aesthetics. Our objective is to shed light on landscaping practices and help you design an ethical and sustainable design.',
+'Thank you for taking the time to learn about ECOBUG. We look forward to sharing more insights, ideas, and practical tips to help you create landscapes that are beautiful, sustainable, and built to last. We hope you will join us as we explore the world of thoughtful landscaping together.',
+    ],
+  },
   {
     slug: 'right-plant-right-place',
     title: 'The Right Plant for the Right Place',
@@ -65,23 +81,6 @@ export const posts: Post[] = [
       'When we imagine a garden, we usually think about plants first. But a garden is a small ecosystem made up of much more than greenery. Soil, insects, birds, water, sunlight, microorganisms, and plants constantly interact with one another. Even something as simple as a flowering plant can become a source of food for pollinators.',
       'This makes biodiversity an important part of landscape design. Using a variety of plants with different heights, textures, flowering periods, and functions can create more opportunities for different species to inhabit a space. Native and locally adapted plants can also play an important role in supporting the surrounding ecosystem.',
       'A landscape does not have to be a perfectly controlled garden. Sometimes, allowing a little wildness into a space can make it more alive.',
-    ],
-  },
-  {
-    slug: 'welcome-to-ecobug',
-    title: 'Welcome to Ecobug',
-    category: 'Introduction',
-    read: '4 min',
-    image: '/images/intro.png',
-    excerpt:
-      'Whether its a residential garden, a commercial complex, or a public park, thoughtful landscape planning can improve functionality, sustainability, and overall well-being.',
-    body: [
-      'A well-designed landscape does more than enhance the appearance of a property; it shapes how people experience and interact with the space. Whether its a residential garden, a commercial complex, or a public park, thoughtful landscape planning can improve functionality, sustainability, and overall well-being.',
-      'At ECOBUG, we help bring these ideas to life through landscaping consultancy and software solutions that simplify the design process. Our goal is to help create outdoor spaces that are not only visually appealing but also practical and environmentally responsible.',
-      'Who Are We and What Do We Do?',
-      'The name ECOBUG reflects our commitment to nature. We believe that a healthy balance between flora, fauna, and the built environment is essential for creating landscapes that thrive. Our mission is to help clients design outdoor spaces that are functional, aesthetically pleasing, and environmentally responsible.',
-'Our blogs intend to convey ideas, suggestions and tips for better landscaping. We hope that these writings can help the users understand that landscaping is not all aesthetics. Our objective is to shed light on landscaping practices and help you design an ethical and sustainable design.',
-'Thank you for taking the time to learn about ECOBUG. We look forward to sharing more insights, ideas, and practical tips to help you create landscapes that are beautiful, sustainable, and built to last. We hope you will join us as we explore the world of thoughtful landscaping together.',
     ],
   },
 ]
