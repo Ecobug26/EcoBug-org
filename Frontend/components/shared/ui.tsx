@@ -69,6 +69,7 @@ export function MonoButton({
   type = 'button',
   ariaLabel,
   bullet = false,
+  disabled = false,
 }: {
   children: React.ReactNode
   href?: string
@@ -77,8 +78,9 @@ export function MonoButton({
   type?: 'button' | 'submit'
   ariaLabel?: string
   bullet?: boolean
+  disabled?: boolean
 }) {
-  const cls = `inline-flex items-center justify-center gap-2.5 bg-black text-white font-geist-mono font-medium select-none cursor-pointer transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[0_5px_0_rgba(0,0,0,0.35)] active:translate-y-0.5 active:shadow-[0_2px_0_rgba(0,0,0,0.35)] ${className}`
+  const cls = `inline-flex items-center justify-center gap-2.5 bg-black text-white font-geist-mono font-medium select-none cursor-pointer transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[0_5px_0_rgba(0,0,0,0.35)] active:translate-y-0.5 active:shadow-[0_2px_0_rgba(0,0,0,0.35)] ${disabled ? 'opacity-50 pointer-events-none' : ''} ${className}`
   const inner = (
     <>
       {bullet && <span className='w-1 h-1 bg-white shrink-0' aria-hidden />}
@@ -93,7 +95,13 @@ export function MonoButton({
     )
   }
   return (
-    <button type={type} onClick={onClick} className={cls} aria-label={ariaLabel}>
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={cls}
+      aria-label={ariaLabel}
+    >
       {inner}
     </button>
   )
