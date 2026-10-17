@@ -1,7 +1,9 @@
+'use client'
+
 import AppNavbar from '@/components/shared/AppNavbar'
 import AppFooter from '@/components/shared/AppFooter'
 import { offbit } from '@/components/utils/utils'
-import { posts } from '@/data/posts'
+import { usePosts } from '@/hooks/usePosts'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
@@ -13,6 +15,32 @@ export const metadata: Metadata = {
 }
 
 export default function Blog() {
+  const { posts, loading, error } = usePosts()
+
+  if (loading) {
+    return (
+      <div className='min-h-screen flex flex-col bg-[#E9F5E0] dark:bg-[#102112]'>
+        <AppNavbar />
+        <main className='flex-1 flex items-center justify-center'>
+          <p className='text-[#40543F] dark:text-[#9BAE95]'>Loading posts…</p>
+        </main>
+        <AppFooter />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className='min-h-screen flex flex-col bg-[#E9F5E0] dark:bg-[#102112]'>
+        <AppNavbar />
+        <main className='flex-1 flex items-center justify-center'>
+          <p className='text-[#40543F] dark:text-[#9BAE95]'>Error loading posts.</p>
+        </main>
+        <AppFooter />
+      </div>
+    )
+  }
+
   return (
     <div className='min-h-screen flex flex-col bg-[#E9F5E0] dark:bg-[#102112]'>
       <AppNavbar />

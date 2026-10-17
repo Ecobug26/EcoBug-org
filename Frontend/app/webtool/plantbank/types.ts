@@ -13,7 +13,7 @@ export interface PlantAttribute {
 }
 
 export interface Plant {
-  id: string
+  id: string | number
   /** Big detail title, e.g. ARECA LUTESCANS */
   scientificName: string
   /** Subtitle under the title, e.g. PALM */
