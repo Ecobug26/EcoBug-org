@@ -60,9 +60,9 @@ export default async function ArticlePage({
   const { slug } = await params
 
   // Try Supabase first, fall back to local data
-  let post = await fetchPostFromSupabase(slug)
+  let post: Post | null = await fetchPostFromSupabase(slug)
   if (!post) {
-    post = getPost(slug)
+    post = getPost(slug) ?? null
   }
   if (!post) notFound()
 
