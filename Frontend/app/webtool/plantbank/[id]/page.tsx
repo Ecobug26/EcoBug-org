@@ -124,12 +124,19 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
             </div>
           ) : (
             <div className='bg-[#B3D69A] dark:bg-card rounded-[32px] p-3 sm:p-5 shadow-[0_10px_30px_rgba(0,0,0,0.15)]'>
-              {/* Panel header: close + search */}
+              {/* Panel header: back + close + search */}
               <div className='flex items-center justify-between gap-3'>
                 <button
                   onClick={goBack}
-                  aria-label='Close plant details'
+                  aria-label='Back to Plant Bank'
                   className='w-9 h-9 flex items-center justify-center text-ink text-xl hover:bg-panel/40 rounded-full transition-colors cursor-pointer flex-shrink-0'
+                >
+                  ←
+                </button>
+                <button
+                  onClick={goBack}
+                  aria-label='Close plant details'
+                  className='w-9 h-9 flex items-center justify-center text-ink text-xl hover:bg-panel/40 rounded-full transition-colors cursor-pointer flex-shrink-0 ml-1'
                 >
                   ✕
                 </button>
