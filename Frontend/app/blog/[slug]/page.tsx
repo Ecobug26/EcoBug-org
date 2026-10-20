@@ -2,16 +2,35 @@ import AppNavbar from '@/components/shared/AppNavbar'
 import AppFooter from '@/components/shared/AppFooter'
 import { MonoButton } from '@/components/shared/ui'
 import { offbit } from '@/components/utils/utils'
-import { getSupabaseClient } from '@/lib/supabase/client'
-import { posts, getPost, type Post } from '@/data/posts'
+import { type Post } from '@/data/posts'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
-export async function generateStaticParams() {
-  // Use local posts for static generation; Supabase data loaded client-side
-  return posts.map((p) => ({ slug: p.slug }))
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
+
+/** Backend BlogPostDTO (camelCase JSON) → shape used by the UI. */
+interface BlogPostDTO {
+  slug: string
+  title: string
+  category: string | null
+  readTime: string | null
+  imageUrl: string | null
+  excerpt: string | null
+  body: string[] | null
+}
+
+function mapPost(dto: BlogPostDTO): Post {
+  return {
+    slug: dto.slug,
+    title: dto.title,
+    category: dto.category ?? '',
+    read: dto.readTime ?? '4 min',
+    image: dto.imageUrl ?? '/images/intro.png',
+    excerpt: dto.excerpt ?? '',
+    body: Array.isArray(dto.body) ? dto.body : [],
+  }
 }
 
 export async function generateMetadata({
@@ -20,33 +39,19 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const post = getPost(slug)
+  const post = await fetchPostFromApi(slug)
   if (!post) return { title: 'Article not found | EcoBug' }
   return { title: `${post.title} | EcoBug`, description: post.excerpt }
 }
 
-async function fetchPostFromSupabase(slug: string): Promise<Post | null> {
-  const supabase = getSupabaseClient()
-  if (!supabase) return null
-
+async function fetchPostFromApi(slug: string): Promise<Post | null> {
   try {
-    const { data, error } = await supabase
-      .from('blog_posts')
-      .select('slug, title, category, read_time, image_url, excerpt, body, created_at, updated_at')
-      .eq('slug', slug)
-      .maybeSingle()
-
-    if (error || !data) return null
-
-    return {
-      slug: data.slug,
-      title: data.title,
-      category: data.category,
-      read: data.read_time ?? '4 min',
-      image: data.image_url ?? '/images/intro.png',
-      excerpt: data.excerpt ?? '',
-      body: Array.isArray(data.body) ? data.body : [data.body ?? ''],
-    }
+    const res = await fetch(`${API_URL}/api/blogs/${encodeURIComponent(slug)}`, {
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
+    })
+    if (!res.ok) return null
+    return mapPost((await res.json()) as BlogPostDTO)
   } catch {
     return null
   }
@@ -59,14 +64,23 @@ export default async function ArticlePage({
 }) {
   const { slug } = await params
 
-  // Try Supabase first, fall back to local data
-  let post: Post | null = await fetchPostFromSupabase(slug)
-  if (!post) {
-    post = getPost(slug) ?? null
-  }
+  const post = await fetchPostFromApi(slug)
   if (!post) notFound()
 
-  const others = posts.filter((p) => p.slug !== post.slug).slice(0, 2)
+  // "Keep reading" — two other posts from the API.
+  let others: Post[] = []
+  try {
+    const res = await fetch(`${API_URL}/api/blogs`, {
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
+    })
+    if (res.ok) {
+      const all = (await res.json()) as BlogPostDTO[]
+      others = all.map(mapPost).filter((p) => p.slug !== post.slug).slice(0, 2)
+    }
+  } catch {
+    // keep others empty when the API is unavailable
+  }
 
   return (
     <div className='min-h-screen flex flex-col bg-[#E9F5E0] dark:bg-[#102112]'>

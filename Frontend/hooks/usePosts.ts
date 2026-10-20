@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { getSupabaseClient } from '@/lib/supabase/client'
 import { Post } from '@/data/posts'
 
 export interface UsePostsReturn {
@@ -11,9 +10,34 @@ export interface UsePostsReturn {
   refetch: () => void
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
+
+/** Backend BlogPostDTO (camelCase JSON) → shape used by the UI. */
+interface BlogPostDTO {
+  slug: string
+  title: string
+  category: string | null
+  readTime: string | null
+  imageUrl: string | null
+  excerpt: string | null
+  body: string[] | null
+}
+
+function mapPost(dto: BlogPostDTO): Post {
+  return {
+    slug: dto.slug,
+    title: dto.title,
+    category: dto.category ?? '',
+    read: dto.readTime ?? '4 min',
+    image: dto.imageUrl ?? '/images/intro.png',
+    excerpt: dto.excerpt ?? '',
+    body: Array.isArray(dto.body) ? dto.body : [],
+  }
+}
+
 /**
- * Hook to fetch blog posts directly from Supabase.
- * Falls back to local posts data when Supabase is unavailable.
+ * Hook to fetch blog posts from the backend API (/api/blogs).
+ * No local fallback — surfaces an error when the API is unreachable.
  */
 export function usePosts(): UsePostsReturn {
   const [posts, setPosts] = useState<Post[]>([])
@@ -24,51 +48,15 @@ export function usePosts(): UsePostsReturn {
     setLoading(true)
     setError(null)
     try {
-      const supabase = getSupabaseClient()
-      if (!supabase) {
-        // Fallback to local data
-        const { posts: localPosts } = await import('@/data/posts')
-        setPosts(localPosts)
-        return
-      }
-
-      const { data, error: supabaseError } = await supabase
-        .from('blog_posts')
-        .select('slug, title, category, read_time, image_url, excerpt, body, created_at, updated_at')
-        .order('created_at', { ascending: false })
-
-      if (supabaseError) {
-        console.error('Error fetching posts from Supabase:', supabaseError)
-        const { posts: localPosts } = await import('@/data/posts')
-        setPosts(localPosts)
-        return
-      }
-
-      if (!data || data.length === 0) {
-        const { posts: localPosts } = await import('@/data/posts')
-        setPosts(localPosts)
-        return
-      }
-
-      const mapped: Post[] = data.map((row) => ({
-        slug: row.slug,
-        title: row.title,
-        category: row.category,
-        read: row.read_time ?? '4 min',
-        image: row.image_url ?? '/images/intro.png',
-        excerpt: row.excerpt ?? '',
-        body: Array.isArray(row.body) ? row.body : [row.body ?? ''],
-      }))
-
-      setPosts(mapped)
+      const res = await fetch(`${API_URL}/api/blogs`, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+      if (!res.ok) throw new Error('Failed to fetch posts')
+      const data = (await res.json()) as BlogPostDTO[]
+      setPosts(Array.isArray(data) ? data.map(mapPost) : [])
     } catch (err) {
+      setPosts([])
       setError(err instanceof Error ? err : new Error('Failed to fetch posts'))
-      try {
-        const { posts: localPosts } = await import('@/data/posts')
-        setPosts(localPosts)
-      } catch {
-        setPosts([])
-      }
     } finally {
       setLoading(false)
     }
