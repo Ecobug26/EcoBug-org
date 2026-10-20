@@ -81,10 +81,11 @@ export default function AccountMenu() {
 
   const close = () => setOpen(false)
 
-  const handleLogout = () => {
-    logout()
+  const handleLogout = async () => {
     close()
-    router.push('/')
+    await logout()
+    router.replace('/')
+    router.refresh()
   }
 
   return (
