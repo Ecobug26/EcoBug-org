@@ -82,11 +82,11 @@ export default function AccountMenu() {
   const close = () => setOpen(false)
 
   const handleLogout = () => {
-    logout()
-    close()
-    router.push('/')
-  }
-
+  logout()
+  setOpen(false)
+  router.replace('/')
+  router.refresh()
+}
   return (
     <div ref={rootRef} className='relative'>
       <button
@@ -111,7 +111,7 @@ export default function AccountMenu() {
 
           {user ? (
             <>
-              <MenuLink href='/username' onClick={close}>
+              <MenuLink href='/profile' onClick={close}>
                 Profile
               </MenuLink>
               <MenuLink href='/webtool/plantbank' onClick={close}>

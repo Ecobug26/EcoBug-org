@@ -6,11 +6,12 @@ import {
   useEffect,
   useState,
   ReactNode,
+  useCallback,
 } from 'react'
 import { getCurrentUser } from '@/lib/api'
 
-type User = {
-  id: number
+export type User = {
+  id: string
   fullName: string
   email: string
   role: string
@@ -33,36 +34,32 @@ export function AuthProvider({
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
-  async function refreshUser() {
-    const currentUser = await getCurrentUser()
-    setUser(currentUser)
-    setLoading(false)
-  }
+  const refreshUser = useCallback(async () => {
+    try {
+      const currentUser = await getCurrentUser()
+      setUser(currentUser)
+    } catch (error) {
+      console.error('Unable to load user:', error)
+      setUser(null)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
-  function logout() {
+  const logout = useCallback(() => {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
+    localStorage.removeItem('email')
     setUser(null)
-  }
+  }, [])
 
   useEffect(() => {
-    async function loadUser() {
-        const currentUser = await getCurrentUser()
-        setUser(currentUser)
-        setLoading(false)
-    }
-
-    loadUser()
-}, [])
+    void refreshUser()
+  }, [refreshUser])
 
   return (
     <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        refreshUser,
-        logout,
-      }}
+      value={{ user, loading, refreshUser, logout }}
     >
       {children}
     </AuthContext.Provider>
