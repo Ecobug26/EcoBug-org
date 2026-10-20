@@ -3,6 +3,7 @@ package com.ecobug.config;
 import com.ecobug.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -47,8 +48,9 @@ public class SecurityConfig {
                                 "/api/create-order",
                                 "/api/verify-payment"
                         ).permitAll()
-                        .anyRequest().authenticated())
-
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .authenticationProvider(authenticationProvider)
 
                 .addFilterBefore(
