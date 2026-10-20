@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { offbit } from '@/components/utils/utils'
 import { MonoButton } from '@/components/shared/ui'
-import { posts } from '@/data/posts'
+import { usePosts } from '@/hooks/usePosts'
 
 /**
  * Blog teaser — Figma "Blog section" (166:2378 / 283:2455, mobile 296:5330):
@@ -14,6 +14,7 @@ import { posts } from '@/data/posts'
  * gap 40 (mobile 30). Cards link to their full article pages.
  */
 export default function Blogs() {
+  const { posts } = usePosts()
   return (
     <section className='w-full px-5 pb-[82px] lg:pb-[50px]'>
       <div className='mx-auto flex flex-col items-center gap-[30px] lg:gap-10'>

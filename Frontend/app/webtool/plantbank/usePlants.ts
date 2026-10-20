@@ -12,7 +12,7 @@ interface UsePlantsReturn {
 
 /**
  * Hook to fetch plants from the backend API (/api/plants).
- * Falls back to local plantsData when the backend is unavailable.
+ * No local fallback — surfaces an error when the API is unreachable.
  */
 export function usePlants(): UsePlantsReturn {
   const [plants, setPlants] = useState<Plant[]>([])
@@ -28,13 +28,10 @@ export function usePlants(): UsePlantsReturn {
       })
       if (!res.ok) throw new Error('Failed to fetch plants')
       const data: Plant[] = await res.json()
-      setPlants(data)
+      setPlants(Array.isArray(data) ? data : [])
     } catch (err) {
+      setPlants([])
       setError(err instanceof Error ? err : new Error('Failed to fetch plants'))
-      // Fallback to local data
-      import('./plantsData').then(({ plants: localPlants }) => {
-        setPlants(localPlants)
-      })
     } finally {
       setLoading(false)
     }
