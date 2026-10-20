@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { offbit, offbitDot } from '@/components/utils/utils'
 
 const CONTACT_EMAIL = 'connect.ecobug@gmail.com'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
 
 /**
  * Contact form — matches Figma Contact Frame 102-106 (195:3926-195:3935):
@@ -18,21 +19,60 @@ export default function ContactForm() {
   const [subject, setSubject] = useState('')
   const [message, setMessage] = useState('')
   const [sent, setSent] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const inputCls =
     'w-full h-[60px] md:h-[70px] rounded-full bg-[#D9D9D9] dark:bg-black/30 border-4 border-[#6D6D6D] dark:border-line px-6 font-geist-sans text-[16px] text-ink placeholder:text-ink-muted/70 outline-none focus:border-black dark:focus:border-white transition-colors'
   const labelCls = `${offbit.className} font-bold text-[18px] sm:text-[20px] md:text-[29px] leading-[22px] md:leading-[29px] tracking-[-0.03em] text-center sm:text-right text-[#646464] dark:text-ink-muted`
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    const mailSubject = encodeURIComponent(
-      `Website enquiry${subject.trim() ? `: ${subject.trim()}` : ''}`
-    )
-    const mailBody = encodeURIComponent(
-      `Name: ${name.trim()}\nEmail: ${email.trim()}\n\n${message.trim()}`
-    )
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${mailSubject}&body=${mailBody}`
-    setSent(true)
+    setSending(true)
+    setSubmitError(null)
+    setSent(false)
+
+    try {
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), 8000)
+      let res: Response
+      try {
+        res = await fetch(`${API_URL}/api/contact/send`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: name.trim(),
+            email: email.trim(),
+            subject: subject.trim(),
+            message: message.trim(),
+          }),
+          signal: controller.signal,
+        })
+      } finally {
+        clearTimeout(timeout)
+      }
+
+      const result = await res.json()
+
+      if (result.success) {
+        setSent(true)
+        setSending(false)
+        return
+      } else {
+        throw new Error(result.message || 'Failed to send message')
+      }
+    } catch (err) {
+      // Fallback to mailto when backend is down or mail fails
+      const mailSubject = encodeURIComponent(
+        `Website enquiry${subject.trim() ? `: ${subject.trim()}` : ''}`
+      )
+      const mailBody = encodeURIComponent(
+        `Name: ${name.trim()}\nEmail: ${email.trim()}\n\n${message.trim()}`
+      )
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${mailSubject}&body=${mailBody}`
+      setSent(true)
+      setSending(false)
+    }
   }
 
   return (
@@ -112,14 +152,15 @@ export default function ContactForm() {
         <div className='pt-2 flex flex-col items-center gap-3'>
           <button
             type='submit'
+            disabled={sending}
             className={`${offbit.className} font-bold w-[212px] h-[78px] rounded-full bg-black text-white text-[29px] leading-[29px] tracking-[-0.03em] inline-flex items-center justify-center select-none cursor-pointer transition-all duration-150 hover:-translate-y-0.5 hover:shadow-[0_5px_0_rgba(0,0,0,0.35)] active:translate-y-0.5 active:shadow-[0_2px_0_rgba(0,0,0,0.35)]`}
           >
-            SEND
+            {sending ? 'SENDING…' : 'SEND'}
           </button>
           {sent && (
             <p className='font-geist-sans text-sm text-ink-muted text-center'>
-              Thanks! Your mail app should open — we&apos;ll get back to you
-              soon.
+              {submitError ? submitError : 'Thanks! Your message has been sent.'}
+
             </p>
           )}
         </div>
@@ -127,3 +168,4 @@ export default function ContactForm() {
     </div>
   )
 }
+

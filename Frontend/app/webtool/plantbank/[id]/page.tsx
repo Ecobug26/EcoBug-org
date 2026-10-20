@@ -1,15 +1,14 @@
 'use client'
 
-import React, { use, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import AppNavbar from '@/components/shared/AppNavbar'
 import AppFooter from '@/components/shared/AppFooter'
 import { offbit } from '@/components/utils/utils'
-import { SearchBar } from '@/components/shared/ui'
+import { SearchBar, LoadingState, ErrorState } from '@/components/shared/ui'
 import { PlantDisclaimer } from '../PlantBankLibrary'
-import { plants } from '../plantsData'
-import { PlantAttribute } from '../types'
+import { Plant, PlantAttribute } from '../types'
 
 /**
  * Plant detail — Figma "PLANT BANK" detail screen:
@@ -86,8 +85,44 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
   const router = useRouter()
   const { id } = use(params)
   const [search, setSearch] = useState('')
+  const [plant, setPlant] = useState<Plant | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
 
-  const plant = plants.find((p) => p.id === id)
+  useEffect(() => {
+    if (!id) return
+    let cancelled = false
+
+    async function loadPlant() {
+      setLoading(true)
+      setError(null)
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/api/plants/${encodeURIComponent(id)}`,
+          { headers: { 'Content-Type': 'application/json' } }
+        )
+        if (res.status === 404) {
+          if (!cancelled) setPlant(null)
+        } else if (!res.ok) {
+          throw new Error('Failed to load plant')
+        } else {
+          const data = (await res.json()) as Plant
+          if (!cancelled) setPlant(data)
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err : new Error('Failed to load plant'))
+        }
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    }
+
+    loadPlant()
+    return () => {
+      cancelled = true
+    }
+  }, [id])
 
   const goBack = () => router.push('/webtool/plantbank')
 
@@ -110,10 +145,14 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
         </h1>
 
         <div className='w-full max-w-5xl mt-8 md:mt-10'>
-          {!plant ? (
+          {loading ? (
+            <div className='flex justify-center py-10'>
+              <LoadingState label='Loading plant...' />
+            </div>
+          ) : error || !plant ? (
             <div className='bg-card rounded-[32px] p-6 sm:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.15)] text-center'>
               <p className={`${offbit.className} text-lg font-bold text-ink`}>
-                Plant not found
+                {error ? 'Failed to load plant' : 'Plant not found'}
               </p>
               <button
                 onClick={goBack}
@@ -124,12 +163,19 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
             </div>
           ) : (
             <div className='bg-[#B3D69A] dark:bg-card rounded-[32px] p-3 sm:p-5 shadow-[0_10px_30px_rgba(0,0,0,0.15)]'>
-              {/* Panel header: close + search */}
+              {/* Panel header: back + close + search */}
               <div className='flex items-center justify-between gap-3'>
                 <button
                   onClick={goBack}
-                  aria-label='Close plant details'
+                  aria-label='Back to Plant Bank'
                   className='w-9 h-9 flex items-center justify-center text-ink text-xl hover:bg-panel/40 rounded-full transition-colors cursor-pointer flex-shrink-0'
+                >
+                  ←
+                </button>
+                <button
+                  onClick={goBack}
+                  aria-label='Close plant details'
+                  className='w-9 h-9 flex items-center justify-center text-ink text-xl hover:bg-panel/40 rounded-full transition-colors cursor-pointer flex-shrink-0 ml-1'
                 >
                   ✕
                 </button>

@@ -39,7 +39,13 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/auth/register",
                                 "/api/auth/login",
-                                "/api/auth/refresh"
+                                "/api/auth/refresh",
+                                "/api/plants/**",
+                                "/api/strategies/**",
+                                "/api/blogs/**",
+                                "/api/contact/**",
+                                "/api/create-order",
+                                "/api/verify-payment"
                         ).permitAll()
                         .anyRequest().authenticated())
 

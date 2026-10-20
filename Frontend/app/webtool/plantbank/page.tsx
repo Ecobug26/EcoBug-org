@@ -6,16 +6,21 @@ import AppNavbar from '@/components/shared/AppNavbar'
 import AppFooter from '@/components/shared/AppFooter'
 import { offbit } from '@/components/utils/utils'
 import { PlantBankLibrary, PlantDisclaimer } from './PlantBankLibrary'
-import { plants } from './plantsData'
+import { usePlants } from './usePlants'
 
 /**
  * Plant Bank list — Figma WEBTOOL screen: AppNavbar, big "WEBTOOL" pixel title,
  * then the Plant Bank panel (search, item count, plant cards).
  * Wrapped in <Suspense> because it reads the `?q=` search param.
+ * Data is fetched from the backend API via the usePlants hook.
  */
 function PlantBankSection() {
   const searchParams = useSearchParams()
   const initialQuery = searchParams.get('q') ?? ''
+  const { plants, loading, error } = usePlants()
+
+  if (loading) return <div className='h-full flex items-center justify-center'>Loading plants…</div>
+  if (error) return <div className='h-full flex items-center justify-center text-ink-muted'>Error loading plants.</div>
 
   return <PlantBankLibrary plants={plants} initialQuery={initialQuery} />
 }
