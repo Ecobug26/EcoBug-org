@@ -40,7 +40,7 @@ export async function getCurrentUser() {
     },
   })
 
-  if (response.status === 401) {
+  if (response.status === 401 || response.status === 403) {
     token = await refreshAccessToken()
 
     if (!token) return null
