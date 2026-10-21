@@ -3,24 +3,34 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { offbit } from '@/components/utils/utils'
+import { useToast } from '@/components/shared/Toast'
 
 export default function Signup() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const router = useRouter()
+  const { toast } = useToast()
 
   async function handleSignup() {
     // Full name derived from email (UI only collects email + password)
     const fullName = email.split('@')[0] || ''
     if (!email || !password) {
-    alert('Please fill in all fields.')
-    return
-  }
+      toast({
+        title: 'Missing fields',
+        message: 'Please fill in all fields.',
+        type: 'error',
+      })
+      return
+    }
 
-  if (password.length < 8) {
-    alert('Password must be at least 8 characters.')
-    return
-  }
+    if (password.length < 8) {
+      toast({
+        title: 'Password too short',
+        message: 'Password must be at least 8 characters.',
+        type: 'error',
+      })
+      return
+    }
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,
@@ -40,7 +50,11 @@ export default function Signup() {
     const data = await response.json()
 
     if (!response.ok) {
-      alert(data.message || 'Signup failed')
+      toast({
+        title: 'Signup failed',
+        message: data.message || 'Unable to create account.',
+        type: 'error',
+      })
       return
     }
 
@@ -48,10 +62,20 @@ export default function Signup() {
     localStorage.setItem('refreshToken', data.refreshToken)
     localStorage.setItem('email', email)
 
+    toast({
+      title: 'Account created',
+      message: 'Welcome to EcoBug!',
+      type: 'success',
+    })
+
     router.push('/')
   } catch (err) {
     console.error(err)
-    alert('Unable to connect to server')
+    toast({
+      title: 'Unable to connect',
+      message: 'Please check your connection and try again.',
+      type: 'error',
+    })
   }
 }
 

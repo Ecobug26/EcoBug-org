@@ -4,12 +4,14 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { offbit } from '@/components/utils/utils'
 import { useAuth } from '@/context/AuthContext'
+import { useToast } from '@/components/shared/Toast'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL
 
 export default function Login() {
   const router = useRouter()
   const { refreshUser } = useAuth()
+  const { toast } = useToast()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -17,14 +19,22 @@ export default function Login() {
 
   async function handleLogin() {
     if (!email.trim() || !password) {
-      alert('Please fill in all fields.')
+      toast({
+        title: 'Missing fields',
+        message: 'Please fill in all fields.',
+        type: 'error',
+      })
       return
     }
 
     if (submitting) return
 
     if (!API_URL) {
-      alert('API URL is not configured.')
+      toast({
+        title: 'Configuration error',
+        message: 'API URL is not configured.',
+        type: 'error',
+      })
       console.error('NEXT_PUBLIC_API_URL is missing')
       return
     }
@@ -82,16 +92,25 @@ export default function Login() {
       // Load the authenticated user into shared application state.
       await refreshUser()
 
+      toast({
+        title: 'Login successful',
+        message: 'Welcome back!',
+        type: 'success',
+      })
+
       router.replace('/')
       router.refresh()
     } catch (error) {
       console.error('Login error:', error)
 
-      alert(
-        error instanceof Error
-          ? error.message
-          : 'Unable to log in. Please try again.'
-      )
+      toast({
+        title: 'Login failed',
+        message:
+          error instanceof Error
+            ? error.message
+            : 'Unable to log in. Please try again.',
+        type: 'error',
+      })
     } finally {
       setSubmitting(false)
     }
