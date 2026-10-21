@@ -16,6 +16,7 @@ public class PlantDTO {
     private String iucnStatus;
     private String uses;
     private List<PlantAttributeDTO> attributes;
+    private List<PlantImageDTO> images;
 
     // Constructors
     public PlantDTO() {}
@@ -74,4 +75,12 @@ public class PlantDTO {
 
     public List<PlantAttributeDTO> getAttributes() { return attributes; }
     public void setAttributes(List<PlantAttributeDTO> attributes) { this.attributes = attributes; }
+
+    public List<PlantImageDTO> getImages() {
+    return images;
+}
+
+    public void setImages(List<PlantImageDTO> images) {
+        this.images = images;
+    }
 }

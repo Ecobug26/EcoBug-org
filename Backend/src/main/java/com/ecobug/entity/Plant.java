@@ -1,5 +1,5 @@
 package com.ecobug.entity;
-
+import java.util.ArrayList;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -70,6 +70,17 @@ public class Plant {
         this.uses = uses;
         this.attributes = attributes;
     }
+    @OneToMany(mappedBy = "plant", cascade = CascadeType.ALL,
+           orphanRemoval = true)
+private List<PlantImage> images = new ArrayList<>();
+
+public List<PlantImage> getImages() {
+    return images;
+}
+
+public void setImages(List<PlantImage> images) {
+    this.images = images;
+}
 
     // Getters and Setters
     public Long getId() { return id; }

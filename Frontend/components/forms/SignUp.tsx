@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { offbit } from '@/components/utils/utils'
 import { DotWordmark } from '@/components/shared/DotWordmark'
+import { useToast } from '@/components/shared/Toast'
 
 export default function Signup() {
   const [email, setEmail] = useState('')
@@ -14,22 +15,35 @@ export default function Signup() {
   const [submitting, setSubmitting] = useState(false)
   
   const router = useRouter()
+  const { toast } = useToast()
 
   async function handleSignup(e?: React.FormEvent) {
     if (e) e.preventDefault()
 
     if (!email || !username || !password || !confirmPassword) {
-      alert('Please fill in all fields.')
+      toast({
+        title: 'Missing fields',
+        message: 'Please fill in all fields.',
+        type: 'error',
+      })
       return
     }
 
     if (password !== confirmPassword) {
-      alert('Passwords do not match.')
+      toast({
+        title: 'Password mismatch',
+        message: 'Passwords do not match.',
+        type: 'error',
+      })
       return
     }
 
     if (password.length < 8) {
-      alert('Password must be at least 8 characters.')
+      toast({
+        title: 'Password too short',
+        message: 'Password must be at least 8 characters.',
+        type: 'error',
+      })
       return
     }
 
@@ -55,7 +69,11 @@ export default function Signup() {
       const data = await response.json()
 
       if (!response.ok) {
-        alert(data.message || 'Signup failed')
+        toast({
+          title: 'Signup failed',
+          message: data.message || 'Unable to create account.',
+          type: 'error',
+        })
         return
       }
 
@@ -63,10 +81,20 @@ export default function Signup() {
       localStorage.setItem('refreshToken', data.refreshToken)
       localStorage.setItem('email', email)
 
+      toast({
+        title: 'Account created',
+        message: 'Welcome to EcoBug!',
+        type: 'success',
+      })
+
       router.push('/')
     } catch (err) {
       console.error(err)
-      alert('Unable to connect to server')
+      toast({
+        title: 'Unable to connect',
+        message: 'Please check your connection and try again.',
+        type: 'error',
+      })
     } finally {
       setSubmitting(false)
     }
