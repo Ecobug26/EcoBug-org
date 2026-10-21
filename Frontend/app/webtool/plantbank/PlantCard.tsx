@@ -10,19 +10,21 @@ interface PlantCardProps {
   plant: Plant
 }
 
-/** Small label/value row used inside the plant list card. */
-function CardField({ label, value }: { label: string; value: string }) {
+function CardField({ label, value, align = 'left' }: { label: string; value: string, align?: 'left' | 'right' }) {
   return (
-    <div>
-      <span className={`${offbit.className} block text-[9px] font-bold text-ink tracking-wide`}>
+    <div className={`flex flex-col ${align === 'right' ? 'items-end text-right' : 'items-start text-left'}`}>
+      {/* Green Bold Header */}
+      <span className={`${offbit.className} block text-[10px] font-bold text-[#2E6B2E] tracking-wide uppercase leading-none`}>
         {label}
       </span>
-      <span className='block text-[10px] leading-tight text-ink-muted'>{value}</span>
+      {/* Black Bold Info */}
+      <span className='block text-[11px] font-bold text-black leading-none mt-1'>
+        {value}
+      </span>
     </div>
   )
 }
 
-/** Simple lightbox overlay that enlarges the clicked image. */
 function ImageZoom({ imageUrl, alt, onClose }: { imageUrl: string; alt: string; onClose: () => void }) {
   return (
     <div
@@ -54,12 +56,6 @@ function ImageZoom({ imageUrl, alt, onClose }: { imageUrl: string; alt: string; 
   )
 }
 
-/**
- * Plant list card — Figma PLANT BANK screen: image block on the left,
- * plant name + PLANT TYPE / FOLIAGE COLOUR / CLIMATIC ZONE rows on the right.
- * Clicking the card navigates to the plant detail screen.
- * Clicking the image enlarges it (zoom).
- */
 export const PlantCard: React.FC<PlantCardProps> = ({ plant }) => {
   const router = useRouter()
   const [zoomed, setZoomed] = useState(false)
@@ -76,43 +72,46 @@ export const PlantCard: React.FC<PlantCardProps> = ({ plant }) => {
         type='button'
         onClick={handleCardClick}
         aria-label={`View ${plant.scientificName} details`}
-        className='group w-full h-full text-left bg-chip border border-ink flex overflow-hidden cursor-pointer select-none transition-all duration-150 hover:-translate-y-1 hover:shadow-[0_6px_0_rgba(0,0,0,0.2)]'
+        className='group w-full text-left flex gap-2 cursor-pointer select-none transition-all duration-150 hover:-translate-y-1'
       >
-        {/* Image block — red background per new UI */}
+        {/* Image Card */}
         <div
-          className='relative w-[42%] shrink-0 bg-red-500/90 overflow-hidden'
+          className='relative w-[45%] shrink-0 bg-red-500/90 border-2 border-black overflow-hidden'
           onClick={handleImageClick}
         >
           <Image
             src={plant.imageUrl}
             alt={plant.scientificName}
             fill
-            sizes='(max-width: 640px) 42vw, 15vw'
+            sizes='(max-width: 640px) 45vw, 15vw'
             className='object-cover'
             unoptimized
           />
         </div>
 
-        {/* Text */}
-        <div className='flex-1 min-w-0 p-2.5 sm:p-3 flex flex-col gap-1.5'>
-          <div>
-            <h3
-              className={`${offbit.className} text-xs sm:text-sm font-bold text-primary-hover leading-tight`}>
+        {/* Text Card (Now Gray as per Figma) */}
+        <div className='flex-1 min-w-0 bg-[#D9D9D9] border-2 border-black px-2.5 py-3 flex flex-col justify-start'>
+          
+          <div className='mb-3'>
+            <h3 className={`${offbit.className} text-sm sm:text-base font-bold text-black leading-tight tracking-tight break-words`}>
               {plant.scientificName}
             </h3>
-            <p className={`${offbit.className} text-[9px] text-ink tracking-wide`}>
+            <p className={`${offbit.className} text-[7px] text-black tracking-wide uppercase mt-1`}>
               {plant.subtitle}
             </p>
           </div>
 
-          <div className='flex flex-col gap-1.5'>
-            <CardField label='PLANT TYPE' value={plant.plantType} />
-            <CardField label='FOLIAGE COLOUR' value={plant.foliageColour} />
+          <div className='flex flex-col'>
+            <div className='flex flex-col gap-2.5'>
+              <CardField label='PLANT TYPE' value={plant.plantType} />
+              <CardField label='FOLIAGE COLOUR' value={plant.foliageColour} />
+            </div>
+
+            <div className='border-t-2 border-black pt-2.5 mt-2.5 flex justify-end'>
+              <CardField label='CLIMATIC ZONE' value={plant.climaticZone} align="right" />
+            </div>
           </div>
 
-          <div className='border-t border-ink/40 pt-1.5 mt-auto'>
-            <CardField label='CLIMATIC ZONE' value={plant.climaticZone} />
-          </div>
         </div>
       </button>
 

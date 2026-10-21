@@ -228,7 +228,7 @@ function TeamTable() {
     {
       name: 'Zeeshan Hyder Kurup',
       title: 'Frontend Intern',
-      email: 'zeeshankurup@gmail.com',
+      email: 'zeeshankurup10@gmail.com',
       key: 'zeeshan',
     },
     {

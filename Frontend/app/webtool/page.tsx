@@ -7,7 +7,7 @@ import { offbit } from '@/components/utils/utils'
 
 /**
  * Webtool landing — Figma "WEBTOOL" screen:
- * big pixel title + stacked white entry cards
+ * big pixel title + stacked entry cards
  * (Plant Bank / Strategies / BOQ).
  */
 interface ToolCardProps {
@@ -20,12 +20,16 @@ function ToolCard({ title, href, disabled = false }: ToolCardProps) {
   const inner = (
     <div
       className={`
-        w-full bg-panel rounded-2xl px-6 py-5
-        shadow-[0_5px_0_rgba(0,0,0,0.18)]
-        ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:-translate-y-1 hover:shadow-[0_8px_0_rgba(0,0,0,0.22)] cursor-pointer transition-all duration-150'}
+        w-full rounded-3xl px-6 py-6 sm:px-8 sm:py-8
+        bg-[#97C974] dark:bg-[#253B25] 
+        transition-transform duration-200
+        ${disabled 
+          ? 'opacity-50 cursor-not-allowed' 
+          : 'hover:-translate-y-1 hover:shadow-[0_10px_24px_rgba(0,0,0,0.15)] cursor-pointer'
+        }
       `}
     >
-      <span className={`${offbit.className} text-ink text-base md:text-lg font-bold tracking-wide`}>
+      <span className={`${offbit.className} text-[#1B2B1E] dark:text-[#EAF2E4] text-lg md:text-xl font-bold tracking-wide`}>
         {title}
       </span>
     </div>
@@ -41,12 +45,12 @@ function ToolCard({ title, href, disabled = false }: ToolCardProps) {
 
 export default function WebTool() {
   return (
-    <div className='min-h-screen flex flex-col bg-bg'>
+    <div className='min-h-screen flex flex-col bg-[#E9F5E0] dark:bg-[#102112]'>
       <AppNavbar />
 
       <main className='flex-1 flex flex-col items-center pt-28 md:pt-32 pb-16 px-4'>
         <h1
-          className={`${offbit.className} text-4xl sm:text-5xl md:text-6xl text-ink tracking-widest uppercase font-bold text-center`}
+          className={`${offbit.className} text-4xl sm:text-5xl md:text-6xl text-[#1B2B1E] dark:text-[#EAF2E4] tracking-widest uppercase font-bold text-center`}
         >
           WEBTOOL
         </h1>
@@ -63,4 +67,3 @@ export default function WebTool() {
     </div>
   )
 }
-

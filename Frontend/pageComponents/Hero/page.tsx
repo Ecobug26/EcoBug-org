@@ -4,8 +4,6 @@
  * above the OUR PRODUCT block. Filled with the main illustration (1366x768),
  * scaled proportionally to the full content width at every screen size.
  */
-import Image from 'next/image'
-
 export default function Hero() {
   return (
     <section
@@ -13,15 +11,18 @@ export default function Hero() {
       aria-label='EcoBug'
     >
       <h1 className='sr-only'>EcoBug — landscaping, designed sustainably</h1>
-      <Image
-        src='/images/main_illu.png'
-        alt='EcoBug landscaping illustration'
-        width={1366}
-        height={768}
-        priority
-        //sizes='100vw'
-        className='block w-full h-full'
-      />
+      
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className='block w-full h-full object-cover'
+      >
+        <source src='/Video-Project.mp4' type='video/mp4' />
+        Your browser does not support the video tag.
+      </video>
+      
     </section>
   )
 }

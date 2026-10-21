@@ -74,8 +74,6 @@ function DotWordmark() {
           r={DOT_R}
         />
       ))}
-
-      <span className="sr-only">ECOBUG</span>
     </svg>
   )
 }

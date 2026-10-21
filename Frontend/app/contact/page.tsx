@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import AppNavbar from '@/components/shared/AppNavbar'
-import AppFooter from '@/components/shared/AppFooter'
 import ContactForm from '@/pageComponents/Contact/page'
+import { DotWordmark } from '@/components/shared/DotWordmark' // Added import
 
 export const metadata: Metadata = {
   title: 'Contact Us | EcoBug',
@@ -15,14 +15,21 @@ export const metadata: Metadata = {
  */
 export default function Contact() {
   return (
-    <div className='min-h-screen flex flex-col bg-[#FFF4DF] dark:bg-cream'>
+    <div className='min-h-screen flex flex-col bg-[#FFF4DF] dark:bg-[#102112]'>
       <AppNavbar />
 
-      <main className='flex-1 flex flex-col items-center px-4 md:px-6 pt-[120px] lg:pt-[163px] pb-16 lg:pb-[120px]'>
+      {/* Added justify-between to push the logo to the bottom */}
+      <main className='flex-1 flex flex-col justify-between items-center px-4 md:px-6 pt-[120px] lg:pt-[140px] pb-4'>
+        
+        {/* The Contact Form */}
         <ContactForm />
-      </main>
 
-      <AppFooter />
+        {/* Giant ECOBUG Dot-Matrix Logo */}
+        <div className='w-full max-w-5xl mt-16 select-none pointer-events-none overflow-hidden leading-none translate-y-2'>
+          <DotWordmark />
+        </div>
+
+      </main>
     </div>
   )
 }

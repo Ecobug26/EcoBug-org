@@ -6,16 +6,9 @@ import Image from 'next/image'
 import AppNavbar from '@/components/shared/AppNavbar'
 import AppFooter from '@/components/shared/AppFooter'
 import { offbit } from '@/components/utils/utils'
-import { SearchBar, LoadingState, ErrorState } from '@/components/shared/ui'
+import { SearchBar, LoadingState } from '@/components/shared/ui'
 import { PlantDisclaimer } from '../PlantBankLibrary'
 import { Plant, PlantAttribute } from '../types'
-
-/**
- * Plant detail — Figma "PLANT BANK" detail screen:
- * green panel with close (X) + search, plant title + subtitle,
- * Common Names row, 3-column attribute grid with MORE pills,
- * growth metrics row, IUCN status pill (bottom-left) and USES box (bottom-right).
- */
 
 interface PlantDetailPageProps {
   params: Promise<{
@@ -23,7 +16,6 @@ interface PlantDetailPageProps {
   }>
 }
 
-/** Small dark-green "MORE" pill */
 function MorePill() {
   return (
     <span className='mt-1 inline-block bg-primary-hover text-panel text-[7px] leading-none font-bold tracking-wide px-2 py-[3px] rounded-full'>
@@ -32,12 +24,6 @@ function MorePill() {
   )
 }
 
-/**
- * One labelled attribute block.
- * - "Family" gets its own style (small green caps label + uppercase value).
- * - Lines containing ":" (e.g. "Colour: Green") are rendered as tiny detail text.
- * - Other lines (e.g. "Terrestrial", "6-12") are rendered as larger, muted values.
- */
 function AttributeBlock({ attribute }: { attribute: PlantAttribute }) {
   const isFamily = attribute.heading.toLowerCase() === 'family'
   const hasDetails = attribute.lines.some((line) => line.includes(':'))
@@ -111,6 +97,7 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
         }
       } catch (err) {
         if (!cancelled) {
+          // Restored proper error handling
           setError(err instanceof Error ? err : new Error('Failed to load plant'))
         }
       } finally {
@@ -163,38 +150,33 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
             </div>
           ) : (
             <div className='bg-[#B3D69A] dark:bg-card rounded-[32px] p-3 sm:p-5 shadow-[0_10px_30px_rgba(0,0,0,0.15)]'>
-              {/* Panel header: back + close + search */}
-              <div className='flex items-center justify-between gap-3'>
-                <button
-                  onClick={goBack}
-                  aria-label='Back to Plant Bank'
-                  className='w-9 h-9 flex items-center justify-center text-ink text-xl hover:bg-panel/40 rounded-full transition-colors cursor-pointer flex-shrink-0'
-                >
-                  ←
-                </button>
+              
+              {/* Panel header: X on the left, Search on the right */}
+              <div className='flex items-center justify-between w-full'>
                 <button
                   onClick={goBack}
                   aria-label='Close plant details'
-                  className='w-9 h-9 flex items-center justify-center text-ink text-xl hover:bg-panel/40 rounded-full transition-colors cursor-pointer flex-shrink-0 ml-1'
+                  className='w-10 h-10 flex items-center justify-center text-black font-bold text-2xl hover:bg-black/10 rounded-full transition-colors cursor-pointer flex-shrink-0 z-10'
                 >
                   ✕
                 </button>
 
-                <SearchBar
-                  value={search}
-                  onChange={setSearch}
-                  onSubmit={submitSearch}
-                  onClear={() => {
-                    setSearch('')
-                    submitSearch()
-                  }}
-                  className='max-w-[220px]'
-                />
+                <div className='flex-shrink-0'>
+                  <SearchBar
+                    value={search}
+                    onChange={setSearch}
+                    onSubmit={submitSearch}
+                    onClear={() => {
+                      setSearch('')
+                      submitSearch()
+                    }}
+                    className='max-w-[220px]'
+                  />
+                </div>
               </div>
 
               <div className='px-1 sm:px-6 pb-3 sm:pb-6'>
-                {/* Top: title + attribute grid (left), image collage (right) */}
-                <div className='mt-2 flex flex-col lg:flex-row lg:justify-between gap-8'>
+                <div className='mt-6 flex flex-col lg:flex-row lg:justify-between gap-8'>
                   <div className='min-w-0'>
                     <h2
                       className={`${offbit.className} text-3xl sm:text-4xl md:text-5xl font-bold uppercase text-ink leading-none`}
@@ -214,7 +196,6 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
                       </span>
                     </p>
 
-                    {/* 9 blocks in Figma order: Family … Soil Type */}
                     <div className='grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-7 mt-7 sm:max-w-[480px]'>
                       {plant.attributes.slice(0, 9).map((attribute) => (
                         <AttributeBlock
@@ -225,7 +206,6 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
                     </div>
                   </div>
 
-                  {/* Four overlapping photo tiles (centre card on top) — origin.png with varied crops */}
                   <div className='relative w-full max-w-[300px] mx-auto lg:mx-0 lg:mt-1 lg:self-start aspect-[252/196] shrink-0'>
                     <div className='absolute left-0 top-[5%] w-[43%] h-[43%] rounded-[18px] bg-[#d9d9d9] border border-ink overflow-hidden'>
                       <Image
@@ -270,14 +250,12 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
                   </div>
                 </div>
 
-                {/* Growth metrics row — content-width columns, not the 3-col grid */}
                 <div className='flex flex-wrap gap-x-10 gap-y-4 mt-8'>
                   {plant.attributes.slice(9).map((attribute) => (
                     <AttributeBlock key={attribute.heading} attribute={attribute} />
                   ))}
                 </div>
 
-                {/* Bottom row: IUCN (left) + USES (right) */}
                 <div className='mt-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6'>
                   <div>
                     <h3 className='font-medium text-xl text-ink'>
