@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { AuthProvider } from '@/context/AuthContext'
+import { ToastProvider } from '@/components/shared/Toast'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -40,9 +41,11 @@ export default function RootLayout({
         <Script id='eb-theme-init' strategy='beforeInteractive'>
           {`(function(){try{var t=localStorage.getItem('eb-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`}
         </Script>
-        <AuthProvider>
-    {children}
-</AuthProvider>
+        <ToastProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+        </ToastProvider>
       </body>
     </html>
   )
