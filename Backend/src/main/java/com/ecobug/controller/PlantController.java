@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
+import com.ecobug.dto.PlantImageDTO;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -53,26 +53,46 @@ public class PlantController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    private PlantDTO toDTO(Plant plant) {
-        List<PlantAttributeDTO> attrDTOs = plant.getAttributes() != null
-                ? plant.getAttributes().stream()
-                    .map(a -> new PlantAttributeDTO(a.getHeading(), a.getLines(), a.getMore()))
-                    .collect(Collectors.toList())
-                : null;
+    
+private PlantDTO toDTO(Plant plant) {
+    List<PlantAttributeDTO> attrDTOs =
+            plant.getAttributes() != null
+                    ? plant.getAttributes().stream()
+                        .map(a -> new PlantAttributeDTO(
+                                a.getHeading(),
+                                a.getLines(),
+                                a.getMore()))
+                        .collect(Collectors.toList())
+                    : null;
 
-        return new PlantDTO(
-                plant.getId(),
-                plant.getScientificName(),
-                plant.getSubtitle(),
-                plant.getCommonNames(),
-                plant.getImageUrl(),
-                plant.getPlantType(),
-                plant.getFoliageColour(),
-                plant.getClimaticZone(),
-                plant.getKeywords(),
-                plant.getIucnStatus(),
-                plant.getUses(),
-                attrDTOs
-        );
-    }
+    PlantDTO dto = new PlantDTO(
+            plant.getId(),
+            plant.getScientificName(),
+            plant.getSubtitle(),
+            plant.getCommonNames(),
+            plant.getImageUrl(),
+            plant.getPlantType(),
+            plant.getFoliageColour(),
+            plant.getClimaticZone(),
+            plant.getKeywords(),
+            plant.getIucnStatus(),
+            plant.getUses(),
+            attrDTOs
+    );
+
+    List<PlantImageDTO> imageDTOs =
+            plant.getImages() != null
+                    ? plant.getImages().stream()
+                        .map(img -> new PlantImageDTO(
+                                img.getId(),
+                                img.getImageUrl(),
+                                img.getImageType(),
+                                img.getSourceRow()))
+                        .collect(Collectors.toList())
+                    : List.of();
+
+    dto.setImages(imageDTOs);
+    return dto;
+}
+
 }
