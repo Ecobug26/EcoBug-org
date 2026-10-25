@@ -20,6 +20,7 @@ function PlantBankSection() {
   const { plants, loading, error } = usePlants()
 
   if (loading) return <div className='h-full flex items-center justify-center'>Loading plants…</div>
+  
   if (error) return <div className='h-full flex items-center justify-center text-ink-muted'>Error loading plants.</div>
 
   return <PlantBankLibrary plants={plants} initialQuery={initialQuery} />

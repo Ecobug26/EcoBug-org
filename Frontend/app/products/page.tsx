@@ -17,7 +17,7 @@ export const metadata: Metadata = {
  */
 export default function Product() {
   return (
-    <div className='min-h-screen flex flex-col bg-bg'>
+    <div className='min-h-screen flex flex-col bg-[#E9F5E0] dark:bg-[#102112]'>
       <AppNavbar />
 
       <main className='flex-1 flex flex-col items-center gap-10 lg:gap-[76px] px-5 pt-28 md:pt-36 pb-24 lg:pb-[176px]'>
@@ -25,7 +25,7 @@ export default function Product() {
 
         <ProductSection />
 
-        <p className='font-geist-sans font-normal text-[16px] leading-[19.2px] tracking-[-0.01em] text-center text-black dark:text-ink max-w-[758px]'>
+        <p className='font-geist-sans font-normal text-[16px] leading-[19.2px] tracking-[-0.01em] text-center text-black dark:text-[#E9F5E0] max-w-[758px]'>
           During any updates or addition of tools in the plans, prior
           information would be given with regard to cost increase in the plans.
         </p>
@@ -35,4 +35,3 @@ export default function Product() {
     </div>
   )
 }
-

@@ -5,7 +5,7 @@ import { useState, useEffect, useRef, SetStateAction } from 'react'
 import { offbit } from '../utils/utils'
 import { useRouter } from 'next/navigation'
 import StaggeredMenu from '../sidebar/StaggeredMenu'
-import { getCurrentUser } from '@/lib/api'
+import { useAuth } from '@/context/AuthContext'
 
 type BtnProps = {
   text: string
@@ -38,7 +38,7 @@ const menuItems = [
 ]
 
 function Btn({ text, link }: BtnProps) {
-  const r = useRouter()
+  const router = useRouter()
 
   return (
     <button
@@ -51,10 +51,10 @@ function Btn({ text, link }: BtnProps) {
         active:translate-y-0 active:scale-95
         cursor-pointer whitespace-nowrap
       `}
-      onClick={() => r.push(link)}
+      onClick={() => router.push(link)}
     >
       {text}
-      <span className='absolute left-0 -bottom-1 w-full h-1 bg-[#2f7335] rounded-full origin-right scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100 group-hover:origin-left' />
+      <span className="absolute left-0 -bottom-1 w-full h-1 bg-[#2f7335] rounded-full origin-right scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100 group-hover:origin-left" />
     </button>
   )
 }
@@ -62,21 +62,15 @@ function Btn({ text, link }: BtnProps) {
 function UserDialog() {
   const router = useRouter()
   const [open, setOpen] = useState(false)
-  const [loggedIn, setLoggedIn] = useState(false)
   const dialogRef = useRef<HTMLDivElement>(null)
+  const { user, loading, logout } = useAuth()
 
   useEffect(() => {
-  async function checkUser() {
-    const user = await getCurrentUser()
-    setLoggedIn(!!user)
-  }
-
-  checkUser()
-}, [])
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dialogRef.current && !dialogRef.current.contains(e.target as Node)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dialogRef.current &&
+        !dialogRef.current.contains(event.target as Node)
+      ) {
         setOpen(false)
       }
     }
@@ -85,14 +79,13 @@ function UserDialog() {
       document.addEventListener('mousedown', handleClickOutside)
     }
 
-    return () =>
+    return () => {
       document.removeEventListener('mousedown', handleClickOutside)
+    }
   }, [open])
 
-  function logout() {
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
-    setLoggedIn(false)
+  function handleLogout() {
+    logout()
     setOpen(false)
     router.push('/')
   }
@@ -100,8 +93,11 @@ function UserDialog() {
   return (
     <div ref={dialogRef} className="relative flex items-center">
       <button
+        type="button"
+        aria-label="User menu"
+        aria-expanded={open}
         className="cursor-pointer"
-        onClick={() => setOpen((p) => !p)}
+        onClick={() => setOpen((previous) => !previous)}
       >
         <Image
           src="/user-gren.png"
@@ -114,9 +110,16 @@ function UserDialog() {
 
       {open && (
         <div className="absolute top-full right-0 mt-2 w-40 bg-white border border-gray-100 rounded-xl shadow-lg overflow-hidden z-50">
-          {!loggedIn ? (
+          {loading ? (
+            <div
+              className={`px-4 py-3 text-sm text-[#1d4226] ${offbit.className}`}
+            >
+              Loading...
+            </div>
+          ) : !user ? (
             <>
               <button
+                type="button"
                 onClick={() => {
                   router.push('/auth/login')
                   setOpen(false)
@@ -129,6 +132,7 @@ function UserDialog() {
               <div className="h-px bg-gray-100" />
 
               <button
+                type="button"
                 onClick={() => {
                   router.push('/auth/signup')
                   setOpen(false)
@@ -141,6 +145,7 @@ function UserDialog() {
           ) : (
             <>
               <button
+                type="button"
                 onClick={() => {
                   setOpen(false)
                   router.push('/profile')
@@ -153,7 +158,8 @@ function UserDialog() {
               <div className="h-px bg-gray-100" />
 
               <button
-                onClick={logout}
+                type="button"
+                onClick={handleLogout}
                 className={`w-full cursor-pointer text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors ${offbit.className}`}
               >
                 Logout
@@ -166,7 +172,11 @@ function UserDialog() {
   )
 }
 
-function SubSection({ onHamburgerClick }: { onHamburgerClick: () => void }) {
+function SubSection({
+  onHamburgerClick,
+}: {
+  onHamburgerClick: () => void
+}) {
   const [scrollY, setScrollY] = useState(0)
   const [maxScroll, setMaxScroll] = useState(1)
   const [width, setWidth] = useState(0)
@@ -176,6 +186,7 @@ function SubSection({ onHamburgerClick }: { onHamburgerClick: () => void }) {
       setMaxScroll(window.innerHeight)
       setWidth(window.innerWidth)
     }
+
     const handleScroll = () => setScrollY(window.scrollY)
 
     updateSize()
@@ -183,24 +194,33 @@ function SubSection({ onHamburgerClick }: { onHamburgerClick: () => void }) {
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('resize', updateSize)
+
     return () => {
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('resize', updateSize)
     }
   }, [])
 
-  const archIntensity = Math.max(0, 1.35 - scrollY / (maxScroll * 0.3))
+  const archIntensity = Math.max(
+    0,
+    1.35 - scrollY / (maxScroll * 0.3),
+  )
 
   return (
     <div>
-      <div className='flex justify-between mx-1 md:mx-12'>
-        <button className='cursor-pointer' onClick={onHamburgerClick}>
+      <div className="flex justify-between mx-1 md:mx-12">
+        <button
+          type="button"
+          className="cursor-pointer"
+          onClick={onHamburgerClick}
+          aria-label="Open navigation menu"
+        >
           <Image
-            src='/ham-gren.png'
-            alt='menu'
+            src="/ham-gren.png"
+            alt="menu"
             width={36}
             height={36}
-            className='w-7 h-7 sm:w-9 sm:h-9 md:w-11 md:h-11'
+            className="w-7 h-7 sm:w-9 sm:h-9 md:w-11 md:h-11"
           />
         </button>
 
@@ -213,7 +233,7 @@ function SubSection({ onHamburgerClick }: { onHamburgerClick: () => void }) {
         <UserDialog />
       </div>
 
-      <div className='flex flex-nowrap justify-center items-end gap-2 sm:gap-6 lg:gap-20   px-2'>
+      <div className="flex flex-nowrap justify-center items-end gap-2 sm:gap-6 lg:gap-20 px-2">
         {navItems.map((item, index) => {
           const distanceFromCenter = index - (navItems.length - 1) / 2
           const baseOffset = distanceFromCenter ** 2 * 12
@@ -225,7 +245,7 @@ function SubSection({ onHamburgerClick }: { onHamburgerClick: () => void }) {
               key={item.text}
               style={{
                 transform: `translateY(${currentY}px)`,
-                transition: 'transform 0.2s ease-out' ,
+                transition: 'transform 0.2s ease-out',
                 willChange: 'transform',
               }}
             >
@@ -246,38 +266,45 @@ export default function Navbar({ setIsSidebarOpen }: NavProps) {
   const sidebarRef = useRef<HTMLDivElement>(null)
 
   const handleHamburgerClick = () => {
-    const toggleBtn = sidebarRef.current?.querySelector(
+    const toggleButton = sidebarRef.current?.querySelector(
       '.sm-toggle',
     ) as HTMLButtonElement | null
-    toggleBtn?.click()
+
+    toggleButton?.click()
   }
 
   return (
     <>
-      <nav className='text-black bg-white fixed top-0 left-0 right-0 z-20 p-2'>
+      <nav className="text-black bg-white fixed top-0 left-0 right-0 z-20 p-2">
         <SubSection onHamburgerClick={handleHamburgerClick} />
       </nav>
 
       <div
         ref={sidebarRef}
-        className='fixed top-0 left-0 w-screen h-screen z-50 pointer-events-none'
+        className="fixed top-0 left-0 w-screen h-screen z-50 pointer-events-none"
       >
         <StaggeredMenu
           isFixed={false}
-          position='left'
+          position="left"
           items={menuItems}
           displaySocials={false}
           displayItemNumbering={false}
-          menuButtonColor='#ffffff'
-          openMenuButtonColor='#000'
+          menuButtonColor="#ffffff"
+          openMenuButtonColor="#000"
           changeMenuColorOnOpen={true}
           colors={['#569b67', '#367b38']}
-          logoUrl=''
-          accentColor='#367b38'
+          logoUrl=""
+          accentColor="#367b38"
           onMenuOpen={() => setIsSidebarOpen(true)}
           onMenuClose={() => setIsSidebarOpen(false)}
         />
-        <style>{`.sm-scope .staggered-menu-header { visibility: hidden !important; pointer-events: none !important; }`}</style>
+
+        <style>{`
+          .sm-scope .staggered-menu-header {
+            visibility: hidden !important;
+            pointer-events: none !important;
+          }
+        `}</style>
       </div>
     </>
   )

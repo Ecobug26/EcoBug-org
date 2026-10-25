@@ -34,23 +34,37 @@ export function AuthProvider({
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
+  const logout = useCallback(() => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('email')
+    setUser(null)
+  }, [])
+
   const refreshUser = useCallback(async () => {
+    if (typeof window === 'undefined') {
+      setUser(null)
+      setLoading(false)
+      return
+    }
+
+    const token = localStorage.getItem('accessToken')
+
+    if (!token) {
+      setUser(null)
+      setLoading(false)
+      return
+    }
+
     try {
       const currentUser = await getCurrentUser()
-      setUser(currentUser)
+      setUser(currentUser ?? null)
     } catch (error) {
       console.error('Unable to load user:', error)
       setUser(null)
     } finally {
       setLoading(false)
     }
-  }, [])
-
-  const logout = useCallback(() => {
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
-    localStorage.removeItem('email')
-    setUser(null)
   }, [])
 
   useEffect(() => {

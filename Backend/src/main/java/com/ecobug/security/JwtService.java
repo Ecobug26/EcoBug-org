@@ -29,27 +29,38 @@ public class JwtService {
     }
 
     public String generateAccessToken(String email) {
-        return buildToken(email, accessTokenExpiration);
-    }
+    return buildToken(email, accessTokenExpiration, "access");
+}
 
-    public String generateRefreshToken(String email) {
-        return buildToken(email, refreshTokenExpiration);
-    }
+public String generateRefreshToken(String email) {
+    return buildToken(email, refreshTokenExpiration, "refresh");
+}
 
-    private String buildToken(String email, long expiration) {
+private String buildToken(
+        String email,
+        long expiration,
+        String tokenType) {
 
-        return Jwts.builder()
-                .subject(email)
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSigningKey())
-                .compact();
-    }
+    return Jwts.builder()
+            .subject(email)
+            .claim("tokenType", tokenType)
+            .issuedAt(new Date())
+            .expiration(new Date(System.currentTimeMillis() + expiration))
+            .signWith(getSigningKey())
+            .compact();
+}
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
+    public boolean isTokenType(String token, String expectedType) {
+    String tokenType = extractClaim(
+            token,
+            claims -> claims.get("tokenType", String.class)
+    );
 
+    return expectedType.equals(tokenType);
+}
     public boolean isTokenValid(String token, String email) {
 
         return email.equals(extractEmail(token))

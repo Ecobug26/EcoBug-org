@@ -26,6 +26,17 @@ public class PlantImage {
     @Column(name = "source_row")
     private Integer sourceRow;
 
+    @Column(name = "source_column")
+private String sourceColumn;
+
+public String getSourceColumn() {
+    return sourceColumn;
+}
+
+public void setSourceColumn(String sourceColumn) {
+    this.sourceColumn = sourceColumn;
+}
+
     public PlantImage() {}
 
     public PlantImage(Plant plant, String imageUrl, String imageType,
