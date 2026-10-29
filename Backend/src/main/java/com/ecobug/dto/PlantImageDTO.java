@@ -7,6 +7,7 @@ public class PlantImageDTO {
     private String imageUrl;
     private String imageType;
     private Integer sourceRow;
+    private String sourceColumn;
 
     public PlantImageDTO() {}
 
