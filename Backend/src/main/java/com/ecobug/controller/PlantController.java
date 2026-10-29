@@ -68,6 +68,12 @@ public class PlantController {
     }
 
     private PlantDTO toDTO(Plant plant) {
+        // Initialize lazy collections while the Hibernate session is still open
+        // (spring.jpa.open-in-view=false, so serialization happens after session close)
+        if (plant.getKeywords() != null) plant.getKeywords().size();
+        if (plant.getAttributes() != null) plant.getAttributes().size();
+        if (plant.getImages() != null) plant.getImages().size();
+
         List<PlantAttributeDTO> attrDTOs =
                 plant.getAttributes() != null
                         ? plant.getAttributes().stream()
