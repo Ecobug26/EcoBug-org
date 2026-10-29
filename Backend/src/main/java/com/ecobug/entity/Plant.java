@@ -5,6 +5,7 @@ import java.util.List;
 
 import java.util.Map;
 import java.util.HashMap;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -40,6 +41,7 @@ public class Plant {
     @ElementCollection
     @CollectionTable(name = "plant_keywords", joinColumns = @JoinColumn(name = "plant_id"))
     @Column(name = "keyword")
+    @BatchSize(size = 20)
     private List<String> keywords;
 
     @Column(name = "iucn_status")
@@ -120,6 +122,7 @@ private Map<String, Object> sourceData = new HashMap<>();
         @AttributeOverride(name = "heading", column = @Column(name = "heading")),
         @AttributeOverride(name = "more", column = @Column(name = "more"))
     })
+    @BatchSize(size = 20)
     private List<PlantAttribute> attributes;
 
     // Constructors
@@ -143,6 +146,7 @@ private Map<String, Object> sourceData = new HashMap<>();
     }
     @OneToMany(mappedBy = "plant", cascade = CascadeType.ALL,
            orphanRemoval = true)
+    @BatchSize(size = 20)
 private List<PlantImage> images = new ArrayList<>();
 
 public List<PlantImage> getImages() {
