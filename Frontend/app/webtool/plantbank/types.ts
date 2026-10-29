@@ -12,6 +12,14 @@ export interface PlantAttribute {
   more?: boolean
 }
 
+export interface PlantImage {
+  id: number | string
+  imageUrl: string
+  imageType?: string
+  sourceRow?: number
+  sourceColumn?: string
+}
+
 export interface Plant {
   id: string | number
   /** Big detail title, e.g. ARECA LUTESCANS */
@@ -31,4 +39,6 @@ export interface Plant {
   uses: string
   /** Search keywords for the list filter. */
   keywords: string[]
+  /** Plant images from database. */
+  images: PlantImage[]
 }
