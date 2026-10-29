@@ -17,13 +17,13 @@ import { usePlants } from './usePlants'
 function PlantBankSection() {
   const searchParams = useSearchParams()
   const initialQuery = searchParams.get('q') ?? ''
-  const { plants, loading, error } = usePlants()
+  const { plants, loading, error, totalElements, totalPages, currentPage, pageSize, setPage } = usePlants()
 
   if (loading) return <div className='h-full flex items-center justify-center'>Loading plants…</div>
   
   if (error) return <div className='h-full flex items-center justify-center text-ink-muted'>Error loading plants.</div>
 
-  return <PlantBankLibrary plants={plants} initialQuery={initialQuery} />
+  return <PlantBankLibrary plants={plants} initialQuery={initialQuery} totalElements={totalElements} totalPages={totalPages} currentPage={currentPage} pageSize={pageSize} onPageChange={setPage} />
 }
 
 export default function PlantBankPage(): JSX.Element {

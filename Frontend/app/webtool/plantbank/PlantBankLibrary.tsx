@@ -10,11 +10,21 @@ import { EmptyState } from '@/components/shared/ui'
 interface PlantBankLibraryProps {
   plants: Plant[]
   initialQuery?: string
+  totalElements: number
+  totalPages: number
+  currentPage: number
+  pageSize: number
+  onPageChange: (page: number) => void
 }
 
 export const PlantBankLibrary: React.FC<PlantBankLibraryProps> = ({
   plants,
   initialQuery = '',
+  totalElements = 0,
+  totalPages = 0,
+  currentPage = 0,
+  pageSize = 24,
+  onPageChange,
 }) => {
   const [searchQuery, setSearchQuery] = useState<string>(initialQuery)
 
@@ -99,6 +109,29 @@ export const PlantBankLibrary: React.FC<PlantBankLibraryProps> = ({
           )}
         </AnimatePresence>
       </div>
+
+      {/* Pagination controls */}
+      {totalPages > 1 && (
+        <div className='flex items-center justify-between gap-2 mt-4 px-4'>
+          <button
+            onClick={() => onPageChange(Math.max(0, currentPage - 1))}
+            disabled={currentPage === 0}
+            className='px-4 py-2 border border-black rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black hover:text-white transition-colors'
+          >
+            ← Prev
+          </button>
+          <span className='text-xs font-bold text-ink'>
+            Page {currentPage + 1} of {totalPages} ({totalElements} items)
+          </span>
+          <button
+            onClick={() => onPageChange(Math.min(totalPages - 1, currentPage + 1))}
+            disabled={currentPage === totalPages - 1}
+            className='px-4 py-2 border border-black rounded-full disabled:opacity-50 disabled:cursor-not-allowed hover:bg-black hover:text-white transition-colors'
+          >
+            Next →
+          </button>
+        </div>
+      )}
     </main>
   )
 }
