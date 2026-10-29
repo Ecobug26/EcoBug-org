@@ -1,6 +1,7 @@
 package com.ecobug.repository;
 
 import com.ecobug.entity.Plant;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +16,11 @@ public interface PlantRepository extends JpaRepository<Plant, Long>, JpaSpecific
 
     Optional<Plant> findByScientificNameIgnoreCase(String scientificName);
 
+    @Override
+    @EntityGraph(attributePaths = {"keywords", "attributes", "images"})
+    List<Plant> findAll();
+
+    @EntityGraph(attributePaths = {"keywords", "attributes", "images"})
     @Query("SELECT p FROM Plant p WHERE (:type IS NULL OR p.plantType = :type) " +
            "AND (:colour IS NULL OR p.foliageColour = :colour) " +
            "AND (:zone IS NULL OR p.climaticZone = :zone)")
