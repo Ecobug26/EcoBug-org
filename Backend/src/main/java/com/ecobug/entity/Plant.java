@@ -41,7 +41,7 @@ public class Plant {
     @ElementCollection
     @CollectionTable(name = "plant_keywords", joinColumns = @JoinColumn(name = "plant_id"))
     @Column(name = "keyword")
-    @BatchSize(size = 20)
+    @BatchSize(size = 100)
     private List<String> keywords;
 
     @Column(name = "iucn_status")
@@ -122,7 +122,7 @@ private Map<String, Object> sourceData = new HashMap<>();
         @AttributeOverride(name = "heading", column = @Column(name = "heading")),
         @AttributeOverride(name = "more", column = @Column(name = "more"))
     })
-    @BatchSize(size = 20)
+    @BatchSize(size = 100)
     private List<PlantAttribute> attributes;
 
     // Constructors
@@ -146,7 +146,7 @@ private Map<String, Object> sourceData = new HashMap<>();
     }
     @OneToMany(mappedBy = "plant", cascade = CascadeType.ALL,
            orphanRemoval = true)
-    @BatchSize(size = 20)
+    @BatchSize(size = 100)
 private List<PlantImage> images = new ArrayList<>();
 
 public List<PlantImage> getImages() {
