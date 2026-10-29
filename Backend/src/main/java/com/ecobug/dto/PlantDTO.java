@@ -37,6 +37,27 @@ public class PlantDTO {
         this.iucnStatus = iucnStatus;
         this.uses = uses;
         this.attributes = attributes;
+        this.images = List.of();
+    }
+
+    public PlantDTO(Long id, String scientificName, String subtitle, String commonNames,
+                    String imageUrl, String plantType, String foliageColour,
+                    String climaticZone, List<String> keywords, String iucnStatus,
+                    String uses, List<PlantAttributeDTO> attributes,
+                    List<PlantImageDTO> images) {
+        this.id = id;
+        this.scientificName = scientificName;
+        this.subtitle = subtitle;
+        this.commonNames = commonNames;
+        this.imageUrl = imageUrl;
+        this.plantType = plantType;
+        this.foliageColour = foliageColour;
+        this.climaticZone = climaticZone;
+        this.keywords = keywords;
+        this.iucnStatus = iucnStatus;
+        this.uses = uses;
+        this.attributes = attributes;
+        this.images = images != null ? images : List.of();
     }
 
     // Getters and Setters

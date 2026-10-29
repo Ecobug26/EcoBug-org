@@ -23,13 +23,18 @@ export function usePlants(): UsePlantsReturn {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/api/plants`, {
-        headers: { 'Content-Type': 'application/json' },
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
+      const res = await fetch(`${apiBase}/api/plants`, {
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       })
-      if (!res.ok) throw new Error('Failed to fetch plants')
+      if (!res.ok) {
+        const body = await res.text().catch(() => '')
+        throw new Error(`Failed to fetch plants (${res.status})${body ? ': ' + body.slice(0, 200) : ''}`)
+      }
       const data: Plant[] = await res.json()
       setPlants(Array.isArray(data) ? data : [])
     } catch (err) {
+      console.error('[usePlants] Error loading plants:', err)
       setPlants([])
       setError(err instanceof Error ? err : new Error('Failed to fetch plants'))
     } finally {
