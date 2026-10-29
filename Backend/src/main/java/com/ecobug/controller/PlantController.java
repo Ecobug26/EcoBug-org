@@ -8,11 +8,16 @@ import com.ecobug.entity.Plant;
 import com.ecobug.repository.PlantRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,24 +31,34 @@ public class PlantController {
 
     @GetMapping
     @Transactional(readOnly = true)
-    public ResponseEntity<List<PlantDTO>> getAllPlants(
+    public ResponseEntity<Map<String, Object>> getAllPlants(
             @RequestParam(required = false) String type,
             @RequestParam(required = false) String colour,
-            @RequestParam(required = false) String zone) {
+            @RequestParam(required = false) String zone,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "24") int size) {
 
-        List<Plant> plants;
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Plant> plantPage;
 
         if (type != null || colour != null || zone != null) {
-            plants = plantRepository.findPlantsWithFilters(type, colour, zone);
+            plantPage = plantRepository.findPlantsWithFilters(type, colour, zone, pageable);
         } else {
-            plants = plantRepository.findAll();
+            plantPage = plantRepository.findAll(pageable);
         }
 
-        List<PlantDTO> dtos = plants.stream()
+        List<PlantDTO> dtos = plantPage.getContent().stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
 
-        return ResponseEntity.ok(dtos);
+        Map<String, Object> response = new HashMap<>();
+        response.put("plants", dtos);
+        response.put("totalElements", plantPage.getTotalElements());
+        response.put("totalPages", plantPage.getTotalPages());
+        response.put("currentPage", plantPage.getNumber());
+        response.put("pageSize", plantPage.getSize());
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
