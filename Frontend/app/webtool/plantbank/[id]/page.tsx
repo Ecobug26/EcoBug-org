@@ -251,6 +251,12 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
                 </div>
 
                 <div className='flex flex-wrap gap-x-10 gap-y-4 mt-8'>
+                  {plant.attributes.slice(0, 9).map((attribute) => (
+                    <AttributeBlock key={attribute.heading} attribute={attribute} />
+                  ))}
+                </div>
+
+                <div className='flex flex-wrap gap-x-10 gap-y-4 mt-8'>
                   {plant.attributes.slice(9).map((attribute) => (
                     <AttributeBlock key={attribute.heading} attribute={attribute} />
                   ))}
