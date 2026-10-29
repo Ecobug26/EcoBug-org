@@ -18,6 +18,15 @@ public class PlantImageDTO {
         this.sourceRow = sourceRow;
     }
 
+    public PlantImageDTO(Long id, String imageUrl,
+                         String imageType, Integer sourceRow, String sourceColumn) {
+        this.id = id;
+        this.imageUrl = imageUrl;
+        this.imageType = imageType;
+        this.sourceRow = sourceRow;
+        this.sourceColumn = sourceColumn;
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -29,4 +38,7 @@ public class PlantImageDTO {
 
     public Integer getSourceRow() { return sourceRow; }
     public void setSourceRow(Integer sourceRow) { this.sourceRow = sourceRow; }
+
+    public String getSourceColumn() { return sourceColumn; }
+    public void setSourceColumn(String sourceColumn) { this.sourceColumn = sourceColumn; }
 }

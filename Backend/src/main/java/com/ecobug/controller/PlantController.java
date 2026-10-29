@@ -78,6 +78,18 @@ public class PlantController {
                                 .collect(Collectors.toList())
                         : null;
 
+        List<PlantImageDTO> imageDTOs =
+                plant.getImages() != null
+                        ? plant.getImages().stream()
+                                .map(img -> new PlantImageDTO(
+                                        img.getId(),
+                                        img.getImageUrl(),
+                                        img.getImageType(),
+                                        img.getSourceRow(),
+                                        img.getSourceColumn()))
+                                .collect(Collectors.toList())
+                        : List.of();
+
         PlantDTO dto = new PlantDTO(
                 plant.getId(),
                 plant.getScientificName(),
@@ -90,21 +102,9 @@ public class PlantController {
                 plant.getKeywords(),
                 plant.getIucnStatus(),
                 plant.getUses(),
-                attrDTOs
+                attrDTOs,
+                imageDTOs
         );
-
-        List<PlantImageDTO> imageDTOs =
-                plant.getImages() != null
-                        ? plant.getImages().stream()
-                                .map(img -> new PlantImageDTO(
-                                        img.getId(),
-                                        img.getImageUrl(),
-                                        img.getImageType(),
-                                        img.getSourceRow()))
-                                .collect(Collectors.toList())
-                        : List.of();
-
-        dto.setImages(imageDTOs);
         return dto;
     }
 }
