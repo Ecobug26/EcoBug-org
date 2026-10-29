@@ -26,7 +26,21 @@ function MorePill() {
 
 function AttributeBlock({ attribute }: { attribute: PlantAttribute }) {
   const isFamily = attribute.heading.toLowerCase() === 'family'
-  const hasDetails = attribute.lines.some((line) => line.includes(':'))
+  const hasLines = attribute.lines && attribute.lines.length > 0
+  const hasDetails = attribute.lines?.some((line) => line.includes(':')) ?? false
+
+  if (!hasLines) {
+    return (
+      <div>
+        <h4 className='font-bold text-[13px] tracking-wide uppercase leading-tight text-primary-hover'>
+          {attribute.heading}
+        </h4>
+        <p className='text-[14px] leading-snug text-ink opacity-50 italic'>
+          Data Not Found
+        </p>
+      </div>
+    )
+  }
 
   if (isFamily) {
     return (
@@ -207,60 +221,63 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
                   </div>
 
                   <div className='relative w-full max-w-[300px] mx-auto lg:mx-0 lg:mt-1 lg:self-start aspect-[252/196] shrink-0'>
-                    <div className='absolute left-0 top-[5%] w-[43%] h-[43%] rounded-[18px] bg-[#d9d9d9] border border-ink overflow-hidden'>
-                      <Image
-                        src='/images/plant_1_1.png'
-                        alt=''
-                        fill
-                        sizes='150px'
-                        className='object-cover object-top'
-                        unoptimized
-                      />
-                    </div>
-                    <div className='absolute right-0 top-0 w-[43%] h-[43%] rounded-[18px] bg-[#d9d9d9] border border-ink overflow-hidden'>
-                      <Image
-                        src='/images/plant_12.png'
-                        alt=''
-                        fill
-                        sizes='150px'
-                        className='object-cover object-bottom'
-                        unoptimized
-                      />
-                    </div>
-                    <div className='absolute left-[14%] top-[60%] w-[41%] h-[40%] rounded-[18px] bg-[#d9d9d9] border border-ink overflow-hidden'>
-                      <Image
-                        src='/images/plant_13.png'
-                        alt=''
-                        fill
-                        sizes='150px'
-                        className='object-cover object-left'
-                        unoptimized
-                      />
-                    </div>
-                    <div className='absolute left-[30%] top-[18%] w-[53%] h-[52%] rounded-[18px] bg-[#d9d9d9] border border-ink overflow-hidden'>
-                      <Image
-                        src='/images/plant_14.png'
-                        alt={plant.scientificName}
-                        fill
-                        sizes='180px'
-                        className='object-cover'
-                        unoptimized
-                      />
-                    </div>
+                    {plant.images && plant.images.length > 0 ? (
+                      <>
+                        {plant.images.map((img, idx) => (
+                          <div
+                            key={img.id}
+                            className={`absolute rounded-[18px] bg-[#d9d9d9] border border-ink overflow-hidden ${
+                              idx === 0 ? 'left-0 top-[5%] w-[43%] h-[43%]' :
+                              idx === 1 ? 'right-0 top-0 w-[43%] h-[43%]' :
+                              idx === 2 ? 'left-[14%] top-[60%] w-[41%] h-[40%]' :
+                              'left-[30%] top-[18%] w-[53%] h-[52%]'
+                            }`}
+                          >
+                            <Image
+                              src={img.imageUrl}
+                              alt={plant.scientificName}
+                              fill
+                              sizes='100%'
+                              className='object-cover'
+                              unoptimized
+                            />
+                          </div>
+                        ))}
+                      </>
+                    ) : (
+                      <div className='w-full h-[200px] md:h-[300px] rounded-[18px] bg-[#d9d9d9] border border-ink flex items-center justify-center text-xs font-bold text-black/40 mb-4'>
+                        No Images Available
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                <div className='flex flex-wrap gap-x-10 gap-y-4 mt-8'>
-                  {plant.attributes.slice(0, 9).map((attribute) => (
-                    <AttributeBlock key={attribute.heading} attribute={attribute} />
-                  ))}
-                </div>
+                {plant.attributes && plant.attributes.length > 0 ? (
+                  <>
+                    <div className='flex flex-wrap gap-x-10 gap-y-4 mt-8'>
+                      {plant.attributes.slice(0, 9).map((attribute) => (
+                        <AttributeBlock key={attribute.heading} attribute={attribute} />
+                      ))}
+                    </div>
 
-                <div className='flex flex-wrap gap-x-10 gap-y-4 mt-8'>
-                  {plant.attributes.slice(9).map((attribute) => (
-                    <AttributeBlock key={attribute.heading} attribute={attribute} />
-                  ))}
-                </div>
+                    <div className='flex flex-wrap gap-x-10 gap-y-4 mt-8'>
+                      {plant.attributes.slice(9).map((attribute) => (
+                        <AttributeBlock key={attribute.heading} attribute={attribute} />
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className='mt-8 flex flex-wrap gap-x-10 gap-y-4'>
+                    <div className='w-full flex-1 min-w-[200px]'>
+                      <h4 className='font-bold text-[13px] tracking-wide uppercase leading-tight text-primary-hover'>
+                        Attributes
+                      </h4>
+                      <p className='text-[14px] leading-snug text-ink opacity-50 italic'>
+                        Data Not Found
+                      </p>
+                    </div>
+                  </div>
+                )}
 
                 <div className='mt-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6'>
                   <div>
@@ -270,7 +287,7 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
                     <span
                       className={`${offbit.className} mt-2.5 inline-block bg-warning/85 text-black text-[13px] px-5 py-2 rounded-full`}
                     >
-                      {plant.iucnStatus}
+                      {plant.iucnStatus || 'Data Not Found'}
                     </span>
                   </div>
 
@@ -281,7 +298,7 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
                       USES:
                     </h3>
                     <p className='text-[13px] leading-relaxed text-ink mt-2'>
-                      {plant.uses}
+                      {plant.uses || 'Data Not Found'}
                     </p>
                   </div>
                 </div>

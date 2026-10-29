@@ -76,17 +76,23 @@ export const PlantCard: React.FC<PlantCardProps> = ({ plant }) => {
       >
         {/* Image Card */}
         <div
-          className='relative w-[45%] shrink-0 bg-red-500/90 border-2 border-black overflow-hidden'
+          className='relative w-[45%] shrink-0 h-[160px] md:h-[200px] bg-[#D9D9D9] border-2 border-black overflow-hidden'
           onClick={handleImageClick}
         >
-          <Image
-            src={plant.imageUrl}
-            alt={plant.scientificName}
-            fill
-            sizes='(max-width: 640px) 45vw, 15vw'
-            className='object-cover'
-            unoptimized
-          />
+          {plant.imageUrl ? (
+            <Image
+              src={plant.imageUrl}
+              alt={plant.scientificName}
+              fill
+              sizes='(max-width: 640px) 45vw, 15vw'
+              className='object-cover'
+              unoptimized
+            />
+          ) : (
+            <div className='flex h-full items-center justify-center text-xs font-bold text-black/40'>
+              No Image
+            </div>
+          )}
         </div>
 
         {/* Text Card (Now Gray as per Figma) */}
