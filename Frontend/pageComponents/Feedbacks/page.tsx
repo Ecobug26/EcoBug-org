@@ -1,63 +1,52 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { Jost } from 'next/font/google'
 import { offbit } from '@/components/utils/utils'
 import { MonoButton } from '@/components/shared/ui'
 
-/**
- * Testimonials + pricing CTA — Figma "Frame 4" (166:2386 / 283:2462,
- * mobile 296:5338): OffBit 64 heading, three static green quote cards
- * (~385x246, r24, pad 40, gap 25), then the 1128-wide CTA container
- * (r24, pad 40/76/40/85, gap 42) with the OffBit 58 two-line headline
- * and black "View our Plans" button.
- */
+// Geometric sans used for the quote text
+const body = Jost({ subsets: ['latin'], weight: ['400', '500'] })
+
 const quotes = [
-  {
-    text: '“It’s really nice to have everything in one place.”',
-    widthClass: 'lg:w-[382px]',
-    heightClass: 'lg:h-[246px]',
-  },
-  {
-    text: '“We are really looking forward to having maintenance plans for landscaping, a much needed respite for our long term works.”',
-    widthClass: 'lg:w-[385px]',
-    heightClass: 'lg:h-[250px]',
-  },
-  {
-    text: '“I am expecting ecologically aware and driven strategies for our upcoming projects.”',
-    widthClass: 'lg:w-[385px]',
-    heightClass: 'lg:h-[246px]',
-  },
+  '“It’s really nice to have everything in one place.”',
+  '“We are really looking forward to having maintenance plans for landscaping, a much needed respite for our long term works.”',
+  '“I am expecting ecologically aware and driven strategies for our upcoming projects.”',
 ]
 
 export default function Feedbacks() {
   const r = useRouter()
 
   return (
-    <section className='w-full flex flex-col items-center gap-[14px] pt-0 pb-0 lg:py-[55px] px-5'>
+    <section className='w-full bg-[#E8F3E0] dark:bg-[#102112] flex flex-col items-center gap-6 lg:gap-8 py-12 lg:py-14 px-5'>
       <h2
-        className={`${offbit.className} font-bold text-[32px] sm:text-[44px] lg:text-[64px] leading-[1.2] tracking-[-0.01em] text-center text-[#1B2B1E] dark:text-[#EAF2E4]`}
+        className={`${offbit.className} font-bold text-[32px] sm:text-[44px] lg:text-[60px] leading-[1.1] tracking-[-0.01em] text-center text-balance text-[#162B18] dark:text-[#EAF2E4]`}
       >
         WHAT OUR CUSTOMERS HAVE TO SAY
       </h2>
 
-      {/* Quote cards: static row on desktop, stacked on mobile */}
-      <div className='w-full flex flex-col sm:flex-col lg:flex-row items-center justify-center gap-[23px] lg:gap-[25px] lg:pb-7'>
+      {/* Quote cards: stacked on mobile, one row on desktop */}
+      <div className='w-full max-w-[860px] flex flex-col lg:flex-row items-stretch gap-4'>
         {quotes.map((quote) => (
           <div
-            key={quote.text}
-            className={`w-full max-w-[347px] lg:max-w-none min-h-[221px] ${quote.widthClass} ${quote.heightClass} bg-[#97C974] dark:bg-[#253B25] rounded-[21.6px] lg:rounded-3xl p-6 sm:p-9 lg:p-10 flex items-center transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_10px_24px_rgba(0,0,0,0.15)]`}
+            key={quote}
+            className='w-full lg:flex-1 min-h-[150px] lg:min-h-0 lg:aspect-[260/166] bg-[#98CA75] dark:bg-[#253B25] rounded-[22px] px-5 pt-6 pb-5 transition-transform duration-200 hover:-translate-y-1'
           >
-            <p className='font-geist-sans text-[19px] sm:text-[22px] lg:text-[28px] leading-[24px] sm:leading-[26.4px] lg:leading-[33.6px] tracking-[-0.04em] text-[#40543F] dark:text-[#9BAE95] text-balance'>
-              {quote.text}
+            {/* Hanging quote mark: first line sticks out, wrapped lines align with the text */}
+            <p
+              className={`${body.className} text-[16px] lg:text-[17px] leading-[1.35] text-[#2D4A2E] dark:text-[#9BAE95]`}
+              style={{ paddingLeft: '0.55em', textIndent: '-0.55em' }}
+            >
+              {quote}
             </p>
           </div>
         ))}
       </div>
 
-      {/* Pricing CTA container */}
-      <div className='w-full max-w-[1128px] bg-[#97C974] dark:bg-[#253B25] rounded-[21.6px] lg:rounded-3xl flex flex-col items-center text-center gap-[37.8px] lg:gap-[42px] px-6 sm:px-9 pt-[68.4px] pb-[76.5px] lg:px-10 lg:pt-[76px] lg:pb-[85px] overflow-x-clip'>
+      {/* CTA box */}
+      <div className='w-full max-w-[800px] bg-[#98CA75] dark:bg-[#253B25] rounded-[22px] flex flex-col items-center text-center gap-6 lg:gap-7 px-6 py-10 lg:pt-10 lg:pb-12'>
         <p
-          className={`${offbit.className} font-bold text-[30px] lg:text-[58px] leading-[36px] lg:leading-[69.6px] tracking-[-0.04em] whitespace-pre-line text-[#1B2B1E] dark:text-[#EAF2E4]`}
+          className={`${offbit.className} font-bold text-[26px] sm:text-[32px] lg:text-[40px] leading-[1.2] tracking-[-0.02em] whitespace-pre-line text-[#162B18] dark:text-[#EAF2E4]`}
         >
           {'Are you ready?\nBe a part of next best thing'}
         </p>
@@ -65,7 +54,7 @@ export default function Feedbacks() {
         <MonoButton
           bullet
           onClick={() => r.push('/products')}
-          className='text-[12.6px] lg:text-[24px] leading-none tracking-[0.1px] lg:tracking-[0.2px] px-[32.4px] lg:px-9 py-[18.9px] lg:py-[21px]'
+          className='text-[13px] lg:text-[16px] leading-none tracking-[0.2px] px-7 lg:px-9 py-4 lg:py-[18px]'
         >
           View our Plans
         </MonoButton>

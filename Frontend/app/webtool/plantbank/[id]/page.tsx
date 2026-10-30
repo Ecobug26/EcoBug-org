@@ -7,7 +7,6 @@ import AppNavbar from '@/components/shared/AppNavbar'
 import AppFooter from '@/components/shared/AppFooter'
 import { offbit } from '@/components/utils/utils'
 import { SearchBar, LoadingState } from '@/components/shared/ui'
-import { PlantDisclaimer } from '../PlantBankLibrary'
 import { Plant, PlantAttribute } from '../types'
 
 interface PlantDetailPageProps {
@@ -111,7 +110,6 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
         }
       } catch (err) {
         if (!cancelled) {
-          // Restored proper error handling
           setError(err instanceof Error ? err : new Error('Failed to load plant'))
         }
       } finally {
@@ -135,7 +133,7 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
   }
 
   return (
-    <div className='min-h-screen flex flex-col bg-bg'>
+    <div className='min-h-screen flex flex-col dark:bg-[#102112]'>
       <AppNavbar />
 
       <main className='flex-1 flex flex-col items-center pt-28 md:pt-32 pb-16 px-3 sm:px-6'>
@@ -211,12 +209,16 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
                     </p>
 
                     <div className='grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-7 mt-7 sm:max-w-[480px]'>
-                      {plant.attributes.slice(0, 9).map((attribute) => (
-                        <AttributeBlock
-                          key={attribute.heading}
-                          attribute={attribute}
-                        />
-                      ))}
+                      {plant.attributes && plant.attributes.length > 0 ? (
+                        plant.attributes.slice(0, 9).map((attribute) => (
+                          <AttributeBlock
+                            key={attribute.heading}
+                            attribute={attribute}
+                          />
+                        ))
+                      ) : (
+                        <p className='text-sm text-ink opacity-50 italic col-span-full'>No attributes found</p>
+                      )}
                     </div>
                   </div>
 
@@ -225,7 +227,7 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
                       <>
                         {plant.images.map((img, idx) => (
                           <div
-                            key={img.id}
+                            key={img.id || idx}
                             className={`absolute rounded-[18px] bg-[#d9d9d9] border border-ink overflow-hidden ${
                               idx === 0 ? 'left-0 top-[5%] w-[43%] h-[43%]' :
                               idx === 1 ? 'right-0 top-0 w-[43%] h-[43%]' :
@@ -252,30 +254,11 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
                   </div>
                 </div>
 
-                {plant.attributes && plant.attributes.length > 0 ? (
-                  <>
-                    <div className='flex flex-wrap gap-x-10 gap-y-4 mt-8'>
-                      {plant.attributes.slice(0, 9).map((attribute) => (
-                        <AttributeBlock key={attribute.heading} attribute={attribute} />
-                      ))}
-                    </div>
-
-                    <div className='flex flex-wrap gap-x-10 gap-y-4 mt-8'>
-                      {plant.attributes.slice(9).map((attribute) => (
-                        <AttributeBlock key={attribute.heading} attribute={attribute} />
-                      ))}
-                    </div>
-                  </>
-                ) : (
-                  <div className='mt-8 flex flex-wrap gap-x-10 gap-y-4'>
-                    <div className='w-full flex-1 min-w-[200px]'>
-                      <h4 className='font-bold text-[13px] tracking-wide uppercase leading-tight text-primary-hover'>
-                        Attributes
-                      </h4>
-                      <p className='text-[14px] leading-snug text-ink opacity-50 italic'>
-                        Data Not Found
-                      </p>
-                    </div>
+                {plant.attributes && plant.attributes.length > 9 && (
+                  <div className='flex flex-wrap gap-x-10 gap-y-4 mt-8'>
+                    {plant.attributes.slice(9).map((attribute) => (
+                      <AttributeBlock key={attribute.heading} attribute={attribute} />
+                    ))}
                   </div>
                 )}
 
@@ -291,14 +274,15 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
                     </span>
                   </div>
 
-                  <div className='w-full lg:w-[38%] lg:min-w-[300px] min-h-[140px] bg-[#b3bd7d] dark:bg-primary/25 border-2 border-ink rounded-[28px] px-6 py-5'>
+                  {/* USES BOX */}
+                  <div className='w-full lg:w-[38%] lg:min-w-[300px] min-h-[140px] bg-[#A3C27D] border-[3px] border-black rounded-[28px] px-6 py-5'>
                     <h3
-                      className={`${offbit.className} underline underline-offset-2 font-bold text-[15px] text-ink`}
+                      className={`${offbit.className} underline underline-offset-2 font-bold text-[15px] text-black`}
                     >
                       USES:
                     </h3>
-                    <p className='text-[13px] leading-relaxed text-ink mt-2'>
-                      {plant.uses || 'Data Not Found'}
+                    <p className='text-[13px] leading-relaxed text-black mt-2'>
+                      {plant.uses || ''}
                     </p>
                   </div>
                 </div>
@@ -307,7 +291,17 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
           )}
         </div>
 
-        <PlantDisclaimer className='mt-6' />
+        {/* Bottom Actions (Save Button & Disclaimer) */}
+        <div className='w-full max-w-5xl mt-6 flex flex-col md:flex-row items-center justify-start gap-8 px-2'>
+          <button className={`${offbit.className} bg-black dark:bg-[#71CB51] text-white dark:text-black text-2xl md:text-3xl font-bold px-10 py-3.5 rounded-full hover:bg-gray-800 dark:hover:bg-[#5ebf3f] transition-colors flex-shrink-0`}>
+            SAVE
+          </button>
+
+          <p className='text-[10px] md:text-[11px] text-black dark:text-[#EAF2E4] leading-relaxed max-w-md text-center md:text-left'>
+            Disclaimer: We do not own the pictures displayed in any of the plant catalogs, they have been outsourced from respective owners, to whom we give complete credits or may have been generated.
+          </p>
+        </div>
+
       </main>
 
       <AppFooter />

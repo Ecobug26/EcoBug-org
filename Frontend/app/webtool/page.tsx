@@ -4,6 +4,7 @@ import Link from 'next/link'
 import AppNavbar from '@/components/shared/AppNavbar'
 import AppFooter from '@/components/shared/AppFooter'
 import { offbit } from '@/components/utils/utils'
+import { useAuth } from '@/context/AuthContext' // 1. Imported Auth
 
 /**
  * Webtool landing — Figma "WEBTOOL" screen:
@@ -44,6 +45,8 @@ function ToolCard({ title, href, disabled = false }: ToolCardProps) {
 }
 
 export default function WebTool() {
+  const { user } = useAuth() // 2. Get user state
+
   return (
     <div className='min-h-screen flex flex-col bg-[#E9F5E0] dark:bg-[#102112]'>
       <AppNavbar />
@@ -55,7 +58,17 @@ export default function WebTool() {
           WEBTOOL
         </h1>
 
-        <div className='w-full max-w-3xl mt-10 md:mt-14 flex flex-col gap-5'>
+        {/* 3. Added the Login Banner here */}
+        {!user && (
+          <div className='w-full max-w-3xl mt-8 flex justify-center'>
+            <div className='px-6 py-2.5 rounded-full bg-[#EAF5C8] dark:bg-[#1B2F1E] text-[#1B2B1E] dark:text-[#EAF2E4] text-sm md:text-base font-bold tracking-wide shadow-sm'>
+              Please Login/Signup to access WEBTOOLS
+            </div>
+          </div>
+        )}
+
+        {/* Adjusted margin top slightly to balance the new banner */}
+        <div className='w-full max-w-3xl mt-8 md:mt-10 flex flex-col gap-5'>
           <ToolCard title='PLANT BANK' href='/webtool/plantbank' />
           <ToolCard title='STRATEGIES' href='/webtool/strategy' />
           {/* BOQ is not in scope yet */}

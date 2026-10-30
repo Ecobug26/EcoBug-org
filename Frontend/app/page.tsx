@@ -26,7 +26,7 @@ export default function Home() {
   }, [])
 
   return (
-    <div className='min-h-screen flex flex-col bg-[#E9F5E0] dark:bg-[#102112]'>
+    <div className='min-h-screen flex flex-col dark:bg-[#102112]'>
       <AppNavbar />
       <Hero />
       <Intro />
@@ -38,4 +38,3 @@ export default function Home() {
     </div>
   )
 }
-

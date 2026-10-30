@@ -1,6 +1,6 @@
 ﻿'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { offbit } from '@/components/utils/utils'
@@ -12,116 +12,65 @@ interface PlantCardProps {
 
 function CardField({ label, value, align = 'left' }: { label: string; value: string, align?: 'left' | 'right' }) {
   return (
-    <div className={`flex flex-col ${align === 'right' ? 'items-end text-right' : 'items-start text-left'}`}>
-      {/* Green Bold Header */}
-      <span className={`${offbit.className} block text-[10px] font-bold text-[#2E6B2E] tracking-wide uppercase leading-none`}>
+    <div className={`flex flex-col ${align === 'right' ? 'items-end text-right' : 'items-start text-left'} w-full min-w-0`}>
+      {/* Label: Always green */}
+      <span className={`${offbit.className} block text-[11px] font-bold text-[#3C6E47] tracking-wide uppercase leading-none`}>
         {label}
       </span>
-      {/* Black Bold Info */}
-      <span className='block text-[11px] font-bold text-black leading-none mt-1'>
+      {/* Value: Always black */}
+      <span className='block text-[13px] font-bold text-black leading-tight mt-1 break-words line-clamp-2'>
         {value}
       </span>
     </div>
   )
 }
 
-function ImageZoom({ imageUrl, alt, onClose }: { imageUrl: string; alt: string; onClose: () => void }) {
-  return (
-    <div
-      onClick={onClose}
-      className='fixed inset-0 z-50 bg-black/90 flex items-center justify-center cursor-zoom-out p-4'
-      role='dialog'
-      aria-modal='true'
-      aria-label='Enlarged plant image'
-    >
-      <div onClick={(e) => e.stopPropagation()} className='relative max-w-full max-h-[90vh] cursor-pointer'>
-        <Image
-          src={imageUrl}
-          alt={alt}
-          fill
-          sizes='90vw'
-          className='object-contain rounded-2xl border-2 border-white/30 shadow-2xl'
-          unoptimized
-          style={{ maxWidth: '90vw', maxHeight: '80vh', width: 'auto', height: 'auto' }}
-        />
-      </div>
-      <button
-        onClick={onClose}
-        aria-label='Close'
-        className='absolute top-4 right-4 z-10 bg-white/10 backdrop-blur text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-white/20 transition-colors'
-      >
-        ✕
-      </button>
-    </div>
-  )
-}
-
 export const PlantCard: React.FC<PlantCardProps> = ({ plant }) => {
   const router = useRouter()
-  const [zoomed, setZoomed] = useState(false)
 
   const handleCardClick = () => router.push(`/webtool/plantbank/${plant.id}`)
-  const handleImageClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setZoomed(true)
-  }
 
   return (
-    <>
-      <button
-        type='button'
-        onClick={handleCardClick}
-        aria-label={`View ${plant.scientificName} details`}
-        className='group w-full text-left flex gap-2 cursor-pointer select-none transition-all duration-150 hover:-translate-y-1'
-      >
-        {/* Image Card */}
-        <div
-          className='relative w-[45%] shrink-0 h-[160px] md:h-[200px] bg-[#D9D9D9] border-2 border-black overflow-hidden'
-          onClick={handleImageClick}
-        >
-          {plant.imageUrl ? (
-            <Image
-              src={plant.imageUrl}
-              alt={plant.scientificName}
-              fill
-              sizes='(max-width: 640px) 45vw, 15vw'
-              className='object-cover'
-              unoptimized
-            />
-          ) : (
-            <div className='flex h-full items-center justify-center text-xs font-bold text-black/40'>
-              No Image
-            </div>
-          )}
+    <div
+      onClick={handleCardClick}
+      className='group w-full min-h-[170px] h-auto flex gap-3 cursor-pointer select-none'
+    >
+      {/* Left Side - Red Placeholder Box */}
+      <div className='relative w-1/2 bg-red-500 border-2 border-black overflow-hidden'>
+        <Image
+          src={plant.imageUrl}
+          alt={plant.scientificName}
+          fill
+          className='object-cover opacity-0 group-hover:opacity-100 transition-opacity'
+          unoptimized
+        />
+      </div>
+
+      {/* Right Side - Text Box (Always light green #C4E6A9, even in dark mode) */}
+      <div className='w-1/2 min-w-0 bg-[#C4E6A9] border-2 border-black p-3 flex flex-col justify-between'>
+        
+        {/* Title Section */}
+        <div>
+          <h3 className={`${offbit.className} text-[15px] font-bold text-black leading-tight uppercase line-clamp-2`}>
+            {plant.scientificName}
+          </h3>
+          <p className={`${offbit.className} text-[11px] text-black tracking-wide uppercase mt-1 truncate`}>
+            {plant.subtitle}
+          </p>
         </div>
 
-        {/* Text Card (Now Gray as per Figma) */}
-        <div className='flex-1 min-w-0 bg-[#D9D9D9] border-2 border-black px-2.5 py-3 flex flex-col justify-start'>
-          
-          <div className='mb-3'>
-            <h3 className={`${offbit.className} text-sm sm:text-base font-bold text-black leading-tight tracking-tight break-words`}>
-              {plant.scientificName}
-            </h3>
-            <p className={`${offbit.className} text-[7px] text-black tracking-wide uppercase mt-1`}>
-              {plant.subtitle}
-            </p>
-          </div>
-
-          <div className='flex flex-col'>
-            <div className='flex flex-col gap-2.5'>
-              <CardField label='PLANT TYPE' value={plant.plantType} />
-              <CardField label='FOLIAGE COLOUR' value={plant.foliageColour} />
-            </div>
-
-            <div className='border-t-2 border-black pt-2.5 mt-2.5 flex justify-end'>
-              <CardField label='CLIMATIC ZONE' value={plant.climaticZone} align="right" />
-            </div>
-          </div>
-
+        {/* Middle Section */}
+        <div className='flex flex-col gap-1.5 mt-2'>
+          <CardField label='PLANT TYPE' value={plant.plantType} />
+          <CardField label='FOLIAGE HABITAT' value={plant.foliageColour} />
         </div>
-      </button>
 
-      {zoomed && <ImageZoom imageUrl={plant.imageUrl} alt={plant.scientificName} onClose={() => setZoomed(false)} />}
-    </>
+        {/* Bottom Section */}
+        <div className='border-t-2 border-black pt-1.5 mt-auto flex justify-end'>
+          <CardField label='CLIMATIC CONDITION' value={plant.climaticZone} align="right" />
+        </div>
+
+      </div>
+    </div>
   )
 }

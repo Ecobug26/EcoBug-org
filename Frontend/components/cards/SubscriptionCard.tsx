@@ -11,13 +11,6 @@ type CardProps = {
   link?: string
 }
 
-/**
- * Pricing plan card — matches Figma Buy Frame 10 (195:3796 light,
- * 312:10979 dark): 350x394 card, r24, pad 40, gap 24.
- * Light: #97C974 card, #1B2B1E title, #40543F body.
- * Dark:  #253B25 card, #EAF2E4 title, #9BAE95 body.
- * Button: black "Button primary" with white bullet (MonoButton).
- */
 export default function SubscriptionCard({
   title,
   features = [],
@@ -38,11 +31,19 @@ export default function SubscriptionCard({
         </p>
       ) : (
         <>
-          <p className='font-geist-sans font-normal text-[16px] leading-[19.2px] tracking-[-0.01em] text-center text-[#40543F] dark:text-[#9BAE95]'>
-            {features.join(' // ')}
-          </p>
+          {/* Changed this from a single <p> to a mapped list of <p> tags */}
+          <div className='flex flex-col gap-1 w-full'>
+            {features.map((feature, index) => (
+              <p 
+                key={index}
+                className='font-geist-sans font-normal text-[16px] leading-[1.2] tracking-[-0.01em] text-center text-[#40543F] dark:text-[#9BAE95]'
+              >
+                {feature}
+              </p>
+            ))}
+          </div>
 
-          <div className='mt-auto pt-2'>
+          <div className='mt-auto pt-6'>
             <MonoButton
               bullet
               href={link}
@@ -57,4 +58,3 @@ export default function SubscriptionCard({
     </div>
   )
 }
-
