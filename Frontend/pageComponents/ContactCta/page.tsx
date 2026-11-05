@@ -14,7 +14,7 @@ export default function ContactCta() {
 
       <MonoButton
         bullet
-        href='mailto:connect.ecobug@gmail.com'
+        href='/contact'
         className='w-full justify-center text-[12.6px] lg:text-[14px] leading-none tracking-normal px-[70px] py-[14.4px] lg:w-auto lg:px-4 lg:py-4'
       >
         Contact Page

@@ -110,17 +110,40 @@ export default function AppFooter() {
             ))}
           </nav>
 
-          <div className='flex items-center gap-9 text-black dark:text-white'>
-            <a href='https://instagram.com' target='_blank' rel='noreferrer' aria-label='Instagram' className='hover:opacity-70 transition-opacity'>
-              <InstagramIcon />
-            </a>
-            <a href='https://linkedin.com' target='_blank' rel='noreferrer' aria-label='LinkedIn' className='hover:opacity-70 transition-opacity'>
-              <LinkedInIcon />
-            </a>
-            <a href='mailto:connect.ecobug@gmail.com' aria-label='Email us' className='hover:opacity-70 transition-opacity'>
-              <MailIcon />
-            </a>
-          </div>
+          <div className="flex items-center gap-9 text-black dark:text-white">
+  {/* Instagram */}
+  <a
+    href="https://www.instagram.com/we.ecobug/"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Instagram"
+    className="hover:opacity-70 transition-opacity"
+  >
+    <InstagramIcon />
+  </a>
+
+  {/* LinkedIn */}
+  <a
+    href="https://www.linkedin.com/company/ecobug-landscape-consultant-software/"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="LinkedIn"
+    className="hover:opacity-70 transition-opacity"
+  >
+    <LinkedInIcon />
+  </a>
+
+  {/* Email */}
+  <a
+    href="https://mail.google.com/mail/?view=cm&fs=1&to=connect.ecobug@gmail.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Email us"
+    className="hover:opacity-70 transition-opacity"
+  >
+    <MailIcon />
+  </a>
+</div>
         </div>
 
         {/* Leaf-texture band */}
