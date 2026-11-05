@@ -25,8 +25,6 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
-
-
 export default function RootLayout({
   children,
 }: {
@@ -35,7 +33,8 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-bg text-ink`}
+        // Changed bg-bg to bg-[#E8F3E0]
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#E8F3E0] dark:bg-[#102112] text-ink`}
       >
         {/* Pre-paint theme init: applies saved/system theme before first paint (no flash) */}
         <Script id='eb-theme-init' strategy='beforeInteractive'>

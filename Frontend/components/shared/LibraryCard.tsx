@@ -16,16 +16,9 @@ export interface LibraryCardData {
 }
 
 interface LibraryCardProps extends LibraryCardData {
-  /** Route pushed when the card is clicked, e.g. `/webtool/strategy/abc` */
   href: string
 }
 
-/**
- * Reusable card component for library-style pages (strategies, plant bank, etc).
- * Renders a folder-style card with 3D tilt hover effect and navigates to `href`.
- * Each entry in the data source becomes one instance of this card.
- * Styled with the Figma design tokens (light/dark aware).
- */
 export const LibraryCard: React.FC<LibraryCardProps> = ({
   title,
   category,
@@ -37,6 +30,7 @@ export const LibraryCard: React.FC<LibraryCardProps> = ({
 }) => {
   const router = useRouter()
   const cardRef = useRef<HTMLDivElement>(null)
+  
   const [rotateX, setRotateX] = useState(0)
   const [rotateY, setRotateY] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
@@ -52,6 +46,7 @@ export const LibraryCard: React.FC<LibraryCardProps> = ({
     const px = (x - centerX) / centerX
     const py = (y - centerY) / centerY
     const maxTilt = 8
+    
     setRotateY(px * maxTilt)
     setRotateX(-py * maxTilt)
   }
@@ -76,74 +71,48 @@ export const LibraryCard: React.FC<LibraryCardProps> = ({
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') handleClick()
       }}
-      style={{
-        perspective: 1000,
-        transformStyle: 'preserve-3d',
-      }}
-      animate={{
-        rotateX,
-        rotateY,
-        y: isHovered ? -4 : 0,
-      }}
-      transition={{
-        type: 'spring',
-        stiffness: 400,
-        damping: 25,
-      }}
-      className='relative w-full h-[240px] cursor-pointer select-none group flex flex-col justify-end'
+      style={{ perspective: 1000, transformStyle: 'preserve-3d' }}
+      animate={{ rotateX, rotateY, y: isHovered ? -4 : 0 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+      className='relative w-full h-[340px] pt-6 cursor-pointer select-none group hover:z-50'
     >
-      {/* Folder tab */}
-      <div
-        className='absolute top-0 left-0 w-28 h-5 bg-chip rounded-t-lg border-t border-l border-r border-line'
-        style={{ clipPath: 'polygon(0 0, 82% 0, 100% 100%, 0 100%)' }}
-      />
+      {/* Folder Tab (Pure White) */}
+      <div className='absolute top-0 left-0 w-auto min-w-[120px] h-[30px] bg-white text-black px-4 flex items-center justify-center rounded-t-lg z-0 shadow-sm'>
+        <span className={`${offbit.className} text-[10px] font-bold tracking-wider uppercase`}>
+          {category}
+        </span>
+      </div>
 
-      {/* Card body */}
-      <div className='absolute top-4 inset-0 bg-panel rounded-2xl rounded-tl-none p-3 flex flex-col border border-line shadow-[0_6px_18px_rgba(0,0,0,0.10)] overflow-hidden'>
-        <div className='flex items-center gap-2 flex-shrink-0'>
-          <div className='w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 bg-chip p-1 border border-primary/20 flex items-center justify-center'>
-            <Image
-              src={imageUrl}
-              alt={title}
-              width={40}
-              height={40}
-              className='w-full h-full object-contain'
-              unoptimized
-            />
-          </div>
-          <div className='flex-1 min-w-0'>
-            <span
-              className={`${offbit.className} inline-block px-2 py-0.5 rounded bg-tertiary/40 text-primary-hover text-[9px] font-bold tracking-tight uppercase truncate max-w-full`}
-            >
-              {category}
-            </span>
-          </div>
+      {/* Card Body (Light Green in both modes) */}
+      <div className='absolute top-[28px] inset-0 bg-[#D1E8A6] dark:bg-[#D1E8A6] rounded-tr-xl rounded-b-xl rounded-bl-xl p-4 flex flex-col z-10 shadow-sm transition-shadow duration-200 group-hover:shadow-md'>
+        
+        {/* Image Box */}
+        <div className='relative w-full h-[140px] bg-white rounded-lg mb-4 overflow-hidden'>
+          <Image
+            src={imageUrl}
+            alt={title}
+            fill
+            className='object-cover'
+            unoptimized
+          />
         </div>
 
-        <div className='flex-1 flex flex-col min-h-0 mt-1'>
-          <h3
-            className={`${offbit.className} text-[13px] font-bold text-ink leading-tight line-clamp-2`}
-            title={title}
-          >
+        {/* Text Content */}
+        <div className='flex flex-col flex-1'>
+          <h3 className={`${offbit.className} text-base font-bold text-black leading-tight mb-2 uppercase line-clamp-2`}>
             {title}
           </h3>
-          <p
-            className={`${offbit.className} text-[10px] text-ink-muted leading-snug line-clamp-3 mt-0.5`}
-          >
+          <p className='font-geist-sans text-[11px] text-[#333333] leading-snug line-clamp-3'>
             {summary}
           </p>
         </div>
 
-        <div className='w-full pt-1 border-t border-line flex justify-between items-center text-[9px] text-ink-muted flex-shrink-0'>
-          <span
-            className={`${offbit.className} text-primary font-semibold truncate max-w-[120px]`}
-          >
+        {/* Footer */}
+        <div className='mt-auto pt-3 border-t border-black/10 flex justify-between items-center'>
+          <span className='font-geist-mono text-[11px] text-black font-bold'>
             {keywords[0] ? `#${keywords[0]}` : fallbackTag}
           </span>
-          <span
-            aria-hidden
-            className={`${offbit.className} group-hover:translate-x-0.5 transition-transform text-ink flex-shrink-0`}
-          >
+          <span className='text-black group-hover:translate-x-1 transition-transform'>
             →
           </span>
         </div>

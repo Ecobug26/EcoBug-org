@@ -6,12 +6,20 @@ import { offbit } from '@/components/utils/utils'
  * (195:3796 light, 312:10979 dark): PRODUCTS heading (OffBit Bold 100,
  * ls -1, centered), 3 plan cards in a row (gap 40).
  */
+
+// 🛠️ Fixed: Split into separate lines
 const EDUCATION_FEATURES = [
-  '1 month free trial Single active device Rs. 49 per month/ Rs. 399 per year Auto renewal every month or year Plant Bank Access Landscape Strategies Upcoming BOQ generation',
+  '1 Month free trial',
+  'Single active device',
+  'Rs. 49 per month/ Rs. 399 per year',
+  'Auto renewal every month or year',
+  'Plant Bank Access',
+  'Landscape Strategies',
 ]
 
 const PROFESSIONAL_FEATURES = [
   ...EDUCATION_FEATURES,
+  'Upcoming BOQ generation',
 ]
 
 export default function Subscriptions() {
@@ -63,4 +71,3 @@ export default function Subscriptions() {
     </section>
   )
 }
-

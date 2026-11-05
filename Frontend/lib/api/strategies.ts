@@ -6,7 +6,6 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
 
 /**
  * Fetch all strategies from the backend API.
- * Throws when the backend is unavailable (no local fallback).
  */
 export async function fetchStrategies(): Promise<Strategy[]> {
   const res = await fetch(`${API_URL}/api/strategies`, {
@@ -31,8 +30,6 @@ export async function fetchStrategyById(id: string): Promise<Strategy | undefine
 
 /**
  * Fetch strategies with filters from the backend API.
- * The backend supports the `category` query param; remaining params are
- * applied by callers (StrategyLibrary filters client-side).
  */
 export async function fetchStrategiesWithFilters(params: {
   category?: string
@@ -50,6 +47,7 @@ export async function fetchStrategiesWithFilters(params: {
     headers: { 'Content-Type': 'application/json' },
   })
   if (!res.ok) throw new Error('Failed to fetch strategies')
+  
   const data = (await res.json()) as Strategy[]
   return {
     strategies: data,

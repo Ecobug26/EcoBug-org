@@ -1,11 +1,11 @@
 'use client'
 
 import { useSyncExternalStore, useCallback } from 'react'
+import { offbit } from '@/components/utils/utils'
 
 const THEME_KEY = 'eb-theme'
 const THEME_EVENT = 'eb-theme-change'
 
-/** The DOM class list is the single source of truth; persistence + DOM updates happen together in toggle(). */
 function subscribe(onChange: () => void) {
   window.addEventListener(THEME_EVENT, onChange)
   const observer = new MutationObserver(onChange)
@@ -27,7 +27,6 @@ function getServerThemeSnapshot(): 'dark' | 'light' {
   return 'light'
 }
 
-/** Figma pill switch (sun/moon) that flips the `dark` class on <html>. */
 export default function ThemeToggle() {
   const theme = useSyncExternalStore(subscribe, getThemeSnapshot, getServerThemeSnapshot)
   const isDark = theme === 'dark'
@@ -37,28 +36,40 @@ export default function ThemeToggle() {
     document.documentElement.classList.toggle('dark', next === 'dark')
     try {
       localStorage.setItem(THEME_KEY, next)
-    } catch {
-      /* private mode etc. — theme still applies for the session */
-    }
+    } catch {}
     window.dispatchEvent(new Event(THEME_EVENT))
   }, [])
 
   return (
-    <button
-      type='button'
-      role='switch'
-      aria-checked={isDark}
-      aria-label='Toggle dark mode'
-      onClick={toggle}
-      className='relative w-14 h-7 rounded-full bg-primary-hover flex items-center px-1 cursor-pointer flex-shrink-0'
-    >
-      <span
-        className={`w-5 h-5 rounded-full bg-panel flex items-center justify-center text-[10px] transition-transform duration-200 ${
-          isDark ? 'translate-x-7' : 'translate-x-0'
+    <div className='flex flex-col items-center gap-1.5 w-full'>
+      <button
+        type='button'
+        role='switch'
+        aria-checked={isDark}
+        aria-label='Toggle dark mode'
+        onClick={toggle}
+        className={`relative w-[54px] h-[28px] rounded-full flex items-center px-1 cursor-pointer transition-colors duration-300 ${
+          isDark ? 'bg-[#1B3B1E] border-2 border-[#3C6E47]' : 'bg-[#6DBF4F]'
         }`}
       >
-        {isDark ? '🌙' : '☀️'}
+        <span
+          className={`w-[20px] h-[20px] rounded-full flex items-center justify-center transition-transform duration-300 ${
+            isDark ? 'translate-x-[24px] bg-[#F4B41A]' : 'translate-x-0 bg-white'
+          }`}
+        >
+          {isDark && (
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+            </svg>
+          )}
+        </span>
+      </button>
+
+      {/* Dynamic text based on current theme */}
+      <span className={`${offbit.className} text-[9px] text-[#3C6E47] font-bold tracking-wider uppercase text-center`}>
+        Toggle: {isDark ? 'Light Mode' : 'Dark Mode'}
       </span>
-    </button>
+    </div>
   )
 }

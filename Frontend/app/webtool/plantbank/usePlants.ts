@@ -23,11 +23,6 @@ interface PaginatedPlantsResponse {
   pageSize: number
 }
 
-/**
- * Hook to fetch plants from the backend API (/api/plants).
- * Supports pagination — fetches pageSize plants per page.
- * No local fallback — surfaces an error when the API is unreachable.
- */
 export function usePlants(initialPage = 0, initialPageSize = 24): UsePlantsReturn {
   const [plants, setPlants] = useState<Plant[]>([])
   const [loading, setLoading] = useState(true)

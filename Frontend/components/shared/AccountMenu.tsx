@@ -7,20 +7,12 @@ import { offbit } from '@/components/utils/utils'
 import ThemeToggle from '@/components/shared/ThemeToggle'
 import { useAuth } from '@/context/AuthContext'
 
-/**
- * Account menu (Figma spec):
- * - navbar shows ONLY the account icon; clicking it toggles a popup
- * - logged out  → LOGIN · SIGN-UP · dark-mode toggle
- * - logged in   → Profile · Plant Vault · LOGOUT · dark-mode toggle
- * Auth state comes from AuthContext (real state — no fake auth here).
- */
-
 function AvatarIcon({ className = '' }: { className?: string }) {
   return (
     <span
-      className={`rounded-full bg-panel border border-line flex items-center justify-center text-primary-hover ${className}`}
+      className={`rounded-full bg-white border border-black/10 flex items-center justify-center text-[#3C6E47] ${className}`}
     >
-      <svg viewBox='0 0 24 24' fill='currentColor' className='w-[62%] h-[62%]' aria-hidden>
+      <svg viewBox='0 0 24 24' fill='currentColor' className='w-[60%] h-[60%]' aria-hidden>
         <path d='M12 12c2.7 0 4.8-2.2 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z' />
       </svg>
     </span>
@@ -41,7 +33,7 @@ function MenuLink({
       role='menuitem'
       href={href}
       onClick={onClick}
-      className={`block w-full text-center py-1.5 text-primary hover:text-primary-hover border-b border-line transition-colors ${offbit.className} text-sm tracking-wide`}
+      className={`block w-full text-center py-2.5 text-[#3C6E47] hover:opacity-70 border-b-2 border-black transition-opacity ${offbit.className} text-lg tracking-wide uppercase`}
     >
       {children}
     </Link>
@@ -55,7 +47,6 @@ export default function AccountMenu() {
   const rootRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
 
-  // Close on outside click + Escape
   useEffect(() => {
     if (!open) return
 
@@ -82,13 +73,14 @@ export default function AccountMenu() {
   const close = () => setOpen(false)
 
   const handleLogout = () => {
-  logout()
-  setOpen(false)
-  router.replace('/')
-  router.refresh()
-}
+    logout()
+    setOpen(false)
+    router.replace('/')
+    router.refresh()
+  }
+
   return (
-    <div ref={rootRef} className='relative'>
+    <div ref={rootRef} className='relative z-50'>
       <button
         ref={buttonRef}
         type='button'
@@ -96,34 +88,26 @@ export default function AccountMenu() {
         aria-haspopup='menu'
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className='cursor-pointer block rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary'
+        className='cursor-pointer block rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3C6E47]'
       >
-        <AvatarIcon className='w-8 h-8 md:w-[42px] md:h-[42px]' />
+        <AvatarIcon className='w-10 h-10 md:w-11 md:h-11' />
       </button>
 
       {open && (
         <div
           role='menu'
           aria-label='Account'
-          className='absolute right-0 top-[calc(100%+10px)] z-50 w-44 max-w-[calc(100vw-2rem)] bg-panel border border-line rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.18)] p-3 flex flex-col items-center'
+          className='absolute right-0 top-[calc(100%+12px)] z-50 w-[220px] max-w-[calc(100vw-2rem)] bg-white rounded-[20px] shadow-2xl border border-black/5 p-4 flex flex-col items-center'
         >
-          <AvatarIcon className='w-11 h-11 mb-2' />
-
           {user ? (
             <>
               <MenuLink href='/profile' onClick={close}>
                 Profile
               </MenuLink>
-              <MenuLink href='/webtool/plantbank' onClick={close}>
+              {/* Plant Vault moved here - only visible when logged in */}
+              <MenuLink href='/webtool/plantvault' onClick={close}>
                 Plant Vault
               </MenuLink>
-              <button
-                role='menuitem'
-                onClick={handleLogout}
-                className={`block w-full text-center py-1.5 text-primary hover:text-primary-hover border-b border-line transition-colors cursor-pointer ${offbit.className} text-sm tracking-wide`}
-              >
-                LOGOUT
-              </button>
             </>
           ) : (
             <>
@@ -136,14 +120,19 @@ export default function AccountMenu() {
             </>
           )}
 
-          <div className='mt-3'>
+          {user && (
+            <button
+              role='menuitem'
+              onClick={handleLogout}
+              className={`block w-full text-center py-2.5 text-[#3C6E47] hover:opacity-70 border-b-2 border-black transition-opacity cursor-pointer ${offbit.className} text-lg tracking-wide uppercase`}
+            >
+              LOGOUT
+            </button>
+          )}
+
+          <div className='mt-4 flex flex-col items-center w-full'>
             <ThemeToggle />
           </div>
-          <span
-            className={`${offbit.className} mt-1.5 text-[9px] tracking-widest text-primary uppercase`}
-          >
-            Toggle: Dark Mode
-          </span>
         </div>
       )}
     </div>
