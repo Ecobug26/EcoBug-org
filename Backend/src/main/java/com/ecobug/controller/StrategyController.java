@@ -6,6 +6,7 @@ import com.ecobug.repository.StrategyRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class StrategyController {
     private StrategyRepository strategyRepository;
 
     @GetMapping
+    @Transactional(readOnly = true)
     public ResponseEntity<List<StrategyDTO>> getAllStrategies(
             @RequestParam(required = false) String category) {
 
@@ -36,6 +38,7 @@ public class StrategyController {
     }
 
     @GetMapping("/{id}")
+    @Transactional(readOnly = true)
     public ResponseEntity<StrategyDTO> getStrategyById(@PathVariable Long id) {
         Optional<Strategy> strategy = strategyRepository.findById(id);
         return strategy.map(s -> ResponseEntity.ok(toDTO(s)))
