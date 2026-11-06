@@ -11,22 +11,21 @@ export interface UseStrategiesReturn {
   refetch: (page?: number) => Promise<void>
   page: number
   pageSize: number
-  total: number
-  totalPages: number
+  hasMore: boolean
   setPage: (page: number) => void
 }
 
 /**
  * Hook to fetch and manage strategies with pagination
- * Returns { strategies, loading, error, refetch, page, pageSize, total, totalPages, setPage }
+ * Returns { strategies, loading, error, refetch, page, pageSize, hasMore, setPage }
  */
-export function useStrategies(initialPage = 1, pageSize = 20): UseStrategiesReturn {
+export function useStrategies(initialPage = 1, pageSize = 12): UseStrategiesReturn {
   const [strategies, setStrategies] = useState<Strategy[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
   const [page, setPageState] = useState(initialPage)
   const [pageSizeState] = useState(pageSize)
-  const [total, setTotal] = useState(0)
+  const [hasMore, setHasMore] = useState(true)
 
   const fetchData = useCallback(async (pageNum = page) => {
     setLoading(true)
@@ -34,7 +33,7 @@ export function useStrategies(initialPage = 1, pageSize = 20): UseStrategiesRetu
     try {
       const data = await fetchStrategies({ page: pageNum, limit: pageSizeState })
       setStrategies(data.strategies)
-      setTotal(data.total)
+      setHasMore(data.hasMore)
       setPageState(pageNum)
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to fetch strategies'))
@@ -47,8 +46,6 @@ export function useStrategies(initialPage = 1, pageSize = 20): UseStrategiesRetu
     fetchData(page)
   }, [fetchData, page])
 
-  const totalPages = Math.ceil(total / pageSizeState)
-
   return {
     strategies,
     loading,
@@ -56,8 +53,7 @@ export function useStrategies(initialPage = 1, pageSize = 20): UseStrategiesRetu
     refetch: fetchData,
     page,
     pageSize: pageSizeState,
-    total,
-    totalPages,
+    hasMore,
     setPage: setPageState,
   }
 }

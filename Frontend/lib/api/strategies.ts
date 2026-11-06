@@ -6,14 +6,17 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
 /**
  * Fetch strategies with pagination.
  * Priority: Supabase (env-configured) -> Backend API fallback.
- * Returns { strategies, total } where total is the count of all strategies.
+ * Returns { strategies, hasMore } where hasMore indicates if more pages exist.
+ * Only selects list-view columns (excludes full_description) for faster loading.
  */
 export async function fetchStrategies(params?: {
   page?: number
   limit?: number
-}): Promise<{ strategies: Strategy[]; total: number }> {
+}): Promise<{ strategies: Strategy[]; hasMore: boolean }> {
   const page = params?.page ?? 1
-  const limit = params?.limit ?? 20
+  const limit = params?.limit ?? 12
+  // Fetch limit + 1 to detect if there's a next page
+  const fetchLimit = limit + 1
   const offset = (page - 1) * limit
 
   // Try Supabase first if env vars are configured
@@ -25,37 +28,31 @@ export async function fetchStrategies(params?: {
       const { createClient } = await import('@supabase/supabase-js')
       const supa = createClient(supaUrl, supaKey)
 
-      // Get total count
-      const { count, error: countErr } = await supa
-        .from('strategies')
-        .select('*', { head: true, count: 'exact' })
-
-      if (countErr) {
-        console.warn('Supabase count error:', countErr)
-      }
-
-      // Fetch paginated page
+      // Fetch paginated page with only list-view columns (excludes full_description)
       const { data: strategies, error: stratErr } = await supa
         .from('strategies')
-        .select('*')
+        .select('id, title, category, summary, image_url, keywords')
         .order('created_at', { ascending: false })
-        .range(offset, offset + limit - 1)
+        .range(offset, offset + fetchLimit - 1)
 
       if (stratErr || !strategies || strategies.length === 0) {
         console.warn('Supabase fetch empty or error - falling back to backend API')
       } else {
-        // Map snake_case to camelCase
+        // Detect if there's a next page (we fetched limit+1 items)
+        const hasMore = strategies.length > limit
+        const pageStrategies = strategies.slice(0, limit)
+
         return {
-          strategies: strategies.map((s: any) => ({
+          strategies: pageStrategies.map((s: any) => ({
             id: String(s.id),
             title: s.title,
             category: s.category,
             summary: s.summary,
             imageUrl: s.image_url,
-            fullDescription: s.full_description,
+            fullDescription: '', // Not loaded on list page; fetched on detail view
             keywords: s.keywords || [],
           })),
-          total: count ?? strategies.length,
+          hasMore,
         }
       }
     } catch (err) {
@@ -76,7 +73,7 @@ export async function fetchStrategies(params?: {
   const data = (await res.json()) as Strategy[]
   return {
     strategies: data,
-    total: data.length,
+    hasMore: data.length === limit,
   }
 }
 
