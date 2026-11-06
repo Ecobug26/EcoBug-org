@@ -16,6 +16,11 @@ interface StrategyLibraryProps {
   loading?: boolean
   error?: Error | null
   initialQuery?: string
+  total?: number
+  totalPages?: number
+  page?: number
+  setPage?: (page: number) => void
+  pageSize?: number
 }
 
 export const StrategyLibrary: React.FC<StrategyLibraryProps> = ({
@@ -23,9 +28,15 @@ export const StrategyLibrary: React.FC<StrategyLibraryProps> = ({
   loading = false,
   error = null,
   initialQuery = '',
+  total = 0,
+  totalPages = 1,
+  page = 1,
+  setPage,
+  pageSize = 20,
 }) => {
   const [searchQuery, setSearchQuery] = useState<string>(initialQuery)
   const [selectedCategory, setSelectedCategory] = useState<string>('All')
+  const [currentPage, setCurrentPage] = useState(page)
 
   const categories = useMemo(() => {
     const unique = Array.from(new Set(strategies.map((s) => s.category))).sort(
@@ -37,6 +48,12 @@ export const StrategyLibrary: React.FC<StrategyLibraryProps> = ({
   useEffect(() => {
     setSearchQuery(initialQuery)
   }, [initialQuery])
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+    if (setPage) setPage(1)
+  }, [searchQuery, selectedCategory, setPage])
 
   const filteredStrategies = useMemo(() => {
     const query = searchQuery.trim().toLowerCase()
@@ -170,6 +187,50 @@ export const StrategyLibrary: React.FC<StrategyLibraryProps> = ({
           )}
         </AnimatePresence>
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className='flex items-center justify-between gap-4 px-4 py-4 border-t border-black/20 bg-[#6DBE51] dark:bg-[#204A2A] rounded-b-[32px]'>
+          <div className='text-xs text-black dark:text-white font-bold'>
+            Showing {Math.min(currentPage * pageSize, total)} of {total} strategies
+          </div>
+          <div className='flex items-center gap-2'>
+            <button
+              onClick={() => {
+                const prev = Math.max(1, currentPage - 1)
+                setCurrentPage(prev)
+                if (setPage) setPage(prev)
+              }}
+              disabled={currentPage === 1}
+              className={`px-4 py-2 rounded-lg font-bold text-black dark:text-white transition-colors ${
+                currentPage === 1
+                  ? 'bg-[#8DE056] opacity-50 cursor-not-allowed'
+                  : 'bg-[#1B2B1E] hover:bg-[#102112]'
+              }`}
+            >
+              ← Prev
+            </button>
+            <span className='px-3 py-2 text-xs font-bold text-black dark:text-white'>
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => {
+                const next = Math.min(totalPages, currentPage + 1)
+                setCurrentPage(next)
+                if (setPage) setPage(next)
+              }}
+              disabled={currentPage >= totalPages}
+              className={`px-4 py-2 rounded-lg font-bold text-black dark:text-white transition-colors ${
+                currentPage >= totalPages
+                  ? 'bg-[#8DE056] opacity-50 cursor-not-allowed'
+                  : 'bg-[#1B2B1E] hover:bg-[#102112]'
+              }`}
+            >
+              Next →
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   )
 }

@@ -12,7 +12,11 @@ import { useStrategies } from '@/hooks/useStrategies'
 function StrategyLibrarySection() {
   const searchParams = useSearchParams()
   const initialQuery = searchParams.get('q') ?? ''
-  const { strategies, loading, error } = useStrategies()
+  const page = parseInt(searchParams.get('page') ?? '1', 10) || 1
+  const { strategies, loading, error, total, totalPages, setPage } = useStrategies(
+    page,
+    20
+  )
 
   return (
     <StrategyLibrary
@@ -20,6 +24,11 @@ function StrategyLibrarySection() {
       loading={loading}
       error={error}
       initialQuery={initialQuery}
+      total={total}
+      totalPages={totalPages}
+      page={page}
+      setPage={setPage}
+      pageSize={20}
     />
   )
 }
