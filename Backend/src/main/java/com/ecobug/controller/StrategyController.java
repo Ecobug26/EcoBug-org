@@ -3,6 +3,7 @@ package com.ecobug.controller;
 import com.ecobug.dto.StrategyDTO;
 import com.ecobug.entity.Strategy;
 import com.ecobug.repository.StrategyRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,8 @@ public class StrategyController {
     }
 
     private StrategyDTO toDTO(Strategy strategy) {
+        // Force-initialize lazy keywords collection before serialization
+        Hibernate.initialize(strategy.getKeywords());
         return new StrategyDTO(
                 strategy.getId(),
                 strategy.getTitle(),
