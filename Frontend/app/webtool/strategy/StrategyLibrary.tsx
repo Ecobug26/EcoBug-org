@@ -16,8 +16,7 @@ interface StrategyLibraryProps {
   loading?: boolean
   error?: Error | null
   initialQuery?: string
-  total?: number
-  totalPages?: number
+  hasMore?: boolean
   page?: number
   setPage?: (page: number) => void
   pageSize?: number
@@ -28,11 +27,10 @@ export const StrategyLibrary: React.FC<StrategyLibraryProps> = ({
   loading = false,
   error = null,
   initialQuery = '',
-  total = 0,
-  totalPages = 1,
+  hasMore = false,
   page = 1,
   setPage,
-  pageSize = 20,
+  pageSize = 12,
 }) => {
   const [searchQuery, setSearchQuery] = useState<string>(initialQuery)
   const [selectedCategory, setSelectedCategory] = useState<string>('All')
@@ -189,42 +187,34 @@ export const StrategyLibrary: React.FC<StrategyLibraryProps> = ({
       </div>
 
       {/* Pagination */}
-      {totalPages > 1 && (
+      {hasMore && (
         <div className='flex items-center justify-between gap-4 px-4 py-4 border-t border-black/20 bg-[#6DBE51] dark:bg-[#204A2A] rounded-b-[32px]'>
           <div className='text-xs text-black dark:text-white font-bold'>
-            Showing {Math.min(currentPage * pageSize, total)} of {total} strategies
+            Showing {strategies.length} strategies
           </div>
           <div className='flex items-center gap-2'>
             <button
               onClick={() => {
-                const prev = Math.max(1, currentPage - 1)
+                const prev = Math.max(1, page - 1)
                 setCurrentPage(prev)
                 if (setPage) setPage(prev)
               }}
-              disabled={currentPage === 1}
-              className={`px-4 py-2 rounded-lg font-bold text-black dark:text-white transition-colors ${
-                currentPage === 1
-                  ? 'bg-[#8DE056] opacity-50 cursor-not-allowed'
-                  : 'bg-[#1B2B1E] hover:bg-[#102112]'
-              }`}
+              disabled={page === 1}
+              className={`px-4 py-2 rounded-lg font-bold text-black dark:text-white transition-colors ${page === 1 ? 'bg-[#8DE056] opacity-50 cursor-not-allowed' : 'bg-[#1B2B1E] hover:bg-[#102112]'}`}
             >
               ← Prev
             </button>
             <span className='px-3 py-2 text-xs font-bold text-black dark:text-white'>
-              Page {currentPage} of {totalPages}
+              Page {page}
             </span>
             <button
               onClick={() => {
-                const next = Math.min(totalPages, currentPage + 1)
+                const next = page + 1
                 setCurrentPage(next)
                 if (setPage) setPage(next)
               }}
-              disabled={currentPage >= totalPages}
-              className={`px-4 py-2 rounded-lg font-bold text-black dark:text-white transition-colors ${
-                currentPage >= totalPages
-                  ? 'bg-[#8DE056] opacity-50 cursor-not-allowed'
-                  : 'bg-[#1B2B1E] hover:bg-[#102112]'
-              }`}
+              disabled={!hasMore}
+              className={`px-4 py-2 rounded-lg font-bold text-black dark:text-white transition-colors ${!hasMore ? 'bg-[#8DE056] opacity-50 cursor-not-allowed' : 'bg-[#1B2B1E] hover:bg-[#102112]'}`}
             >
               Next →
             </button>

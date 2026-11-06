@@ -13,9 +13,9 @@ function StrategyLibrarySection() {
   const searchParams = useSearchParams()
   const initialQuery = searchParams.get('q') ?? ''
   const page = parseInt(searchParams.get('page') ?? '1', 10) || 1
-  const { strategies, loading, error, total, totalPages, setPage } = useStrategies(
+  const { strategies, loading, error, hasMore, setPage } = useStrategies(
     page,
-    20
+    12
   )
 
   return (
@@ -24,11 +24,10 @@ function StrategyLibrarySection() {
       loading={loading}
       error={error}
       initialQuery={initialQuery}
-      total={total}
-      totalPages={totalPages}
+      hasMore={hasMore}
       page={page}
       setPage={setPage}
-      pageSize={20}
+      pageSize={12}
     />
   )
 }
