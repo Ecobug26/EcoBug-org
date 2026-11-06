@@ -1,10 +1,5 @@
 // lib/api/strategies.ts
 import { Strategy } from '@/app/webtool/strategy/types'
-import {
-  fetchStrategiesFromSupabase,
-  fetchStrategyByIdFromSupabase,
-  getSupabaseClient,
-} from '@/lib/supabase/strategies'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
 
@@ -14,14 +9,36 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
  */
 export async function fetchStrategies(): Promise<Strategy[]> {
   // Try Supabase first if env vars are configured
-  const supa = getSupabaseClient()
-  if (supa) {
-    const data = await fetchStrategiesFromSupabase()
-    if (data.length > 0) {
-      console.log('Fetched strategies from Supabase')
-      return data
+  const supaUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supaKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (supaUrl && supaKey) {
+    try {
+      const { createClient } = await import('@supabase/supabase-js')
+      const supa = createClient(supaUrl, supaKey)
+
+      const { data: strategies, error: stratErr } = await supa
+        .from('strategies')
+        .select('*')
+        .order('created_at', { ascending: false })
+
+      if (stratErr || !strategies || strategies.length === 0) {
+        console.warn('Supabase fetch empty or error - falling back to backend API')
+      } else {
+        // Map snake_case to camelCase
+        return strategies.map((s: any) => ({
+          id: String(s.id),
+          title: s.title,
+          category: s.category,
+          summary: s.summary,
+          imageUrl: s.image_url,
+          fullDescription: s.full_description,
+          keywords: s.keywords || [],
+        }))
+      }
+    } catch (err) {
+      console.error('Supabase fetch error, falling back to backend:', err)
     }
-    console.warn('Supabase fetch returned empty - falling back to backend API')
   } else {
     console.log('Supabase env vars missing - using backend API')
   }
@@ -40,17 +57,37 @@ export async function fetchStrategies(): Promise<Strategy[]> {
  * Returns undefined for 404 (unknown id); throws on other failures.
  */
 export async function fetchStrategyById(id: string): Promise<Strategy | undefined> {
-  // Try Supabase first if env vars are configured
-  const supa = getSupabaseClient()
-  if (supa) {
-    const data = await fetchStrategyByIdFromSupabase(id)
-    if (data !== undefined) {
-      console.log('Fetched strategy from Supabase by ID')
-      return data
+  const supaUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supaKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (supaUrl && supaKey) {
+    try {
+      const { createClient } = await import('@supabase/supabase-js')
+      const supa = createClient(supaUrl, supaKey)
+
+      const { data: strategy, error: stratErr } = await supa
+        .from('strategies')
+        .select('*')
+        .eq('id', Number(id))
+        .single()
+
+      if (stratErr || !strategy) {
+        console.warn('Supabase single fetch failed - falling back to backend API')
+      } else {
+        // Map snake_case to camelCase
+        return {
+          id: String(strategy.id),
+          title: strategy.title,
+          category: strategy.category,
+          summary: strategy.summary,
+          imageUrl: strategy.image_url,
+          fullDescription: strategy.full_description,
+          keywords: strategy.keywords || [],
+        }
+      }
+    } catch (err) {
+      console.error('Supabase single fetch error, falling back to backend:', err)
     }
-    console.warn('Supabase single fetch failed - falling back to backend API')
-  } else {
-    console.log('Supabase env vars missing - using backend API')
   }
 
   // Fallback to backend API
