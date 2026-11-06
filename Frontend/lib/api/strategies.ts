@@ -70,10 +70,10 @@ export async function fetchStrategies(params?: {
     headers: { 'Content-Type': 'application/json' },
   })
   if (!res.ok) throw new Error('Failed to fetch strategies')
-  const data = (await res.json()) as Strategy[]
+  const data = (await res.json()) as { strategies: Strategy[]; hasMore: boolean; total: number; page: number; limit: number }
   return {
-    strategies: data,
-    hasMore: data.length === limit,
+    strategies: data.strategies,
+    hasMore: data.hasMore,
   }
 }
 
@@ -148,9 +148,9 @@ export async function fetchStrategiesWithFilters(params: {
   })
   if (!res.ok) throw new Error('Failed to fetch strategies')
 
-  const data = (await res.json()) as Strategy[]
+  const data = (await res.json()) as { strategies: Strategy[]; total: number; page: number; limit: number; hasMore: boolean }
   return {
-    strategies: data,
-    total: data.length,
+    strategies: data.strategies,
+    total: data.total,
   }
 }
