@@ -67,7 +67,7 @@ export const PlantCard: React.FC<PlantCardProps> = ({ plant }) => {
 
         {/* Bottom Section */}
         <div className='border-t-2 border-black pt-1.5 mt-auto flex justify-end'>
-          <CardField label='CLIMATIC CONDITION' value={plant.climaticZone} align="right" />
+          <CardField label='CLIMATIC CONDITION' value={plant.climate_condition} align="right" />
         </div>
 
       </div>

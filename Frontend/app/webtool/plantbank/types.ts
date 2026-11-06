@@ -33,6 +33,7 @@ export interface Plant {
   plantType: string
   foliageColour: string
   climaticZone: string
+  climate_condition: string
   /** Detail attribute grid in Figma display order (9 blocks + 3 growth blocks). */
   attributes: PlantAttribute[]
   iucnStatus: string
