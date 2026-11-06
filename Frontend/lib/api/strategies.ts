@@ -4,10 +4,18 @@ import { Strategy } from '@/app/webtool/strategy/types'
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
 
 /**
- * Fetch all strategies.
+ * Fetch strategies with pagination.
  * Priority: Supabase (env-configured) -> Backend API fallback.
+ * Returns { strategies, total } where total is the count of all strategies.
  */
-export async function fetchStrategies(): Promise<Strategy[]> {
+export async function fetchStrategies(params?: {
+  page?: number
+  limit?: number
+}): Promise<{ strategies: Strategy[]; total: number }> {
+  const page = params?.page ?? 1
+  const limit = params?.limit ?? 20
+  const offset = (page - 1) * limit
+
   // Try Supabase first if env vars are configured
   const supaUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supaKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -17,24 +25,38 @@ export async function fetchStrategies(): Promise<Strategy[]> {
       const { createClient } = await import('@supabase/supabase-js')
       const supa = createClient(supaUrl, supaKey)
 
+      // Get total count
+      const { count, error: countErr } = await supa
+        .from('strategies')
+        .select('*', { head: true, count: 'exact' })
+
+      if (countErr) {
+        console.warn('Supabase count error:', countErr)
+      }
+
+      // Fetch paginated page
       const { data: strategies, error: stratErr } = await supa
         .from('strategies')
         .select('*')
         .order('created_at', { ascending: false })
+        .range(offset, offset + limit - 1)
 
       if (stratErr || !strategies || strategies.length === 0) {
         console.warn('Supabase fetch empty or error - falling back to backend API')
       } else {
         // Map snake_case to camelCase
-        return strategies.map((s: any) => ({
-          id: String(s.id),
-          title: s.title,
-          category: s.category,
-          summary: s.summary,
-          imageUrl: s.image_url,
-          fullDescription: s.full_description,
-          keywords: s.keywords || [],
-        }))
+        return {
+          strategies: strategies.map((s: any) => ({
+            id: String(s.id),
+            title: s.title,
+            category: s.category,
+            summary: s.summary,
+            imageUrl: s.image_url,
+            fullDescription: s.full_description,
+            keywords: s.keywords || [],
+          })),
+          total: count ?? strategies.length,
+        }
       }
     } catch (err) {
       console.error('Supabase fetch error, falling back to backend:', err)
@@ -44,11 +66,18 @@ export async function fetchStrategies(): Promise<Strategy[]> {
   }
 
   // Fallback to backend API
-  const res = await fetch(`${API_URL}/api/strategies`, {
+  const queryParams = new URLSearchParams()
+  queryParams.append('page', String(page))
+  queryParams.append('limit', String(limit))
+  const res = await fetch(`${API_URL}/api/strategies?${queryParams}`, {
     headers: { 'Content-Type': 'application/json' },
   })
   if (!res.ok) throw new Error('Failed to fetch strategies')
-  return (await res.json()) as Strategy[]
+  const data = (await res.json()) as Strategy[]
+  return {
+    strategies: data,
+    total: data.length,
+  }
 }
 
 /**

@@ -1,12 +1,8 @@
 import type { NextConfig } from "next";
-import path from "path";
 
 const nextConfig: NextConfig = {
-  /* Pin the Turbopack workspace root to this package — a stray lockfile in
-     the user's home directory otherwise trips Next.js root inference. */
-  turbopack: {
-    root: path.join(__dirname),
-  },
+  /* Turbopack configuration removed due to compatibility issues with next/font/google.
+     Using webpack instead where next/font/google is fully supported. */
 };
 
 export default nextConfig;
