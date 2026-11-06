@@ -1,10 +1,14 @@
 package com.ecobug.controller;
 
 import com.ecobug.dto.StrategyDTO;
+import com.ecobug.dto.StrategyPaginationResponse;
 import com.ecobug.entity.Strategy;
 import com.ecobug.repository.StrategyRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -23,18 +27,35 @@ public class StrategyController {
 
     @GetMapping
     @Transactional(readOnly = true)
-    public ResponseEntity<List<StrategyDTO>> getAllStrategies(
-            @RequestParam(required = false) String category) {
+    public ResponseEntity<StrategyPaginationResponse> getAllStrategies(
+            @RequestParam(required = false) String category,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "12") int limit) {
 
-        List<Strategy> strategies;
+        Pageable pageable = PageRequest.of(Math.max(0, page - 1), Math.max(1, limit));
+
+        Page<Strategy> strategyPage;
         if (category != null && !category.isEmpty()) {
-            strategies = strategyRepository.findByCategoryIgnoreCase(category);
+            strategyPage = strategyRepository.findByCategoryIgnoreCase(category, pageable);
         } else {
-            strategies = strategyRepository.findAll();
+            strategyPage = strategyRepository.findAll(pageable);
         }
 
-        List<StrategyDTO> dtos = strategies.stream().map(this::toDTO).collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+        List<StrategyDTO> dtos = strategyPage.getContent().stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+
+        boolean hasMore = strategyPage.hasNext();
+
+        StrategyPaginationResponse response = new StrategyPaginationResponse(
+                dtos,
+                (int) strategyPage.getTotalElements(),
+                strategyPage.getNumber() + 1,
+                limit,
+                hasMore
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
