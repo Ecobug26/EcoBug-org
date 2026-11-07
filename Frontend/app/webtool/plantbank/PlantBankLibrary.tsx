@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo, useEffect, useRef } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PlantCard } from './PlantCard'
 import { Plant } from './types'
@@ -12,93 +12,58 @@ interface PlantBankLibraryProps {
   initialQuery?: string
 }
 
-const FILTER_OPTIONS = [
-  'plant type',
-  'habitat system',
-  'purpose/uses',
-  'foliage colour',
-  'foliage habit',
-  'flower colour',
-  'climatic condition',
-  'agro climatic zone',
-  'soil type',
-]
-
-// 🚨 TEMPORARY MOCK DATA
-const mockPlants: Plant[] = [
-  {
-    id: '1', scientificName: 'ARECA LUTESCANS', subtitle: 'ARECA PALM', commonNames: 'ARECA PALM', imageUrl: '/images/main_illu.png', plantType: 'Palm', foliageColour: 'Green', climaticZone: 'Tropical', attributes: [], iucnStatus: 'LC', uses: 'Ornamental', keywords: ['areca', 'palm'], images: []
-  },
-  {
-    id: '2', scientificName: 'FICUS ELASTICA', subtitle: 'RUBBER PLANT', commonNames: 'RUBBER FIG', imageUrl: '/images/main_illu.png', plantType: 'Tree', foliageColour: 'Dark Green', climaticZone: 'Tropical', attributes: [], iucnStatus: 'LC', uses: 'Indoor', keywords: ['ficus', 'rubber'], images: []
-  },
-  {
-    id: '3', scientificName: 'MONSTERA DELICIOSA', subtitle: 'SWISS CHEESE PLANT', commonNames: 'MONSTERA', imageUrl: '/images/main_illu.png', plantType: 'Climber', foliageColour: 'Green', climaticZone: 'Tropical', attributes: [], iucnStatus: 'LC', uses: 'Indoor', keywords: ['monstera', 'climber'], images: []
-  },
-  {
-    id: '4', scientificName: 'SANSEVIERIA', subtitle: 'SNAKE PLANT', commonNames: 'SNAKE PLANT', imageUrl: '/images/main_illu.png', plantType: 'Succulent', foliageColour: 'Dark Green', climaticZone: 'Arid', attributes: [], iucnStatus: 'LC', uses: 'Ornamental', keywords: ['snake', 'sansevieria'], images: []
-  },
-  {
-    id: '5', scientificName: 'ALOE VERA', subtitle: 'ALOE', commonNames: 'ALOE VERA', imageUrl: '/images/main_illu.png', plantType: 'Succulent', foliageColour: 'Green', climaticZone: 'Arid', attributes: [], iucnStatus: 'LC', uses: 'Medicinal', keywords: ['aloe', 'succulent'], images: []
-  },
-  {
-    id: '6', scientificName: 'PHALAENOPSIS', subtitle: 'MOTH ORCHID', commonNames: 'ORCHID', imageUrl: '/images/main_illu.png', plantType: 'Epiphyte', foliageColour: 'Green', climaticZone: 'Tropical', attributes: [], iucnStatus: 'LC', uses: 'Ornamental', keywords: ['orchid', 'moth'], images: []
-  }
-]
+const ITEMS_PER_PAGE = 24
 
 export const PlantBankLibrary: React.FC<PlantBankLibraryProps> = ({
   plants: apiPlants,
   initialQuery = '',
 }) => {
-  const plants = apiPlants && apiPlants.length > 0 ? apiPlants : mockPlants
-  const [searchQuery, setSearchQuery] = useState<string>(initialQuery)
+  // Use API data directly. If empty, the UI will render the EmptyState.
+  const plants = apiPlants || []
   
-  // Filter Dropdown State
-  const [isFilterOpen, setIsFilterOpen] = useState(false)
-  const [activeFilters, setActiveFilters] = useState<string[]>([])
-  const dropdownRef = useRef<HTMLDivElement>(null)
+  const [searchQuery, setSearchQuery] = useState<string>(initialQuery)
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     setSearchQuery(initialQuery)
   }, [initialQuery])
 
-  // Handle click outside to close filter
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsFilterOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
-
-  const toggleFilter = (filter: string) => {
-    setActiveFilters(prev => 
-      prev.includes(filter) ? prev.filter(f => f !== filter) : [...prev, filter]
-    )
-  }
-
   const filteredPlants = useMemo(() => {
     let result = plants
     const query = searchQuery.trim().toLowerCase()
     if (query) {
-      result = result.filter((plant) =>
-        [plant.scientificName, plant.subtitle, plant.commonNames, plant.plantType].some((field) => field.toLowerCase().includes(query))
-      )
+      result = result.filter((plant) => {
+        const basicFields = [
+          plant.scientificName,
+          plant.subtitle,
+          plant.commonNames,
+          plant.plantType
+        ].join(' ')
+
+        const attributeText = (plant.attributes || [])
+          .flatMap(attr => [attr.heading, ...(attr.lines || [])])
+          .join(' ')
+
+        return `${basicFields} ${attributeText}`.toLowerCase().includes(query)
+      })
     }
     return result
   }, [plants, searchQuery])
 
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchQuery])
+
+  const totalPages = Math.ceil(filteredPlants.length / ITEMS_PER_PAGE)
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
+  const paginatedPlants = filteredPlants.slice(startIndex, startIndex + ITEMS_PER_PAGE)
+
   return (
-    <main className='w-full max-w-[1250px] mx-auto bg-[#8CD45F] dark:bg-[#204A2A] rounded-[32px] p-6 shadow-xl flex flex-col h-[650px] max-h-[85vh] relative'>
+    <main className='w-full max-w-[1250px] mx-auto bg-[#8CD45F] dark:bg-[#204A2A] rounded-[32px] p-6 shadow-xl flex flex-col h-[650px] max-h-[85vh]'>
       
-      {/* Top control bar */}
       <div className='flex flex-col md:flex-row items-start md:items-center justify-between gap-4 w-full flex-shrink-0 mb-4'>
-        
-        {/* Title & Count */}
         <div className='flex items-center gap-3'>
-          <h2 className={`${offbit.className} text-2xl sm:text-3xl font-bold text-black dark:text-[#EAF2E4] tracking-wide`}>
+          <h2 className={`${offbit.className} text-2xl sm:text-3xl font-bold text-black dark:text-white tracking-wide`}>
             PLANT BANK
           </h2>
           <span className={`${offbit.className} text-xs px-3 py-1 rounded-full bg-[#1B2B1E] text-white font-bold`}>
@@ -106,9 +71,8 @@ export const PlantBankLibrary: React.FC<PlantBankLibraryProps> = ({
           </span>
         </div>
 
-        {/* Search Bar */}
         <div className='relative flex items-center w-full md:max-w-[340px] h-10'>
-          <svg className='absolute left-3 w-4 h-4 text-black' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
+          <svg className='absolute left-3 w-4 h-4 text-black dark:text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='3' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'></path>
           </svg>
           <input
@@ -116,64 +80,25 @@ export const PlantBankLibrary: React.FC<PlantBankLibraryProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder='Search'
-            className={`w-full h-full pl-9 pr-10 rounded-full border-2 border-black bg-[#6EBA42] text-black text-sm font-bold focus:outline-none placeholder-black/50 ${offbit.className}`}
+            className={`w-full h-full pl-9 pr-10 rounded-full border-2 border-black bg-[#6EBA42] dark:bg-[#102112] text-black dark:text-white text-sm font-bold focus:outline-none placeholder-black/50 dark:placeholder-white/50 ${offbit.className}`}
           />
-          <svg className='absolute right-3 w-4 h-4 text-black cursor-pointer hover:text-gray-800' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
+          <svg className='absolute right-3 w-4 h-4 text-black dark:text-white cursor-pointer hover:text-gray-800' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='3' d='M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z'></path>
           </svg>
         </div>
       </div>
 
-      {/* Filter Button & Dropdown */}
-      <div className='relative mb-6 z-50 w-fit' ref={dropdownRef}>
-        <button
-          onClick={() => setIsFilterOpen(!isFilterOpen)}
-          className={`${offbit.className} bg-[#3F9B38] hover:bg-[#34822E] text-white text-sm font-bold px-8 py-2 rounded-full transition-colors`}
-        >
-          FILTER
-        </button>
-
-        <AnimatePresence>
-          {isFilterOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.15 }}
-              className='absolute top-full left-0 mt-3 w-[280px] bg-white rounded-[20px] shadow-2xl p-6 flex flex-col gap-3 border border-black/5'
-            >
-              {FILTER_OPTIONS.map((option) => {
-                const isActive = activeFilters.includes(option)
-                return (
-                  <button
-                    key={option}
-                    onClick={() => toggleFilter(option)}
-                    className='flex items-center gap-3 w-full text-left group'
-                  >
-                    <div className={`w-5 h-5 rounded-md border-2 border-transparent transition-colors flex-shrink-0 ${isActive ? 'bg-black' : 'bg-[#D9D9D9]'}`} />
-                    <span className='font-sans text-sm font-semibold text-black group-hover:text-gray-600 transition-colors'>
-                      {option}
-                    </span>
-                  </button>
-                )
-              })}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Grid (3 Columns) */}
       <div className='w-full overflow-y-auto flex-1 pr-3 pb-4 custom-scrollbar'>
         <AnimatePresence mode='popLayout'>
-          {filteredPlants.length > 0 ? (
+          {paginatedPlants.length > 0 ? (
             <motion.div
-              key='plant-grid'
+              key={`plant-grid-${currentPage}`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-stretch'
             >
-              {filteredPlants.map((plant) => (
+              {paginatedPlants.map((plant) => (
                 <PlantCard key={plant.id} plant={plant} />
               ))}
             </motion.div>
@@ -181,13 +106,45 @@ export const PlantBankLibrary: React.FC<PlantBankLibraryProps> = ({
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
               <EmptyState
                 title='No Plants Found'
-                message={`No plant matched your search query "${searchQuery}".`}
+                message={searchQuery ? `No plant matched your search query "${searchQuery}".` : "No plants available at the moment."}
                 onReset={() => setSearchQuery('')}
               />
             </motion.div>
           )}
         </AnimatePresence>
       </div>
+
+      {totalPages > 1 && (
+        <div className='w-full flex justify-center items-center gap-6 mt-4 pt-4 border-t-2 border-black/10 dark:border-white/10 flex-shrink-0'>
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className={`${offbit.className} px-4 py-1.5 rounded-full text-sm font-bold transition-colors ${
+              currentPage === 1
+                ? 'bg-black/10 text-black/30 dark:bg-white/10 dark:text-white/30 cursor-not-allowed'
+                : 'bg-[#1B2B1E] text-white hover:bg-[#102112] cursor-pointer'
+            }`}
+          >
+            ← Prev
+          </button>
+          
+          <span className={`${offbit.className} text-sm font-bold text-black dark:text-white`}>
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <button
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className={`${offbit.className} px-4 py-1.5 rounded-full text-sm font-bold transition-colors ${
+              currentPage === totalPages
+                ? 'bg-black/10 text-black/30 dark:bg-white/10 dark:text-white/30 cursor-not-allowed'
+                : 'bg-[#1B2B1E] text-white hover:bg-[#102112] cursor-pointer'
+            }`}
+          >
+            Next →
+          </button>
+        </div>
+      )}
     </main>
   )
 }

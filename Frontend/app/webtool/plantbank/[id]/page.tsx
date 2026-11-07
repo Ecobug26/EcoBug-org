@@ -1,6 +1,6 @@
 'use client'
 
-import React, { use, useEffect, useState } from 'react'
+import React, { use, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import AppNavbar from '@/components/shared/AppNavbar'
@@ -10,72 +10,93 @@ import { SearchBar, LoadingState } from '@/components/shared/ui'
 import { Plant, PlantAttribute } from '../types'
 
 interface PlantDetailPageProps {
-  params: Promise<{
-    id: string
-  }>
+  params: Promise<{ id: string }>
+}
+
+const SAVED_KEY = 'plantbank:saved'
+
+function readSavedIds(): string[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const raw = localStorage.getItem(SAVED_KEY)
+    if (!raw) return []
+    const parsed: unknown = JSON.parse(raw)
+    if (!Array.isArray(parsed)) return []
+    return parsed.map((v) => String(v))
+  } catch {
+    return []
+  }
+}
+
+function writeSavedIds(ids: string[]): void {
+  if (typeof window === 'undefined') return
+  try {
+    localStorage.setItem(SAVED_KEY, JSON.stringify(ids))
+  } catch {}
 }
 
 function MorePill() {
   return (
-    <span className='mt-1 inline-block bg-primary-hover text-panel text-[7px] leading-none font-bold tracking-wide px-2 py-[3px] rounded-full'>
+    <span className='mt-1 inline-flex w-fit bg-[#1E3822] text-white text-[8px] leading-none font-bold tracking-widest px-2 py-0.5 rounded-full uppercase'>
       MORE
     </span>
   )
 }
 
 function AttributeBlock({ attribute }: { attribute: PlantAttribute }) {
-  const isFamily = attribute.heading.toLowerCase() === 'family'
-  const hasLines = attribute.lines && attribute.lines.length > 0
-  const hasDetails = attribute.lines?.some((line) => line.includes(':')) ?? false
+  const lines = attribute.lines ?? []
+  // Explicitly hide the MORE pill for 'Plant Form'
+  const showMorePill = attribute.more && attribute.heading.toLowerCase() !== 'plant form'
 
-  if (!hasLines) {
-    return (
-      <div>
-        <h4 className='font-bold text-[13px] tracking-wide uppercase leading-tight text-primary-hover'>
-          {attribute.heading}
-        </h4>
-        <p className='text-[14px] leading-snug text-ink opacity-50 italic'>
-          Data Not Found
-        </p>
+  return (
+    <div className='min-w-0 flex flex-col items-start'>
+      <h4 className='font-extrabold text-[15px] sm:text-[16px] text-[#1E3822] dark:text-[#EAF2E4] leading-tight mb-0.5'>
+        {attribute.heading}
+      </h4>
+      <div className='space-y-0 w-full'>
+        {lines.length === 0 ? (
+          <p className='text-[13px] leading-tight text-[#1E3822]/60 dark:text-[#EAF2E4]/60 italic'>Data Not Found</p>
+        ) : (
+          lines.map((line, i) => {
+            const idx = line.indexOf(':')
+            const hasLabel = idx > 0 && idx < line.length - 1
+            const label = hasLabel ? line.slice(0, idx).trim() : null
+            const value = hasLabel ? line.slice(idx + 1).trim() : line
+            return hasLabel ? (
+              <p key={`${line}-${i}`} className='text-[13px] sm:text-[14px] leading-tight text-[#1E3822] dark:text-[#EAF2E4]'>
+                <span className='font-bold'>{label}:</span> <span className="font-semibold">{value}</span>
+              </p>
+            ) : (
+              <p key={`${line}-${i}`} className='text-[13px] sm:text-[14px] font-semibold leading-tight text-[#1E3822] dark:text-[#EAF2E4]'>
+                {value}
+              </p>
+            )
+          })
+        )}
       </div>
-    )
-  }
+      {showMorePill && <MorePill />}
+    </div>
+  )
+}
 
-  if (isFamily) {
-    return (
-      <div>
-        <h4 className='font-bold text-[13px] tracking-wide uppercase leading-tight text-primary-hover'>
-          {attribute.heading}
-        </h4>
-        {attribute.lines.map((line) => (
-          <p key={line} className='text-[15px] uppercase leading-snug text-ink'>
-            {line}
-          </p>
-        ))}
-      </div>
-    )
+function PlantGallery({ plant }: { plant: Plant }) {
+  const images = (plant.images ?? []).filter((img) => img?.imageUrl).slice(0, 3)
+  const displayImages = [...images]
+  while (displayImages.length < 3) {
+    displayImages.push({ id: `placeholder-${displayImages.length}`, imageUrl: '/images/main_illu.png' })
   }
 
   return (
-    <div>
-      <h4 className='font-medium text-[17px] leading-tight text-ink'>
-        {attribute.heading}
-      </h4>
-      <div className='mt-0.5'>
-        {attribute.lines.map((line) => (
-          <p
-            key={line}
-            className={
-              hasDetails
-                ? 'text-[9px] leading-snug text-ink'
-                : 'text-[14px] leading-snug text-ink opacity-70'
-            }
-          >
-            {line}
-          </p>
-        ))}
+    <div className='relative w-[280px] sm:w-[320px] h-[180px] sm:h-[200px] shrink-0 mx-auto lg:mx-0'>
+      <div className='absolute top-0 right-0 w-[140px] sm:w-[160px] h-[100px] sm:h-[110px] bg-[#D9D9D9] rounded-[16px] border-[1.5px] border-black overflow-hidden z-10'>
+        <Image src={displayImages[0].imageUrl} alt={plant.scientificName} fill className='object-cover' unoptimized />
       </div>
-      {attribute.more && <MorePill />}
+      <div className='absolute top-[40px] left-0 w-[140px] sm:w-[160px] h-[100px] sm:h-[110px] bg-[#D9D9D9] rounded-[16px] border-[1.5px] border-black overflow-hidden z-20'>
+        <Image src={displayImages[1].imageUrl} alt={plant.scientificName} fill className='object-cover' unoptimized />
+      </div>
+      <div className='absolute bottom-0 right-[20px] sm:right-[30px] w-[140px] sm:w-[160px] h-[100px] sm:h-[110px] bg-[#D9D9D9] rounded-[16px] border-[1.5px] border-black overflow-hidden z-30'>
+        <Image src={displayImages[2].imageUrl} alt={plant.scientificName} fill className='object-cover' unoptimized />
+      </div>
     </div>
   )
 }
@@ -83,10 +104,12 @@ function AttributeBlock({ attribute }: { attribute: PlantAttribute }) {
 export default function PlantDetailPage({ params }: PlantDetailPageProps) {
   const router = useRouter()
   const { id } = use(params)
+
   const [search, setSearch] = useState('')
   const [plant, setPlant] = useState<Plant | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
+  const [saved, setSaved] = useState(false)
 
   useEffect(() => {
     if (!id) return
@@ -110,6 +133,7 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
         }
       } catch (err) {
         if (!cancelled) {
+          // REMOVED fallback mock data. Now strictly relies on the API.
           setError(err instanceof Error ? err : new Error('Failed to load plant'))
         }
       } finally {
@@ -123,7 +147,21 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
     }
   }, [id])
 
+  useEffect(() => {
+    if (!plant) return
+    const plantId = String(plant.id)
+    setSaved(readSavedIds().includes(plantId))
+  }, [plant])
+
   const goBack = () => router.push('/webtool/plantbank')
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') router.push('/webtool/plantbank')
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [router])
 
   const submitSearch = () => {
     const q = search.trim()
@@ -132,43 +170,57 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
     )
   }
 
+  const toggleSave = () => {
+    if (!plant) return
+    const plantId = String(plant.id)
+    const list = readSavedIds()
+    const next = list.includes(plantId)
+      ? list.filter((i) => i !== plantId)
+      : [...list, plantId]
+    writeSavedIds(next)
+    setSaved(next.includes(plantId))
+  }
+
+  const attributes = useMemo(() => plant?.attributes ?? [], [plant])
+
   return (
-    <div className='min-h-screen flex flex-col dark:bg-[#102112]'>
+    <div className='min-h-screen flex flex-col bg-[#F4F8F0] dark:bg-[#102112]'>
       <AppNavbar />
 
-      <main className='flex-1 flex flex-col items-center pt-28 md:pt-32 pb-16 px-3 sm:px-6'>
+      <main className='flex-1 flex flex-col items-center pt-20 md:pt-24 pb-10 px-3 sm:px-6'>
         <h1
-          className={`${offbit.className} text-4xl sm:text-5xl md:text-6xl text-ink tracking-widest uppercase font-bold text-center`}
+          className={`${offbit.className} text-4xl sm:text-5xl md:text-6xl text-[#1E3822] dark:text-[#EAF2E4] tracking-widest uppercase font-bold text-center`}
         >
           PLANT BANK
         </h1>
 
-        <div className='w-full max-w-5xl mt-8 md:mt-10'>
+        <div className='w-full max-w-5xl mt-4'>
           {loading ? (
             <div className='flex justify-center py-10'>
               <LoadingState label='Loading plant...' />
             </div>
           ) : error || !plant ? (
-            <div className='bg-card rounded-[32px] p-6 sm:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.15)] text-center'>
-              <p className={`${offbit.className} text-lg font-bold text-ink`}>
+            <div className='bg-[#C4E6A9] dark:bg-[#253B25] rounded-[32px] p-5 sm:p-6 shadow-lg text-center'>
+              <p className={`${offbit.className} text-lg font-bold text-[#1E3822] dark:text-white`}>
                 {error ? 'Failed to load plant' : 'Plant not found'}
               </p>
               <button
+                type='button'
                 onClick={goBack}
-                className={`${offbit.className} mt-3 text-sm text-primary-hover hover:underline cursor-pointer`}
+                className={`${offbit.className} mt-2 text-sm text-[#1E3822] dark:text-[#EAF2E4] hover:underline cursor-pointer`}
               >
                 ← Back to Plant Bank
               </button>
             </div>
           ) : (
-            <div className='bg-[#B3D69A] dark:bg-card rounded-[32px] p-3 sm:p-5 shadow-[0_10px_30px_rgba(0,0,0,0.15)]'>
+            <div className='bg-[#C4E6A9] dark:bg-[#253B25] rounded-[32px] p-3 sm:p-5 shadow-[0_10px_30px_rgba(0,0,0,0.1)] relative'>
               
-              {/* Panel header: X on the left, Search on the right */}
-              <div className='flex items-center justify-between w-full'>
+              <div className='flex items-center justify-between gap-3 w-full mb-3'>
                 <button
+                  type='button'
                   onClick={goBack}
                   aria-label='Close plant details'
-                  className='w-10 h-10 flex items-center justify-center text-black font-bold text-2xl hover:bg-black/10 rounded-full transition-colors cursor-pointer flex-shrink-0 z-10'
+                  className='w-10 h-10 flex items-center justify-center text-[#1E3822] dark:text-[#EAF2E4] font-bold text-2xl hover:bg-black/5 dark:hover:bg-white/10 rounded-full transition-colors cursor-pointer flex-shrink-0'
                 >
                   ✕
                 </button>
@@ -182,126 +234,82 @@ export default function PlantDetailPage({ params }: PlantDetailPageProps) {
                       setSearch('')
                       submitSearch()
                     }}
-                    className='max-w-[220px]'
+                    className='w-[150px] sm:w-[240px]'
                   />
                 </div>
               </div>
 
-              <div className='px-1 sm:px-6 pb-3 sm:pb-6'>
-                <div className='mt-6 flex flex-col lg:flex-row lg:justify-between gap-8'>
-                  <div className='min-w-0'>
-                    <h2
-                      className={`${offbit.className} text-3xl sm:text-4xl md:text-5xl font-bold uppercase text-ink leading-none`}
-                    >
-                      {plant.scientificName}
-                    </h2>
-                    <p
-                      className={`${offbit.className} text-xl sm:text-2xl uppercase text-ink leading-tight mt-1`}
-                    >
-                      {plant.subtitle}
-                    </p>
-
-                    <p className={`${offbit.className} text-[15px] text-ink mt-5`}>
-                      Common Names:
-                      <span className='font-bold uppercase ml-2'>
-                        {plant.commonNames}
-                      </span>
-                    </p>
-
-                    <div className='grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-7 mt-7 sm:max-w-[480px]'>
-                      {plant.attributes && plant.attributes.length > 0 ? (
-                        plant.attributes.slice(0, 9).map((attribute) => (
-                          <AttributeBlock
-                            key={attribute.heading}
-                            attribute={attribute}
-                          />
-                        ))
-                      ) : (
-                        <p className='text-sm text-ink opacity-50 italic col-span-full'>No attributes found</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className='relative w-full max-w-[300px] mx-auto lg:mx-0 lg:mt-1 lg:self-start aspect-[252/196] shrink-0'>
-                    {plant.images && plant.images.length > 0 ? (
-                      <>
-                        {plant.images.map((img, idx) => (
-                          <div
-                            key={img.id || idx}
-                            className={`absolute rounded-[18px] bg-[#d9d9d9] border border-ink overflow-hidden ${
-                              idx === 0 ? 'left-0 top-[5%] w-[43%] h-[43%]' :
-                              idx === 1 ? 'right-0 top-0 w-[43%] h-[43%]' :
-                              idx === 2 ? 'left-[14%] top-[60%] w-[41%] h-[40%]' :
-                              'left-[30%] top-[18%] w-[53%] h-[52%]'
-                            }`}
-                          >
-                            <Image
-                              src={img.imageUrl}
-                              alt={plant.scientificName}
-                              fill
-                              sizes='100%'
-                              className='object-cover'
-                              unoptimized
-                            />
-                          </div>
-                        ))}
-                      </>
-                    ) : (
-                      <div className='w-full h-[200px] md:h-[300px] rounded-[18px] bg-[#d9d9d9] border border-ink flex items-center justify-center text-xs font-bold text-black/40 mb-4'>
-                        No Images Available
-                      </div>
-                    )}
-                  </div>
+              <div className='flex flex-col-reverse lg:flex-row lg:justify-between lg:items-start gap-4 lg:gap-6'>
+                <div className='flex-1 min-w-0'>
+                  <h2 className={`${offbit.className} text-3xl sm:text-4xl md:text-[42px] font-bold uppercase text-[#1E3822] dark:text-[#EAF2E4] leading-[1.1] mb-0.5`}>
+                    {plant.scientificName}
+                  </h2>
+                  <p className={`${offbit.className} text-xl sm:text-[22px] uppercase text-[#1E3822] dark:text-[#EAF2E4] leading-tight opacity-90`}>
+                    {plant.subtitle}
+                  </p>
+                  
+                  <p className='text-[13px] sm:text-[14px] text-[#1E3822] dark:text-[#EAF2E4] mt-2 font-bold'>
+                    Common Names: <span className="font-normal uppercase ml-1">{plant.commonNames}</span>
+                  </p>
                 </div>
 
-                {plant.attributes && plant.attributes.length > 9 && (
-                  <div className='flex flex-wrap gap-x-10 gap-y-4 mt-8'>
-                    {plant.attributes.slice(9).map((attribute) => (
-                      <AttributeBlock key={attribute.heading} attribute={attribute} />
-                    ))}
-                  </div>
+                <PlantGallery plant={plant} />
+              </div>
+
+              <div className='grid grid-cols-2 md:grid-cols-3 gap-x-3 lg:gap-x-6 gap-y-4 mt-6 sm:mt-8 w-full lg:w-[85%]'>
+                {attributes.length > 0 ? (
+                  attributes.map((attribute, i) => (
+                    <AttributeBlock
+                      key={`${attribute.heading}-${i}`}
+                      attribute={attribute}
+                    />
+                  ))
+                ) : (
+                  <p className='text-sm text-[#1E3822] dark:text-[#EAF2E4] opacity-50 italic col-span-full'>
+                    No specific attributes found.
+                  </p>
                 )}
+              </div>
 
-                <div className='mt-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6'>
-                  <div>
-                    <h3 className='font-medium text-xl text-ink'>
-                      IUCN Conservation Status:
-                    </h3>
-                    <span
-                      className={`${offbit.className} mt-2.5 inline-block bg-warning/85 text-black text-[13px] px-5 py-2 rounded-full`}
-                    >
-                      {plant.iucnStatus || 'Data Not Found'}
-                    </span>
-                  </div>
+              <div className='mt-6 sm:mt-8 flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6'>
+                <div className="flex-shrink-0 mb-1 md:mb-0">
+                  <h3 className='font-bold text-[15px] sm:text-[16px] text-[#1E3822] dark:text-[#EAF2E4] mb-1.5'>
+                    IUCN Conservation Status:
+                  </h3>
+                  <span className={`${offbit.className} inline-block bg-[#F5A663] text-black text-[12px] font-bold px-4 py-1 rounded-full`}>
+                    {plant.iucnStatus || 'Data Not Found'}
+                  </span>
+                </div>
 
-                  {/* USES BOX */}
-                  <div className='w-full lg:w-[38%] lg:min-w-[300px] min-h-[140px] bg-[#A3C27D] border-[3px] border-black rounded-[28px] px-6 py-5'>
-                    <h3
-                      className={`${offbit.className} underline underline-offset-2 font-bold text-[15px] text-black`}
-                    >
-                      USES:
-                    </h3>
-                    <p className='text-[13px] leading-relaxed text-black mt-2'>
-                      {plant.uses || ''}
-                    </p>
-                  </div>
+                <div className='w-full md:w-[45%] min-h-[100px] bg-[#A3C27D] dark:bg-[#1c3520] border-[1.5px] border-black dark:border-[#71CB51] rounded-[16px] px-4 py-3'>
+                  <h3 className={`${offbit.className} underline underline-offset-4 decoration-2 font-bold text-[13px] text-[#1E3822] dark:text-[#EAF2E4] uppercase`}>
+                    USES:
+                  </h3>
+                  <p className='text-[13px] leading-snug text-[#1E3822] dark:text-[#EAF2E4] mt-1'>
+                    {plant.uses || 'Data Not Found'}
+                  </p>
                 </div>
               </div>
+
             </div>
           )}
         </div>
 
-        {/* Bottom Actions (Save Button & Disclaimer) */}
-        <div className='w-full max-w-5xl mt-6 flex flex-col md:flex-row items-center justify-start gap-8 px-2'>
-          <button className={`${offbit.className} bg-black dark:bg-[#71CB51] text-white dark:text-black text-2xl md:text-3xl font-bold px-10 py-3.5 rounded-full hover:bg-gray-800 dark:hover:bg-[#5ebf3f] transition-colors flex-shrink-0`}>
-            SAVE
+        <div className='w-full max-w-5xl mt-4 flex flex-col md:flex-row items-center justify-start gap-4 md:gap-6 px-2'>
+          <button
+            type='button'
+            onClick={toggleSave}
+            disabled={!plant}
+            aria-pressed={saved}
+            className={`${offbit.className} bg-black dark:bg-[#71CB51] text-white dark:text-black text-xl md:text-2xl font-bold px-8 py-2.5 rounded-full hover:bg-gray-800 dark:hover:bg-[#5ebf3f] transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed`}
+          >
+            {saved ? 'SAVED' : 'SAVE'}
           </button>
 
-          <p className='text-[10px] md:text-[11px] text-black dark:text-[#EAF2E4] leading-relaxed max-w-md text-center md:text-left'>
+          <p className='text-[10px] md:text-[11px] text-[#1E3822] dark:text-[#EAF2E4]/70 leading-relaxed max-w-md text-center md:text-left'>
             Disclaimer: We do not own the pictures displayed in any of the plant catalogs, they have been outsourced from respective owners, to whom we give complete credits or may have been generated.
           </p>
         </div>
-
       </main>
 
       <AppFooter />
