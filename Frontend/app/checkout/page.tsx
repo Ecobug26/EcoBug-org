@@ -32,7 +32,7 @@ export default function CheckoutPage() {
             EDUCATION / PROFESSIONAL PLAN — Rs. 49 per month
           </p>
 
-          <CheckoutButton amount={4900} description='EcoBug plan — Rs. 49/month' />
+          <CheckoutButton description='EcoBug plan — Rs. 49/month' />
         </div>
       </main>
 
