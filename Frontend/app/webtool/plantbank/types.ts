@@ -1,3 +1,5 @@
+// app/webtool/plantbank/types.ts
+
 /**
  * Plant Bank data model — mirrors the Figma "PLANT BANK" detail screen
  * (Areca Lutescans entry) and the list card fields.
@@ -35,11 +37,11 @@ export interface Plant {
   climaticZone: string
   
   /** Detail attribute grid in Figma display order (9 blocks + 3 growth blocks). */
-  attributes: PlantAttribute[]
-  iucnStatus: string
-  uses: string
+  attributes?: PlantAttribute[]
+  iucnStatus?: string
+  uses?: string
   /** Search keywords for the list filter. */
-  keywords: string[]
+  keywords?: string[]
   /** Plant images from database. */
-  images: PlantImage[]
+  images?: PlantImage[]
 }

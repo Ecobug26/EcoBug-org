@@ -12,6 +12,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.HexFormat;
+import java.util.Locale;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -51,6 +53,9 @@ public class RazorpayService {
      * @throws RazorpayApiException  on any other API failure
      */
     public CreateOrderResponse createOrder(long amount, String currency, String receipt) throws Exception {
+        if (amount < 100) {
+            throw new IllegalArgumentException("Order amount must be at least 100 paise");
+        }
         if (!isConfigured()) {
             throw new RazorpayAuthException("Razorpay keys are not configured");
         }
@@ -108,9 +113,15 @@ public class RazorpayService {
         try {
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(new SecretKeySpec(keySecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
-            byte[] expected = mac.doFinal((orderId + "|" + paymentId).getBytes(StandardCharsets.UTF_8));
-            byte[] provided = signature.getBytes(StandardCharsets.UTF_8);
-            return MessageDigest.isEqual(expected, provided);
+            byte[] digest = mac.doFinal((orderId + "|" + paymentId).getBytes(StandardCharsets.UTF_8));
+            String expectedHex = HexFormat.of().formatHex(digest);
+            String providedHex = signature.trim().toLowerCase(Locale.ROOT);
+            if (!providedHex.matches("[0-9a-f]{64}")) {
+                return false;
+            }
+            return MessageDigest.isEqual(
+                    expectedHex.getBytes(StandardCharsets.US_ASCII),
+                    providedHex.getBytes(StandardCharsets.US_ASCII));
         } catch (Exception e) {
             return false;
         }

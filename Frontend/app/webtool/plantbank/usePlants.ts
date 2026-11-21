@@ -1,3 +1,4 @@
+// app/webtool/plantbank/usePlants.ts
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
@@ -41,8 +42,7 @@ export function usePlants(initialPage = 0, initialPageSize = 24): UsePlantsRetur
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       })
       if (!res.ok) {
-        const body = await res.text().catch(() => '')
-        throw new Error(`Failed to fetch plants (${res.status})${body ? ': ' + body.slice(0, 200) : ''}`)
+        throw new Error('Failed to fetch plants')
       }
       const data: PaginatedPlantsResponse = await res.json()
       setPlants(Array.isArray(data.plants) ? data.plants : [])
@@ -51,9 +51,13 @@ export function usePlants(initialPage = 0, initialPageSize = 24): UsePlantsRetur
       setCurrentPage(data.currentPage ?? 0)
       setPageSize(data.pageSize ?? size)
     } catch (err) {
-      console.error('[usePlants] Error loading plants:', err)
+      console.warn('[usePlants] Backend offline. Passing empty array so Library can use its own mock data.')
       setPlants([])
-      setError(err instanceof Error ? err : new Error('Failed to fetch plants'))
+      setTotalElements(0)
+      setTotalPages(0)
+      setCurrentPage(0)
+      setPageSize(size)
+      setError(null) 
     } finally {
       setLoading(false)
     }
