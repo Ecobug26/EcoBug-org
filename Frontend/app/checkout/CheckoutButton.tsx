@@ -14,6 +14,8 @@ type Status = {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8080'
 const RAZORPAY_KEY_ID = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ?? ''
+// Match this key name to whatever AuthContext.tsx uses in localStorage
+const TOKEN_STORAGE_KEY = 'accessToken'
 
 declare global {
   interface Window {
@@ -68,17 +70,30 @@ export default function CheckoutButton({ description }: CheckoutButtonProps) {
       return
     }
 
+    const token = typeof window !== 'undefined' ? localStorage.getItem(TOKEN_STORAGE_KEY) : null
+    if (!token) {
+      setStatus({ kind: 'error', message: 'Please log in before starting checkout.' })
+      return
+    }
+
     setStatus({ kind: 'loading' })
 
     try {
-      // 1) Create order on the backend.
+      // 1) Create order on the backend (authenticated).
       const res = await fetch(`${API_URL}/api/create-order`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           receipt: `ecobug-${Date.now()}`,
         }),
       })
+
+      if (res.status === 401 || res.status === 403) {
+        throw new Error('Your session expired. Please log in again to continue.')
+      }
 
       const data = await res.json().catch(() => null)
 
@@ -108,7 +123,10 @@ export default function CheckoutButton({ description }: CheckoutButtonProps) {
           try {
             const verifyRes = await fetch(`${API_URL}/api/verify-payment`, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
               body: JSON.stringify({
                 orderId: r.razorpay_order_id,
                 paymentId: r.razorpay_payment_id,

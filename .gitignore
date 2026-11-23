@@ -147,3 +147,6 @@ vite.config.ts.timestamp-*
 figma_tmp/
 figma_imgs/
 figma_*.json
+
+application-local.properties
+*.zip
