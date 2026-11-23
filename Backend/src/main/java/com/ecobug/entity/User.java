@@ -1,6 +1,6 @@
 package com.ecobug.entity;
-import com.ecobug.enums.Role;
 
+import com.ecobug.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,8 +30,12 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-@Column(nullable = false)
-private Role role;
+    @Column(nullable = false)
+    private Role role;
+
+    private String subscriptionPlan;
+
+    private LocalDateTime subscriptionExpiresAt;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -43,5 +47,9 @@ private Role role;
         if (role == null) {
             role = Role.USER;
         }
+    }
+
+    public boolean hasActiveSubscription() {
+        return subscriptionExpiresAt != null && subscriptionExpiresAt.isAfter(LocalDateTime.now());
     }
 }

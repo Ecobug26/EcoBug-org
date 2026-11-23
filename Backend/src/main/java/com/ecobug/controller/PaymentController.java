@@ -120,6 +120,15 @@ public class PaymentController {
             order.setStatus("PAID");
             order.setPaidAt(Instant.now());
             orderRepository.save(order);
+
+            User user = order.getUser();
+            java.time.LocalDateTime now = java.time.LocalDateTime.now();
+            java.time.LocalDateTime base = (user.getSubscriptionExpiresAt() != null && user.getSubscriptionExpiresAt().isAfter(now))
+                    ? user.getSubscriptionExpiresAt()
+                    : now;
+            user.setSubscriptionPlan("PRO_MONTHLY");
+            user.setSubscriptionExpiresAt(base.plusDays(30));
+            userRepository.save(user);
         }
 
         return ResponseEntity.ok(Map.of("success", true, "verified", true));

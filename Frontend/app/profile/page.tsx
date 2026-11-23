@@ -118,9 +118,36 @@ export default function ProfilePage() {
           {user.fullName || 'LOREM IPSUM'}
         </h1>
 
-        <p className="text-[10px] uppercase tracking-widest text-black mb-6">
-          Subscription: Studio Plan
-        </p>
+        {/* User Info */}
+        <h1 className={`${offbit.className} text-3xl md:text-4xl font-bold uppercase tracking-widest mb-1 text-black text-center break-words w-full`}>
+          {user.fullName || 'LOREM IPSUM'}
+        </h1>
+
+        {(() => {
+          const expiresAt = user.subscriptionExpiresAt ? new Date(user.subscriptionExpiresAt) : null
+          const isActive = expiresAt !== null && expiresAt.getTime() > Date.now()
+          const formattedDate = expiresAt
+            ? expiresAt.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+            : null
+
+          return (
+            <div className="flex flex-col items-center gap-1 mb-6">
+              <p className="text-[10px] uppercase tracking-widest text-black">
+                {isActive
+                  ? `Subscription: Education / Pro Plan (Active until ${formattedDate})`
+                  : 'Subscription: Free Plan'}
+              </p>
+              {!isActive && (
+                <Link
+                  href="/checkout"
+                  className="text-[11px] font-bold underline text-[#1B2B1E] hover:text-black transition-colors"
+                >
+                  Upgrade to Pro Plan (₹49/mo)
+                </Link>
+              )}
+            </div>
+          )
+        })()}
 
         {/* Details */}
         <div className="w-full max-w-sm flex flex-col items-start gap-1 text-sm text-black">

@@ -192,6 +192,7 @@ export default function CheckoutButton({ description }: CheckoutButtonProps) {
             const verifyData = await verifyRes.json().catch(() => null)
 
             if (verifyRes.ok && verifyData?.verified) {
+              await refreshUser()
               setStatus({ kind: 'success', message: 'Payment verified — thank you!' })
             } else {
               setStatus({

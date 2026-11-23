@@ -15,6 +15,8 @@ export type User = {
   fullName: string
   email: string
   role: string
+  subscriptionPlan?: string | null
+  subscriptionExpiresAt?: string | null
 }
 
 type AuthContextType = {
