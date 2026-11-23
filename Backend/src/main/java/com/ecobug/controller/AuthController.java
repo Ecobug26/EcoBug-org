@@ -46,6 +46,8 @@ public UserResponse me(Authentication authentication) {
             .fullName(user.getFullName())
             .email(user.getEmail())
             .role(user.getRole())
+            .subscriptionPlan(user.getSubscriptionPlan())
+            .subscriptionExpiresAt(user.getSubscriptionExpiresAt())
             .build();
 }
 @PostMapping("/refresh")
