@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -36,6 +37,7 @@ public class PaymentController {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     @PostMapping("/api/create-order")
     public ResponseEntity<?> createOrder(
             @AuthenticationPrincipal UserDetails principal,
@@ -79,6 +81,7 @@ public class PaymentController {
         }
     }
 
+    @Transactional
     @PostMapping("/api/verify-payment")
     public ResponseEntity<?> verifyPayment(
             @AuthenticationPrincipal UserDetails principal,
