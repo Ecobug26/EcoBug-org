@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { MonoButton } from '@/components/shared/ui'
+import { useAuth } from '@/context/AuthContext'
 
 type CheckoutButtonProps = {
   description?: string
@@ -24,16 +25,38 @@ declare global {
   }
 }
 
-/**
- * Standard Checkout button: creates an order on the backend, opens the
- * Razorpay modal, then verifies the returned signature server-side.
- * KEY_SECRET never reaches this file — only the public NEXT_PUBLIC key id.
- */
+async function refreshAccessToken(refreshUser: () => Promise<void>): Promise<string | null> {
+  if (typeof window === 'undefined') return null
+  const refreshToken = localStorage.getItem('refreshToken')
+  if (!refreshToken) return null
+
+  try {
+    const res = await fetch(`${API_URL}/api/auth/refresh`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refreshToken }),
+    })
+    if (!res.ok) return null
+    const data = await res.json().catch(() => null)
+    const newToken = data?.accessToken ?? data?.token ?? null
+    if (newToken) {
+      localStorage.setItem('accessToken', newToken)
+      if (data?.refreshToken) {
+        localStorage.setItem('refreshToken', data.refreshToken)
+      }
+      await refreshUser()
+    }
+    return newToken
+  } catch {
+    return null
+  }
+}
+
 export default function CheckoutButton({ description }: CheckoutButtonProps) {
+  const { user, loading: authLoading, refreshUser } = useAuth()
   const [status, setStatus] = useState<Status>({ kind: 'idle' })
   const [scriptReady, setScriptReady] = useState(false)
 
-  // Load checkout.js once, on this page only.
   useEffect(() => {
     if (typeof window === 'undefined') return
 
@@ -68,17 +91,43 @@ export default function CheckoutButton({ description }: CheckoutButtonProps) {
       return
     }
 
+    let token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
+    if (!token || !user) {
+      setStatus({ kind: 'error', message: 'Please log in before starting checkout.' })
+      return
+    }
+
     setStatus({ kind: 'loading' })
 
     try {
-      // 1) Create order on the backend.
-      const res = await fetch(`${API_URL}/api/create-order`, {
+      let res = await fetch(`${API_URL}/api/create-order`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           receipt: `ecobug-${Date.now()}`,
         }),
       })
+
+      if (res.status === 401 || res.status === 403) {
+        const refreshed = await refreshAccessToken(refreshUser)
+        if (!refreshed) {
+          throw new Error('Your session expired. Please log in again to continue.')
+        }
+        token = refreshed
+        res = await fetch(`${API_URL}/api/create-order`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            receipt: `ecobug-${Date.now()}`,
+          }),
+        })
+      }
 
       const data = await res.json().catch(() => null)
 
@@ -86,7 +135,6 @@ export default function CheckoutButton({ description }: CheckoutButtonProps) {
         throw new Error(data?.error ?? 'Could not start the payment. Please retry.')
       }
 
-      // 2) Open the Razorpay modal with the freshly created order_id.
       const rzp = new window.Razorpay({
         key: RAZORPAY_KEY_ID,
         amount: data.amount,
@@ -94,10 +142,13 @@ export default function CheckoutButton({ description }: CheckoutButtonProps) {
         name: 'EcoBug',
         description: description ?? 'EcoBug subscription',
         order_id: data.order_id,
-        prefill: { name: '', email: '', contact: '' },
+        prefill: {
+          name: user.fullName ?? '',
+          email: user.email ?? '',
+          contact: '',
+        },
         theme: { color: '#97C974' },
         modal: { ondismiss: () => setStatus({ kind: 'idle', message: 'Payment cancelled.' }) },
-        // Razorpay Standard Checkout calls handler after a successful payment.
         handler: async (response: unknown) => {
           const r = response as {
             razorpay_payment_id?: string
@@ -106,15 +157,38 @@ export default function CheckoutButton({ description }: CheckoutButtonProps) {
           }
           setStatus({ kind: 'loading', message: 'Verifying payment…' })
           try {
-            const verifyRes = await fetch(`${API_URL}/api/verify-payment`, {
+            const activeToken = localStorage.getItem('accessToken') ?? token
+            let verifyRes = await fetch(`${API_URL}/api/verify-payment`, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${activeToken}`,
+              },
               body: JSON.stringify({
                 orderId: r.razorpay_order_id,
                 paymentId: r.razorpay_payment_id,
                 signature: r.razorpay_signature,
               }),
             })
+
+            if (verifyRes.status === 401 || verifyRes.status === 403) {
+              const refreshed = await refreshAccessToken(refreshUser)
+              if (refreshed) {
+                verifyRes = await fetch(`${API_URL}/api/verify-payment`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${refreshed}`,
+                  },
+                  body: JSON.stringify({
+                    orderId: r.razorpay_order_id,
+                    paymentId: r.razorpay_payment_id,
+                    signature: r.razorpay_signature,
+                  }),
+                })
+              }
+            }
+
             const verifyData = await verifyRes.json().catch(() => null)
 
             if (verifyRes.ok && verifyData?.verified) {
@@ -146,19 +220,25 @@ export default function CheckoutButton({ description }: CheckoutButtonProps) {
         message: err instanceof Error ? err.message : 'Something went wrong. Please retry.',
       })
     }
-  }, [description])
+  }, [description, user, refreshUser])
 
   return (
     <div className='flex flex-col items-center gap-3 w-full'>
       <MonoButton
         bullet
         onClick={handlePayment}
-        disabled={status.kind === 'loading' || status.kind === 'success'}
+        disabled={authLoading || status.kind === 'loading' || status.kind === 'success'}
         ariaLabel='Pay with Razorpay'
         className='px-9 py-[21px] text-[24px] leading-6 tracking-[4.1px] w-full justify-center'
       >
         {status.kind === 'loading' ? 'WORKING…' : 'PAY'}
       </MonoButton>
+
+      {!authLoading && !user && status.kind === 'idle' && (
+        <p className='font-geist-mono text-xs text-[#40543F] dark:text-[#9BAE95]'>
+          Log in to your EcoBug account to complete checkout.
+        </p>
+      )}
 
       {!scriptReady && status.kind !== 'error' && (
         <p className='font-geist-mono text-xs text-[#40543F] dark:text-[#9BAE95]'>
