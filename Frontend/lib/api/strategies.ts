@@ -3,11 +3,16 @@ import { Strategy } from '@/app/webtool/strategy/types'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
 
+function getAuthHeaders(): HeadersInit {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  }
+}
+
 /**
- * Fetch strategies with pagination.
- * Priority: Supabase (env-configured) -> Backend API fallback.
- * Returns { strategies, hasMore } where hasMore indicates if more pages exist.
- * Only selects list-view columns (excludes full_description) for faster loading.
+ * Fetch strategies with pagination from the subscription-gated backend API.
  */
 export async function fetchStrategies(params?: {
   page?: number
@@ -15,62 +20,28 @@ export async function fetchStrategies(params?: {
 }): Promise<{ strategies: Strategy[]; hasMore: boolean }> {
   const page = params?.page ?? 1
   const limit = params?.limit ?? 12
-  // Fetch limit + 1 to detect if there's a next page
-  const fetchLimit = limit + 1
-  const offset = (page - 1) * limit
 
-  // Try Supabase first if env vars are configured
-  const supaUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supaKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-  if (supaUrl && supaKey) {
-    try {
-      const { createClient } = await import('@supabase/supabase-js')
-      const supa = createClient(supaUrl, supaKey)
-
-      // Fetch paginated page with only list-view columns (excludes full_description)
-      const { data: strategies, error: stratErr } = await supa
-        .from('strategies')
-        .select('id, title, category, summary, image_url, keywords')
-        .order('created_at', { ascending: false })
-        .range(offset, offset + fetchLimit - 1)
-
-      if (stratErr || !strategies || strategies.length === 0) {
-        console.warn('Supabase fetch empty or error - falling back to backend API')
-      } else {
-        // Detect if there's a next page (we fetched limit+1 items)
-        const hasMore = strategies.length > limit
-        const pageStrategies = strategies.slice(0, limit)
-
-        return {
-          strategies: pageStrategies.map((s: any) => ({
-            id: String(s.id),
-            title: s.title,
-            category: s.category,
-            summary: s.summary,
-            imageUrl: s.image_url,
-            fullDescription: '', // Not loaded on list page; fetched on detail view
-            keywords: s.keywords || [],
-          })),
-          hasMore,
-        }
-      }
-    } catch (err) {
-      console.error('Supabase fetch error, falling back to backend:', err)
-    }
-  } else {
-    console.log('Supabase env vars missing - using backend API')
-  }
-
-  // Fallback to backend API
   const queryParams = new URLSearchParams()
   queryParams.append('page', String(page))
   queryParams.append('limit', String(limit))
+
   const res = await fetch(`${API_URL}/api/strategies?${queryParams}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
   })
+
+  if (res.status === 401 || res.status === 402 || res.status === 403) {
+    throw new Error('Active Pro subscription required to view strategies')
+  }
   if (!res.ok) throw new Error('Failed to fetch strategies')
-  const data = (await res.json()) as { strategies: Strategy[]; hasMore: boolean; total: number; page: number; limit: number }
+
+  const data = (await res.json()) as {
+    strategies: Strategy[]
+    hasMore: boolean
+    total: number
+    page: number
+    limit: number
+  }
+
   return {
     strategies: data.strategies,
     hasMore: data.hasMore,
@@ -78,58 +49,24 @@ export async function fetchStrategies(params?: {
 }
 
 /**
- * Fetch a single strategy by ID.
- * Priority: Supabase (env-configured) -> Backend API fallback.
- * Returns undefined for 404 (unknown id); throws on other failures.
+ * Fetch a single strategy by ID from the subscription-gated backend API.
  */
 export async function fetchStrategyById(id: string): Promise<Strategy | undefined> {
-  const supaUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supaKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-  if (supaUrl && supaKey) {
-    try {
-      const { createClient } = await import('@supabase/supabase-js')
-      const supa = createClient(supaUrl, supaKey)
-
-      const { data: strategy, error: stratErr } = await supa
-        .from('strategies')
-        .select('*')
-        .eq('id', Number(id))
-        .single()
-
-      if (stratErr || !strategy) {
-        console.warn('Supabase single fetch failed - falling back to backend API')
-      } else {
-        // Map snake_case to camelCase
-        return {
-          id: String(strategy.id),
-          title: strategy.title,
-          category: strategy.category,
-          summary: strategy.summary,
-          imageUrl: strategy.image_url,
-          fullDescription: strategy.full_description,
-          keywords: strategy.keywords || [],
-        }
-      }
-    } catch (err) {
-      console.error('Supabase single fetch error, falling back to backend:', err)
-    }
-  }
-
-  // Fallback to backend API
   const res = await fetch(`${API_URL}/api/strategies/${id}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
   })
+
   if (res.status === 404) return undefined
+  if (res.status === 401 || res.status === 402 || res.status === 403) {
+    throw new Error('Active Pro subscription required to view this strategy')
+  }
   if (!res.ok) throw new Error('Failed to fetch strategy')
+
   return (await res.json()) as Strategy
 }
 
 /**
  * Fetch strategies with filters from the backend API.
- * Keeping this as a backend-API-only endpoint since it supports
- * server-side pagination/filtering that Supabase would need
- * additional config for. Not currently used on the frontend.
  */
 export async function fetchStrategiesWithFilters(params: {
   category?: string
@@ -144,11 +81,18 @@ export async function fetchStrategiesWithFilters(params: {
   if (params.limit) queryParams.append('limit', String(params.limit))
 
   const res = await fetch(`${API_URL}/api/strategies?${queryParams}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
   })
   if (!res.ok) throw new Error('Failed to fetch strategies')
 
-  const data = (await res.json()) as { strategies: Strategy[]; total: number; page: number; limit: number; hasMore: boolean }
+  const data = (await res.json()) as {
+    strategies: Strategy[]
+    total: number
+    page: number
+    limit: number
+    hasMore: boolean
+  }
+
   return {
     strategies: data.strategies,
     total: data.total,

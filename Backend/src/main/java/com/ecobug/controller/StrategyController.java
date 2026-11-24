@@ -4,12 +4,14 @@ import com.ecobug.dto.StrategyDTO;
 import com.ecobug.dto.StrategyPaginationResponse;
 import com.ecobug.entity.Strategy;
 import com.ecobug.repository.StrategyRepository;
+import com.ecobug.security.SubscriptionGuard;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +27,18 @@ public class StrategyController {
     @Autowired
     private StrategyRepository strategyRepository;
 
+    @Autowired
+    private SubscriptionGuard subscriptionGuard;
+
     @GetMapping
     @Transactional(readOnly = true)
     public ResponseEntity<StrategyPaginationResponse> getAllStrategies(
+            Authentication authentication,
             @RequestParam(required = false) String category,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "12") int limit) {
+
+        subscriptionGuard.requireActiveSubscription(authentication);
 
         Pageable pageable = PageRequest.of(Math.max(0, page - 1), Math.max(1, limit));
 
@@ -60,7 +68,12 @@ public class StrategyController {
 
     @GetMapping("/{id}")
     @Transactional(readOnly = true)
-    public ResponseEntity<StrategyDTO> getStrategyById(@PathVariable Long id) {
+    public ResponseEntity<StrategyDTO> getStrategyById(
+            Authentication authentication,
+            @PathVariable Long id) {
+
+        subscriptionGuard.requireActiveSubscription(authentication);
+
         Optional<Strategy> strategy = strategyRepository.findById(id);
         return strategy.map(s -> ResponseEntity.ok(toDTO(s)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
