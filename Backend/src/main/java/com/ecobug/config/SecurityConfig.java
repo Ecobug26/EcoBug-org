@@ -40,8 +40,8 @@ public class SecurityConfig {
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "/api/auth/refresh",
+                                "/api/webhook/razorpay",
                                 "/api/plants/**",
-                                "/api/strategies/**",
                                 "/api/blogs/**",
                                 "/api/contact/**"
                         ).permitAll()
@@ -52,7 +52,6 @@ public class SecurityConfig {
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class);
-
 
         return http.build();
     }

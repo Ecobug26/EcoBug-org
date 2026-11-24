@@ -8,6 +8,8 @@ import com.ecobug.entity.User;
 import com.ecobug.repository.PaymentOrderRepository;
 import com.ecobug.repository.UserRepository;
 import com.ecobug.service.RazorpayService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,14 +31,17 @@ public class PaymentController {
     private final RazorpayService razorpayService;
     private final PaymentOrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final ObjectMapper objectMapper;
 
     public PaymentController(
             RazorpayService razorpayService,
             PaymentOrderRepository orderRepository,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            ObjectMapper objectMapper) {
         this.razorpayService = razorpayService;
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.objectMapper = objectMapper;
     }
 
     @Transactional
@@ -115,22 +122,90 @@ public class PaymentController {
                     .body(Map.of("success", false, "error", "Invalid payment signature"));
         }
 
-        if (!"PAID".equals(order.getStatus())) {
-            order.setRazorpayPaymentId(request.getPaymentId());
-            order.setStatus("PAID");
-            order.setPaidAt(Instant.now());
-            orderRepository.save(order);
-
-            User user = order.getUser();
-            java.time.LocalDateTime now = java.time.LocalDateTime.now();
-            java.time.LocalDateTime base = (user.getSubscriptionExpiresAt() != null && user.getSubscriptionExpiresAt().isAfter(now))
-                    ? user.getSubscriptionExpiresAt()
-                    : now;
-            user.setSubscriptionPlan("PRO_MONTHLY");
-            user.setSubscriptionExpiresAt(base.plusDays(30));
-            userRepository.save(user);
-        }
+        markOrderPaidAndActivateUser(order, request.getPaymentId());
 
         return ResponseEntity.ok(Map.of("success", true, "verified", true));
+    }
+
+    @Transactional
+    @PostMapping("/api/webhook/razorpay")
+    public ResponseEntity<?> handleRazorpayWebhook(
+            @RequestHeader(value = "X-Razorpay-Signature", required = false) String signature,
+            @RequestBody String rawPayload) {
+
+        if (!razorpayService.verifyWebhookSignature(rawPayload, signature)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Invalid webhook signature"));
+        }
+
+        try {
+            JsonNode root = objectMapper.readTree(rawPayload);
+            String event = root.path("event").asText("");
+
+            if ("payment.captured".equals(event)) {
+                JsonNode paymentEntity = root.path("payload").path("payment").path("entity");
+                String razorpayOrderId = paymentEntity.path("order_id").asText("");
+                String razorpayPaymentId = paymentEntity.path("id").asText("");
+
+                if (!razorpayOrderId.isBlank()) {
+                    orderRepository.findByRazorpayOrderId(razorpayOrderId)
+                            .ifPresent(order -> markOrderPaidAndActivateUser(order, razorpayPaymentId));
+                }
+            }
+            return ResponseEntity.ok(Map.of("status", "ok"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Malformed webhook payload"));
+        }
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/api/orders/me")
+    public ResponseEntity<?> getMyOrders(@AuthenticationPrincipal UserDetails principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Unauthorized"));
+        }
+
+        User user = userRepository.findByEmail(principal.getUsername()).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "User not found"));
+        }
+
+        var orders = orderRepository
+                .findByUserOrderByCreatedAtDesc(user)
+                .stream()
+                .map(o -> Map.<String, Object>of(
+                        "id", o.getId(),
+                        "orderId", o.getRazorpayOrderId(),
+                        "paymentId", o.getRazorpayPaymentId() == null ? "" : o.getRazorpayPaymentId(),
+                        "amountInr", o.getAmountPaise() / 100.0,
+                        "currency", o.getCurrency(),
+                        "status", o.getStatus(),
+                        "createdAt", o.getCreatedAt().toString(),
+                        "paidAt", o.getPaidAt() == null ? "" : o.getPaidAt().toString()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(orders);
+    }
+
+    private void markOrderPaidAndActivateUser(PaymentOrder order, String paymentId) {
+        if ("PAID".equals(order.getStatus())) {
+            return;
+        }
+        order.setRazorpayPaymentId(paymentId);
+        order.setStatus("PAID");
+        order.setPaidAt(Instant.now());
+        orderRepository.save(order);
+
+        User user = order.getUser();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime base = (user.getSubscriptionExpiresAt() != null && user.getSubscriptionExpiresAt().isAfter(now))
+                ? user.getSubscriptionExpiresAt()
+                : now;
+        user.setSubscriptionPlan("PRO_MONTHLY");
+        user.setSubscriptionExpiresAt(base.plusDays(30));
+        userRepository.save(user);
     }
 }

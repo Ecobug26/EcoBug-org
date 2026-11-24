@@ -12,18 +12,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.util.Base64;
 import java.util.HexFormat;
 import java.util.Locale;
-import java.util.Base64;
 import java.util.UUID;
 
-/**
- * Razorpay Standard Checkout backend: creates orders via the Razorpay REST API
- * and verifies payment signatures (HMAC-SHA256) locally.
- *
- * No SDK dependency — uses the JDK HttpClient + javax.crypto so the build stays
- * offline-friendly (see Backend/pom.xml for the existing dependency set).
- */
 @Service
 public class RazorpayService {
 
@@ -33,12 +26,15 @@ public class RazorpayService {
 
     private final String keyId;
     private final String keySecret;
+    private final String webhookSecret;
 
     public RazorpayService(
             @Value("${razorpay.key.id:}") String keyId,
-            @Value("${razorpay.key.secret:}") String keySecret) {
+            @Value("${razorpay.key.secret:}") String keySecret,
+            @Value("${razorpay.webhook.secret:}") String webhookSecret) {
         this.keyId = keyId;
         this.keySecret = keySecret;
+        this.webhookSecret = webhookSecret;
     }
 
     public boolean isConfigured() {
@@ -46,12 +42,6 @@ public class RazorpayService {
                 && keySecret != null && !keySecret.isBlank();
     }
 
-    /**
-     * Creates an order at Razorpay. Amount must already be in paise.
-     *
-     * @throws RazorpayAuthException on 401/invalid credentials
-     * @throws RazorpayApiException  on any other API failure
-     */
     public CreateOrderResponse createOrder(long amount, String currency, String receipt) throws Exception {
         if (amount < 100) {
             throw new IllegalArgumentException("Order amount must be at least 100 paise");
@@ -100,20 +90,29 @@ public class RazorpayService {
         return new CreateOrderResponse(orderId, returnedAmount, returnedCurrency);
     }
 
-    /**
-     * Verifies the Razorpay checkout signature:
-     *   HMAC_SHA256(order_id + "|" + payment_id, KEY_SECRET) == razorpay_signature
-     * Uses a constant-time comparison to avoid timing side channels.
-     */
     public boolean verifySignature(String orderId, String paymentId, String signature) {
         if (!isConfigured() || orderId == null || paymentId == null || signature == null) {
             return false;
         }
+        return verifyHmacSha256(orderId + "|" + paymentId, signature, keySecret);
+    }
 
+    /**
+     * Verifies the X-Razorpay-Signature header on incoming webhook payloads:
+     *   HMAC_SHA256(rawRequestBody, WEBHOOK_SECRET) == X-Razorpay-Signature
+     */
+    public boolean verifyWebhookSignature(String rawPayload, String signature) {
+        if (webhookSecret == null || webhookSecret.isBlank() || rawPayload == null || signature == null) {
+            return false;
+        }
+        return verifyHmacSha256(rawPayload, signature, webhookSecret);
+    }
+
+    private boolean verifyHmacSha256(String payload, String signature, String secret) {
         try {
             Mac mac = Mac.getInstance("HmacSHA256");
-            mac.init(new SecretKeySpec(keySecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
-            byte[] digest = mac.doFinal((orderId + "|" + paymentId).getBytes(StandardCharsets.UTF_8));
+            mac.init(new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+            byte[] digest = mac.doFinal(payload.getBytes(StandardCharsets.UTF_8));
             String expectedHex = HexFormat.of().formatHex(digest);
             String providedHex = signature.trim().toLowerCase(Locale.ROOT);
             if (!providedHex.matches("[0-9a-f]{64}")) {
@@ -164,14 +163,12 @@ public class RazorpayService {
         return value.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 
-    /** Thrown when Razorpay rejects credentials or keys are absent. */
     public static class RazorpayAuthException extends Exception {
         public RazorpayAuthException(String message) {
             super(message);
         }
     }
 
-    /** Thrown for any non-auth Razorpay API failure. */
     public static class RazorpayApiException extends Exception {
         public RazorpayApiException(String message) {
             super(message);
